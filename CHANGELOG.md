@@ -7,5 +7,6 @@
 - Added auto reconnect, Gateway resume, and optional session persistence.
 - Added `EmbedBuilder` and `SlashCommandBuilder`.
 - Added `ActionRowBuilder`, `ButtonBuilder`, and `ButtonStyle`.
+- Added `StringSelectMenuBuilder`, `SelectMenuOptionBuilder`, and `interaction.Values`.
 - Added discord.js-style `Message` and `Interaction` wrapper objects.
 - Added Darklua bundle output at `dist/BetterDisblox.lua`.

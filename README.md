@@ -16,6 +16,7 @@ This project is early. It currently supports:
 - `EmbedBuilder`.
 - `SlashCommandBuilder`.
 - `ActionRowBuilder` and `ButtonBuilder`.
+- `StringSelectMenuBuilder` and `SelectMenuOptionBuilder`.
 - discord.js-style `Message` and `Interaction` wrapper objects.
 
 ## Requirements
@@ -144,6 +145,44 @@ client:On("INTERACTION_CREATE", function(interaction)
 	if interaction.CustomId == "cancel" then
 		interaction:ReplyEphemeral("Cancelled")
 	end
+end)
+```
+
+## String Select Menus
+
+```lua
+local menu = BetterDisblox.StringSelectMenuBuilder.new()
+	:SetCustomId("choose_color")
+	:SetPlaceholder("Choose a color")
+	:SetMinValues(1)
+	:SetMaxValues(1)
+	:AddOptions(
+		BetterDisblox.SelectMenuOptionBuilder.new()
+			:SetLabel("Red")
+			:SetValue("red")
+			:SetDescription("Pick red"),
+		BetterDisblox.SelectMenuOptionBuilder.new()
+			:SetLabel("Green")
+			:SetValue("green")
+			:SetDescription("Pick green")
+	)
+	:Build()
+
+local row = BetterDisblox.ActionRowBuilder.new()
+	:AddComponents(menu)
+	:Build()
+
+interaction:Reply({
+	content = "Pick one",
+	components = { row },
+})
+
+client:On("INTERACTION_CREATE", function(interaction)
+	if interaction.Type ~= 3 or interaction.CustomId ~= "choose_color" then
+		return
+	end
+
+	interaction:ReplyEphemeral("You picked " .. tostring(interaction.Values[1]))
 end)
 ```
 

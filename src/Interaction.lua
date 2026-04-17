@@ -10,6 +10,7 @@ export type Interaction = {
 	Data: any,
 	CommandName: string?,
 	CustomId: string?,
+	Values: { string },
 	Options: { any },
 	Raw: any,
 	Reply: (self: Interaction, payload: any) -> any,
@@ -54,6 +55,11 @@ function Interaction.new(rawInteraction: any, restClient: any): Interaction
 		customId = rawInteraction.data.custom_id
 	end
 
+	local values = {}
+	if type(rawInteraction.data) == "table" and type(rawInteraction.data.values) == "table" then
+		values = rawInteraction.data.values
+	end
+
 	local self = {
 		Id = rawInteraction.id,
 		Token = rawInteraction.token,
@@ -62,6 +68,7 @@ function Interaction.new(rawInteraction: any, restClient: any): Interaction
 		Data = rawInteraction.data,
 		CommandName = commandName,
 		CustomId = customId,
+		Values = values,
 		Options = getOptions(rawInteraction),
 		Raw = rawInteraction,
 		restClient = restClient,

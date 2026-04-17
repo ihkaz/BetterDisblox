@@ -12,7 +12,9 @@ local Interaction = require("./Interaction")
 local Message = require("./Message")
 local RestClient = require("./RestClient")
 local SessionStore = require("./SessionStore")
+local SelectMenuOptionBuilder = require("./SelectMenuOptionBuilder")
 local SlashCommandBuilder = require("./SlashCommandBuilder")
+local StringSelectMenuBuilder = require("./StringSelectMenuBuilder")
 
 return {
 	ActionRowBuilder = ActionRowBuilder,
@@ -26,6 +28,8 @@ return {
 	InteractionResponseType = InteractionResponseType,
 	Message = Message,
 	RestClient = RestClient,
+	SelectMenuOptionBuilder = SelectMenuOptionBuilder,
 	SessionStore = SessionStore,
 	SlashCommandBuilder = SlashCommandBuilder,
+	StringSelectMenuBuilder = StringSelectMenuBuilder,
 }
