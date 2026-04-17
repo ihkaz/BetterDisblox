@@ -15,6 +15,7 @@ This project is early. It currently supports:
 - Interaction response helpers.
 - `EmbedBuilder`.
 - `SlashCommandBuilder`.
+- `ActionRowBuilder` and `ButtonBuilder`.
 - discord.js-style `Message` and `Interaction` wrapper objects.
 
 ## Requirements
@@ -105,6 +106,43 @@ client:On("INTERACTION_CREATE", function(interaction)
 
 	if interaction.CommandName == "say" then
 		interaction:Reply(interaction:GetString("text") or "")
+	end
+end)
+```
+
+## Buttons
+
+```lua
+local row = BetterDisblox.ActionRowBuilder.new()
+	:AddComponents(
+		BetterDisblox.ButtonBuilder.new()
+			:SetCustomId("confirm")
+			:SetLabel("Confirm")
+			:SetStyle(BetterDisblox.ButtonStyle.Success),
+		BetterDisblox.ButtonBuilder.new()
+			:SetCustomId("cancel")
+			:SetLabel("Cancel")
+			:SetStyle(BetterDisblox.ButtonStyle.Danger)
+	)
+	:Build()
+
+interaction:Reply({
+	content = "Choose an action",
+	components = { row },
+})
+
+client:On("INTERACTION_CREATE", function(interaction)
+	if interaction.Type ~= 3 then
+		return
+	end
+
+	if interaction.CustomId == "confirm" then
+		interaction:ReplyEphemeral("Confirmed")
+		return
+	end
+
+	if interaction.CustomId == "cancel" then
+		interaction:ReplyEphemeral("Cancelled")
 	end
 end)
 ```

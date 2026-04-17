@@ -1,41 +1,56 @@
-type Disconnectable__DARKLUA_TYPE_a={
-Disconnect:(self:Disconnectable__DARKLUA_TYPE_a)->(),
+type ActionRowBuilder__DARKLUA_TYPE_a={
+AddComponents:(self:ActionRowBuilder__DARKLUA_TYPE_a,...any)->ActionRowBuilder__DARKLUA_TYPE_a,
+SetComponents:(self:ActionRowBuilder__DARKLUA_TYPE_a,components:{any})->ActionRowBuilder__DARKLUA_TYPE_a,
+Build:(self:ActionRowBuilder__DARKLUA_TYPE_a)->{[string]:any},
 }
 
-type EventEmitter__DARKLUA_TYPE_b={
-On:(self:EventEmitter__DARKLUA_TYPE_b,eventName:string,callback:(...any)->())->Disconnectable__DARKLUA_TYPE_a,
-Once:(self:EventEmitter__DARKLUA_TYPE_b,eventName:string,callback:(...any)->())->Disconnectable__DARKLUA_TYPE_a,
-Emit:(self:EventEmitter__DARKLUA_TYPE_b,eventName:string,...any)->(),
-RemoveAllListeners:(self:EventEmitter__DARKLUA_TYPE_b,eventName:string)->(),
+type ButtonBuilder__DARKLUA_TYPE_b={
+SetCustomId:(self:ButtonBuilder__DARKLUA_TYPE_b,customId:string)->ButtonBuilder__DARKLUA_TYPE_b,
+SetLabel:(self:ButtonBuilder__DARKLUA_TYPE_b,label:string)->ButtonBuilder__DARKLUA_TYPE_b,
+SetStyle:(self:ButtonBuilder__DARKLUA_TYPE_b,style:number)->ButtonBuilder__DARKLUA_TYPE_b,
+SetUrl:(self:ButtonBuilder__DARKLUA_TYPE_b,url:string)->ButtonBuilder__DARKLUA_TYPE_b,
+SetDisabled:(self:ButtonBuilder__DARKLUA_TYPE_b,disabled:boolean)->ButtonBuilder__DARKLUA_TYPE_b,
+Build:(self:ButtonBuilder__DARKLUA_TYPE_b)->{[string]:any},
 }
 
-type Listener__DARKLUA_TYPE_c={
+type Disconnectable__DARKLUA_TYPE_c={
+Disconnect:(self:Disconnectable__DARKLUA_TYPE_c)->(),
+}
+
+type EventEmitter__DARKLUA_TYPE_d={
+On:(self:EventEmitter__DARKLUA_TYPE_d,eventName:string,callback:(...any)->())->Disconnectable__DARKLUA_TYPE_c,
+Once:(self:EventEmitter__DARKLUA_TYPE_d,eventName:string,callback:(...any)->())->Disconnectable__DARKLUA_TYPE_c,
+Emit:(self:EventEmitter__DARKLUA_TYPE_d,eventName:string,...any)->(),
+RemoveAllListeners:(self:EventEmitter__DARKLUA_TYPE_d,eventName:string)->(),
+}
+
+type Listener__DARKLUA_TYPE_e={
 callback:(...any)->(),
 once:boolean,
 }
 
-type EventEmitterState__DARKLUA_TYPE_d={
-listeners:{[string]:{Listener__DARKLUA_TYPE_c}},
+type EventEmitterState__DARKLUA_TYPE_f={
+listeners:{[string]:{Listener__DARKLUA_TYPE_e}},
 }
 
-type Json__DARKLUA_TYPE_e={
+type Json__DARKLUA_TYPE_g={
 Encode:(value:any)->string,
 Decode:(value:string)->any,
 }
 
-type GatewaySession__DARKLUA_TYPE_f={
+type GatewaySession__DARKLUA_TYPE_h={
 sessionId:string?,
 sequence:number?,
 resumeGatewayUrl:string?,
 }
 
-type SessionStore__DARKLUA_TYPE_g={
-Load:(self:SessionStore__DARKLUA_TYPE_g)->GatewaySession__DARKLUA_TYPE_f?,
-Save:(self:SessionStore__DARKLUA_TYPE_g,session:GatewaySession__DARKLUA_TYPE_f)->(),
-Clear:(self:SessionStore__DARKLUA_TYPE_g)->(),
+type SessionStore__DARKLUA_TYPE_i={
+Load:(self:SessionStore__DARKLUA_TYPE_i)->GatewaySession__DARKLUA_TYPE_h?,
+Save:(self:SessionStore__DARKLUA_TYPE_i,session:GatewaySession__DARKLUA_TYPE_h)->(),
+Clear:(self:SessionStore__DARKLUA_TYPE_i)->(),
 }
 
-type GatewayClientOptions__DARKLUA_TYPE_h={
+type GatewayClientOptions__DARKLUA_TYPE_j={
 Token:string,
 Intents:number,
 Url:string?,
@@ -47,91 +62,92 @@ SessionFolder:string?,
 SessionFileName:string?,
 }
 
-type GatewayClient__DARKLUA_TYPE_i={
-On:(self:GatewayClient__DARKLUA_TYPE_i,eventName:string,callback:(...any)->())->any,
-Once:(self:GatewayClient__DARKLUA_TYPE_i,eventName:string,callback:(...any)->())->any,
-Connect:(self:GatewayClient__DARKLUA_TYPE_i)->(),
-Disconnect:(self:GatewayClient__DARKLUA_TYPE_i)->(),
-Send:(self:GatewayClient__DARKLUA_TYPE_i,payload:any)->(),
-SetPresence:(self:GatewayClient__DARKLUA_TYPE_i,presence:any)->(),
+type GatewayClient__DARKLUA_TYPE_k={
+On:(self:GatewayClient__DARKLUA_TYPE_k,eventName:string,callback:(...any)->())->any,
+Once:(self:GatewayClient__DARKLUA_TYPE_k,eventName:string,callback:(...any)->())->any,
+Connect:(self:GatewayClient__DARKLUA_TYPE_k)->(),
+Disconnect:(self:GatewayClient__DARKLUA_TYPE_k)->(),
+Send:(self:GatewayClient__DARKLUA_TYPE_k,payload:any)->(),
+SetPresence:(self:GatewayClient__DARKLUA_TYPE_k,presence:any)->(),
 }
 
-type Interaction__DARKLUA_TYPE_j={
+type Interaction__DARKLUA_TYPE_l={
 Id:string,
 Token:string,
 ApplicationId:string,
 Type:number,
 Data:any,
 CommandName:string?,
+CustomId:string?,
 Options:{any},
 Raw:any,
-Reply:(self:Interaction__DARKLUA_TYPE_j,payload:any)->any,
-ReplyEphemeral:(self:Interaction__DARKLUA_TYPE_j,payload:any)->any,
-DeferReply:(self:Interaction__DARKLUA_TYPE_j,ephemeral:boolean)->any,
-EditReply:(self:Interaction__DARKLUA_TYPE_j,payload:any)->any,
-DeleteReply:(self:Interaction__DARKLUA_TYPE_j)->any,
-FollowUp:(self:Interaction__DARKLUA_TYPE_j,payload:any)->any,
-GetOption:(self:Interaction__DARKLUA_TYPE_j,name:string)->any,
-GetString:(self:Interaction__DARKLUA_TYPE_j,name:string)->string?,
-GetInteger:(self:Interaction__DARKLUA_TYPE_j,name:string)->number?,
-GetBoolean:(self:Interaction__DARKLUA_TYPE_j,name:string)->boolean?,
+Reply:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
+ReplyEphemeral:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
+DeferReply:(self:Interaction__DARKLUA_TYPE_l,ephemeral:boolean)->any,
+EditReply:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
+DeleteReply:(self:Interaction__DARKLUA_TYPE_l)->any,
+FollowUp:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
+GetOption:(self:Interaction__DARKLUA_TYPE_l,name:string)->any,
+GetString:(self:Interaction__DARKLUA_TYPE_l,name:string)->string?,
+GetInteger:(self:Interaction__DARKLUA_TYPE_l,name:string)->number?,
+GetBoolean:(self:Interaction__DARKLUA_TYPE_l,name:string)->boolean?,
 }
 
-type Message__DARKLUA_TYPE_k={
+type Message__DARKLUA_TYPE_m={
 Id:string,
 ChannelId:string,
 GuildId:string?,
 Content:string,
 Author:any,
 Raw:any,
-Reply:(self:Message__DARKLUA_TYPE_k,payload:any)->any,
-Edit:(self:Message__DARKLUA_TYPE_k,payload:any)->any,
-Delete:(self:Message__DARKLUA_TYPE_k)->any,
+Reply:(self:Message__DARKLUA_TYPE_m,payload:any)->any,
+Edit:(self:Message__DARKLUA_TYPE_m,payload:any)->any,
+Delete:(self:Message__DARKLUA_TYPE_m)->any,
 }
 
-type RequestOptions__DARKLUA_TYPE_l={
+type RequestOptions__DARKLUA_TYPE_n={
 Url:string,
 Method:string,
 Headers:{[string]:string},
 Body:string?,
 }
 
-type HttpResponse__DARKLUA_TYPE_m={
+type HttpResponse__DARKLUA_TYPE_o={
 StatusCode:number,
 Body:string,
 Headers:{[string]:string},
 }
 
-type RateLimitState__DARKLUA_TYPE_n={
+type RateLimitState__DARKLUA_TYPE_p={
 unlockedAt:number,
 }
 
-type RateLimiter__DARKLUA_TYPE_o={
-Wait:(self:RateLimiter__DARKLUA_TYPE_o,routeKey:string)->(),
-Update:(self:RateLimiter__DARKLUA_TYPE_o,routeKey:string,statusCode:number,headers:{[string]:string},body:string)->(),
+type RateLimiter__DARKLUA_TYPE_q={
+Wait:(self:RateLimiter__DARKLUA_TYPE_q,routeKey:string)->(),
+Update:(self:RateLimiter__DARKLUA_TYPE_q,routeKey:string,statusCode:number,headers:{[string]:string},body:string)->(),
 }
 
-type RestClientOptions__DARKLUA_TYPE_p={
+type RestClientOptions__DARKLUA_TYPE_r={
 Token:string,
 BaseUrl:string?,
 }
 
-type RestClient__DARKLUA_TYPE_q={
-Request:(self:RestClient__DARKLUA_TYPE_q,method:string,route:string,body:any)->any,
-CreateMessage:(self:RestClient__DARKLUA_TYPE_q,channelId:string,payload:any)->any,
-EditMessage:(self:RestClient__DARKLUA_TYPE_q,channelId:string,messageId:string,payload:any)->any,
-DeleteMessage:(self:RestClient__DARKLUA_TYPE_q,channelId:string,messageId:string)->any,
-CreateGlobalApplicationCommand:(self:RestClient__DARKLUA_TYPE_q,applicationId:string,payload:any)->any,
-BulkOverwriteGlobalApplicationCommands:(self:RestClient__DARKLUA_TYPE_q,applicationId:string,payload:{any})->any,
-CreateGuildApplicationCommand:(self:RestClient__DARKLUA_TYPE_q,applicationId:string,guildId:string,payload:any)->any,
-BulkOverwriteGuildApplicationCommands:(self:RestClient__DARKLUA_TYPE_q,applicationId:string,guildId:string,payload:{any})->any,
-CreateInteractionResponse:(self:RestClient__DARKLUA_TYPE_q,interactionId:string,interactionToken:string,payload:any)->any,
-EditOriginalInteractionResponse:(self:RestClient__DARKLUA_TYPE_q,applicationId:string,interactionToken:string,payload:any)->any,
-DeleteOriginalInteractionResponse:(self:RestClient__DARKLUA_TYPE_q,applicationId:string,interactionToken:string)->any,
-CreateFollowupMessage:(self:RestClient__DARKLUA_TYPE_q,applicationId:string,interactionToken:string,payload:any)->any,
+type RestClient__DARKLUA_TYPE_s={
+Request:(self:RestClient__DARKLUA_TYPE_s,method:string,route:string,body:any)->any,
+CreateMessage:(self:RestClient__DARKLUA_TYPE_s,channelId:string,payload:any)->any,
+EditMessage:(self:RestClient__DARKLUA_TYPE_s,channelId:string,messageId:string,payload:any)->any,
+DeleteMessage:(self:RestClient__DARKLUA_TYPE_s,channelId:string,messageId:string)->any,
+CreateGlobalApplicationCommand:(self:RestClient__DARKLUA_TYPE_s,applicationId:string,payload:any)->any,
+BulkOverwriteGlobalApplicationCommands:(self:RestClient__DARKLUA_TYPE_s,applicationId:string,payload:{any})->any,
+CreateGuildApplicationCommand:(self:RestClient__DARKLUA_TYPE_s,applicationId:string,guildId:string,payload:any)->any,
+BulkOverwriteGuildApplicationCommands:(self:RestClient__DARKLUA_TYPE_s,applicationId:string,guildId:string,payload:{any})->any,
+CreateInteractionResponse:(self:RestClient__DARKLUA_TYPE_s,interactionId:string,interactionToken:string,payload:any)->any,
+EditOriginalInteractionResponse:(self:RestClient__DARKLUA_TYPE_s,applicationId:string,interactionToken:string,payload:any)->any,
+DeleteOriginalInteractionResponse:(self:RestClient__DARKLUA_TYPE_s,applicationId:string,interactionToken:string)->any,
+CreateFollowupMessage:(self:RestClient__DARKLUA_TYPE_s,applicationId:string,interactionToken:string,payload:any)->any,
 }
 
-type ClientOptions__DARKLUA_TYPE_r={
+type ClientOptions__DARKLUA_TYPE_t={
 Token:string,
 Intents:number,
 GatewayUrl:string?,
@@ -144,45 +160,249 @@ SessionFolder:string?,
 SessionFileName:string?,
 }
 
-type Client__DARKLUA_TYPE_s={
+type Client__DARKLUA_TYPE_u={
 Rest:any,
-On:(self:Client__DARKLUA_TYPE_s,eventName:string,callback:(...any)->())->any,
-Once:(self:Client__DARKLUA_TYPE_s,eventName:string,callback:(...any)->())->any,
-Login:(self:Client__DARKLUA_TYPE_s)->(),
-Destroy:(self:Client__DARKLUA_TYPE_s)->(),
-SetPresence:(self:Client__DARKLUA_TYPE_s,presence:any)->(),
+On:(self:Client__DARKLUA_TYPE_u,eventName:string,callback:(...any)->())->any,
+Once:(self:Client__DARKLUA_TYPE_u,eventName:string,callback:(...any)->())->any,
+Login:(self:Client__DARKLUA_TYPE_u)->(),
+Destroy:(self:Client__DARKLUA_TYPE_u)->(),
+SetPresence:(self:Client__DARKLUA_TYPE_u,presence:any)->(),
 }
 
-type EmbedBuilder__DARKLUA_TYPE_t={
-SetTitle:(self:EmbedBuilder__DARKLUA_TYPE_t,title:string)->EmbedBuilder__DARKLUA_TYPE_t,
-SetDescription:(self:EmbedBuilder__DARKLUA_TYPE_t,description:string)->EmbedBuilder__DARKLUA_TYPE_t,
-SetColor:(self:EmbedBuilder__DARKLUA_TYPE_t,color:number)->EmbedBuilder__DARKLUA_TYPE_t,
-SetUrl:(self:EmbedBuilder__DARKLUA_TYPE_t,url:string)->EmbedBuilder__DARKLUA_TYPE_t,
-SetTimestamp:(self:EmbedBuilder__DARKLUA_TYPE_t,timestamp:string)->EmbedBuilder__DARKLUA_TYPE_t,
-AddField:(self:EmbedBuilder__DARKLUA_TYPE_t,name:string,value:string,inline:boolean)->EmbedBuilder__DARKLUA_TYPE_t,
-Build:(self:EmbedBuilder__DARKLUA_TYPE_t)->{[string]:any},
+type EmbedBuilder__DARKLUA_TYPE_v={
+SetTitle:(self:EmbedBuilder__DARKLUA_TYPE_v,title:string)->EmbedBuilder__DARKLUA_TYPE_v,
+SetDescription:(self:EmbedBuilder__DARKLUA_TYPE_v,description:string)->EmbedBuilder__DARKLUA_TYPE_v,
+SetColor:(self:EmbedBuilder__DARKLUA_TYPE_v,color:number)->EmbedBuilder__DARKLUA_TYPE_v,
+SetUrl:(self:EmbedBuilder__DARKLUA_TYPE_v,url:string)->EmbedBuilder__DARKLUA_TYPE_v,
+SetTimestamp:(self:EmbedBuilder__DARKLUA_TYPE_v,timestamp:string)->EmbedBuilder__DARKLUA_TYPE_v,
+AddField:(self:EmbedBuilder__DARKLUA_TYPE_v,name:string,value:string,inline:boolean)->EmbedBuilder__DARKLUA_TYPE_v,
+Build:(self:EmbedBuilder__DARKLUA_TYPE_v)->{[string]:any},
 }
 
-type SlashCommandOption__DARKLUA_TYPE_u={
+type SlashCommandOption__DARKLUA_TYPE_w={
 type:number,
 name:string,
 description:string,
 required:boolean?,
 choices:{any}?,
-options:{SlashCommandOption__DARKLUA_TYPE_u}?,
+options:{SlashCommandOption__DARKLUA_TYPE_w}?,
 }
 
-type SlashCommandBuilder__DARKLUA_TYPE_v={
-SetName:(self:SlashCommandBuilder__DARKLUA_TYPE_v,name:string)->SlashCommandBuilder__DARKLUA_TYPE_v,
-SetDescription:(self:SlashCommandBuilder__DARKLUA_TYPE_v,description:string)->SlashCommandBuilder__DARKLUA_TYPE_v,
-AddStringOption:(self:SlashCommandBuilder__DARKLUA_TYPE_v,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_v,
-AddIntegerOption:(self:SlashCommandBuilder__DARKLUA_TYPE_v,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_v,
-AddBooleanOption:(self:SlashCommandBuilder__DARKLUA_TYPE_v,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_v,
-AddUserOption:(self:SlashCommandBuilder__DARKLUA_TYPE_v,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_v,
-AddChannelOption:(self:SlashCommandBuilder__DARKLUA_TYPE_v,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_v,
-AddRoleOption:(self:SlashCommandBuilder__DARKLUA_TYPE_v,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_v,
-Build:(self:SlashCommandBuilder__DARKLUA_TYPE_v)->{[string]:any},
+type SlashCommandBuilder__DARKLUA_TYPE_x={
+SetName:(self:SlashCommandBuilder__DARKLUA_TYPE_x,name:string)->SlashCommandBuilder__DARKLUA_TYPE_x,
+SetDescription:(self:SlashCommandBuilder__DARKLUA_TYPE_x,description:string)->SlashCommandBuilder__DARKLUA_TYPE_x,
+AddStringOption:(self:SlashCommandBuilder__DARKLUA_TYPE_x,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_x,
+AddIntegerOption:(self:SlashCommandBuilder__DARKLUA_TYPE_x,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_x,
+AddBooleanOption:(self:SlashCommandBuilder__DARKLUA_TYPE_x,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_x,
+AddUserOption:(self:SlashCommandBuilder__DARKLUA_TYPE_x,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_x,
+AddChannelOption:(self:SlashCommandBuilder__DARKLUA_TYPE_x,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_x,
+AddRoleOption:(self:SlashCommandBuilder__DARKLUA_TYPE_x,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_x,
+Build:(self:SlashCommandBuilder__DARKLUA_TYPE_x)->{[string]:any},
 }local __DARKLUA_BUNDLE_MODULES={cache={}::any}do do local function __modImpl()
+
+
+
+
+
+
+
+
+
+local ActionRowBuilder={}
+ActionRowBuilder.__index=ActionRowBuilder
+
+local COMPONENT_TYPE_ACTION_ROW=1
+local MAX_COMPONENTS=5
+
+function ActionRowBuilder.new():ActionRowBuilder__DARKLUA_TYPE_a
+local self={
+components={}::{any},
+}
+
+return(setmetatable(self,ActionRowBuilder)::any)::ActionRowBuilder__DARKLUA_TYPE_a
+end
+
+local function normalizeComponent(component:any):any
+if type(component)~="table"then
+error("component must be a table",3)
+end
+
+if type(component.Build)=="function"then
+return component:Build()
+end
+
+return component
+end
+
+function ActionRowBuilder:AddComponents(...:any):ActionRowBuilder__DARKLUA_TYPE_a
+local state=self::any
+local components=table.pack(...)
+
+for index=1,components.n do
+if#state.components>=MAX_COMPONENTS then
+error("action rows can contain at most five components",2)
+end
+
+table.insert(state.components,normalizeComponent(components[index]))
+end
+
+return self
+end
+
+function ActionRowBuilder:SetComponents(components:{any}):ActionRowBuilder__DARKLUA_TYPE_a
+if type(components)~="table"then
+error("components must be a table",2)
+end
+
+if#components>MAX_COMPONENTS then
+error("action rows can contain at most five components",2)
+end
+
+local normalizedComponents:{any}={}
+for _,component in ipairs(components)do
+table.insert(normalizedComponents,normalizeComponent(component))
+end
+
+local state=self::any
+state.components=normalizedComponents
+return self
+end
+
+function ActionRowBuilder:Build():{[string]:any}
+local state=self::any
+
+if#state.components<1 then
+error("action rows require at least one component",2)
+end
+
+return{
+type=COMPONENT_TYPE_ACTION_ROW,
+components=state.components,
+}
+end
+
+return ActionRowBuilder end function __DARKLUA_BUNDLE_MODULES.a():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.a if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.a=v end return v.c end end do local function __modImpl()
+
+
+
+
+
+
+
+
+
+
+
+
+local ButtonBuilder={}
+ButtonBuilder.__index=ButtonBuilder
+
+local COMPONENT_TYPE_BUTTON=2
+local LINK_BUTTON_STYLE=5
+
+local function assertString(name:string,value:string,maxLength:number):()
+if type(value)~="string"or value==""then
+error(name.." must be a non-empty string",3)
+end
+
+if#value>maxLength then
+error(name.." must be "..tostring(maxLength).." characters or fewer",3)
+end
+end
+
+function ButtonBuilder.new():ButtonBuilder__DARKLUA_TYPE_b
+local self={
+component={
+type=COMPONENT_TYPE_BUTTON,
+}::{[string]:any},
+}
+
+return(setmetatable(self,ButtonBuilder)::any)::ButtonBuilder__DARKLUA_TYPE_b
+end
+
+function ButtonBuilder:SetCustomId(customId:string):ButtonBuilder__DARKLUA_TYPE_b
+assertString("customId",customId,100)
+
+local component=(self::any).component
+component.custom_id=customId
+component.url=nil
+return self
+end
+
+function ButtonBuilder:SetLabel(label:string):ButtonBuilder__DARKLUA_TYPE_b
+assertString("label",label,80)
+
+local component=(self::any).component
+component.label=label
+return self
+end
+
+function ButtonBuilder:SetStyle(style:number):ButtonBuilder__DARKLUA_TYPE_b
+if type(style)~="number"or style<1 or style>5 then
+error("button style must be a number from 1 to 5",2)
+end
+
+local component=(self::any).component
+component.style=style
+return self
+end
+
+function ButtonBuilder:SetUrl(url:string):ButtonBuilder__DARKLUA_TYPE_b
+assertString("url",url,512)
+
+local component=(self::any).component
+component.url=url
+component.custom_id=nil
+component.style=LINK_BUTTON_STYLE
+return self
+end
+
+function ButtonBuilder:SetDisabled(disabled:boolean):ButtonBuilder__DARKLUA_TYPE_b
+if type(disabled)~="boolean"then
+error("disabled must be a boolean",2)
+end
+
+local component=(self::any).component
+component.disabled=disabled
+return self
+end
+
+function ButtonBuilder:Build():{[string]:any}
+local component=(self::any).component
+
+if type(component.style)~="number"then
+error("button style is required",2)
+end
+
+if component.style==LINK_BUTTON_STYLE then
+if type(component.url)~="string"or component.url==""then
+error("link buttons require a url",2)
+end
+else
+if type(component.custom_id)~="string"or component.custom_id==""then
+error("non-link buttons require a customId",2)
+end
+end
+
+local output:{[string]:any}={}
+for key,value in pairs(component)do
+output[key]=value
+end
+
+return output
+end
+
+return ButtonBuilder end function __DARKLUA_BUNDLE_MODULES.b():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.b if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.b=v end return v.c end end do local function __modImpl()
+
+
+
+return{
+Primary=1,
+Secondary=2,
+Success=3,
+Danger=4,
+Link=5,
+}end function __DARKLUA_BUNDLE_MODULES.c():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.c if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.c=v end return v.c end end do local function __modImpl()
 
 
 
@@ -209,15 +429,15 @@ Build:(self:SlashCommandBuilder__DARKLUA_TYPE_v)->{[string]:any},
 local EventEmitter={}
 EventEmitter.__index=EventEmitter
 
-function EventEmitter.new():EventEmitter__DARKLUA_TYPE_b
-local self:EventEmitterState__DARKLUA_TYPE_d={
+function EventEmitter.new():EventEmitter__DARKLUA_TYPE_d
+local self:EventEmitterState__DARKLUA_TYPE_f={
 listeners={},
 }
 
-return(setmetatable(self,EventEmitter)::any)::EventEmitter__DARKLUA_TYPE_b
+return(setmetatable(self,EventEmitter)::any)::EventEmitter__DARKLUA_TYPE_d
 end
 
-function EventEmitter:On(eventName:string,callback:(...any)->()):Disconnectable__DARKLUA_TYPE_a
+function EventEmitter:On(eventName:string,callback:(...any)->()):Disconnectable__DARKLUA_TYPE_c
 if type(eventName)~="string"or eventName==""then
 error("eventName must be a non-empty string",2)
 end
@@ -227,7 +447,7 @@ error("callback must be a function",2)
 end
 
 local state=self::any
-local listener:Listener__DARKLUA_TYPE_c={
+local listener:Listener__DARKLUA_TYPE_e={
 callback=callback,
 once=false,
 }
@@ -254,7 +474,7 @@ if currentListeners==nil then
 return
 end
 
-local nextListeners:{Listener__DARKLUA_TYPE_c}={}
+local nextListeners:{Listener__DARKLUA_TYPE_e}={}
 for _,currentListener in ipairs(currentListeners)do
 if currentListener~=listener then
 table.insert(nextListeners,currentListener)
@@ -264,10 +484,10 @@ end
 state.listeners[eventName]=nextListeners
 end
 
-return disconnectable::Disconnectable__DARKLUA_TYPE_a
+return disconnectable::Disconnectable__DARKLUA_TYPE_c
 end
 
-function EventEmitter:Once(eventName:string,callback:(...any)->()):Disconnectable__DARKLUA_TYPE_a
+function EventEmitter:Once(eventName:string,callback:(...any)->()):Disconnectable__DARKLUA_TYPE_c
 if type(eventName)~="string"or eventName==""then
 error("eventName must be a non-empty string",2)
 end
@@ -277,7 +497,7 @@ error("callback must be a function",2)
 end
 
 local state=self::any
-local listener:Listener__DARKLUA_TYPE_c={
+local listener:Listener__DARKLUA_TYPE_e={
 callback=callback,
 once=true,
 }
@@ -304,7 +524,7 @@ if currentListeners==nil then
 return
 end
 
-local nextListeners:{Listener__DARKLUA_TYPE_c}={}
+local nextListeners:{Listener__DARKLUA_TYPE_e}={}
 for _,currentListener in ipairs(currentListeners)do
 if currentListener~=listener then
 table.insert(nextListeners,currentListener)
@@ -314,7 +534,7 @@ end
 state.listeners[eventName]=nextListeners
 end
 
-return disconnectable::Disconnectable__DARKLUA_TYPE_a
+return disconnectable::Disconnectable__DARKLUA_TYPE_c
 end
 
 function EventEmitter:Emit(eventName:string,...:any):()
@@ -329,7 +549,7 @@ return
 end
 
 local arguments=table.pack(...)
-local nextListeners:{Listener__DARKLUA_TYPE_c}={}
+local nextListeners:{Listener__DARKLUA_TYPE_e}={}
 
 for _,listener in ipairs(eventListeners)do
 task.spawn(function()
@@ -353,7 +573,7 @@ local state=self::any
 state.listeners[eventName]={}
 end
 
-return EventEmitter end function __DARKLUA_BUNDLE_MODULES.a():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.a if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.a=v end return v.c end end do local function __modImpl()
+return EventEmitter end function __DARKLUA_BUNDLE_MODULES.d():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.d if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.d=v end return v.c end end do local function __modImpl()
 
 
 
@@ -369,7 +589,7 @@ REQUEST_GUILD_MEMBERS=8,
 INVALID_SESSION=9,
 HELLO=10,
 HEARTBEAT_ACK=11,
-}end function __DARKLUA_BUNDLE_MODULES.b():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.b if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.b=v end return v.c end end do local function __modImpl()
+}end function __DARKLUA_BUNDLE_MODULES.e():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.e if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.e=v end return v.c end end do local function __modImpl()
 
 
 
@@ -412,11 +632,11 @@ end
 return result
 end
 
-return Json end function __DARKLUA_BUNDLE_MODULES.c():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.c if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.c=v end return v.c end end do local function __modImpl()
+return Json end function __DARKLUA_BUNDLE_MODULES.f():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.f if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.f=v end return v.c end end do local function __modImpl()
 
 
 
-local Json=__DARKLUA_BUNDLE_MODULES.c()
+local Json=__DARKLUA_BUNDLE_MODULES.f()
 
 
 
@@ -462,7 +682,7 @@ error("UNC makefolder function is unavailable",3)
 end
 end
 
-function SessionStore.new(folder:string?,fileName:string?):SessionStore__DARKLUA_TYPE_g
+function SessionStore.new(folder:string?,fileName:string?):SessionStore__DARKLUA_TYPE_i
 local resolvedFolder=folder
 if resolvedFolder==nil then
 resolvedFolder=DEFAULT_FOLDER
@@ -479,10 +699,10 @@ fileName=resolvedFileName,
 filePath=getFilePath(resolvedFolder,resolvedFileName),
 }
 
-return(setmetatable(self,SessionStore)::any)::SessionStore__DARKLUA_TYPE_g
+return(setmetatable(self,SessionStore)::any)::SessionStore__DARKLUA_TYPE_i
 end
 
-function SessionStore:Load():GatewaySession__DARKLUA_TYPE_f?
+function SessionStore:Load():GatewaySession__DARKLUA_TYPE_h?
 assertFilesystemAvailable()
 
 local state=self::any
@@ -502,7 +722,7 @@ resumeGatewayUrl=decoded.resumeGatewayUrl,
 }
 end
 
-function SessionStore:Save(session:GatewaySession__DARKLUA_TYPE_f):()
+function SessionStore:Save(session:GatewaySession__DARKLUA_TYPE_h):()
 assertFilesystemAvailable()
 
 local state=self::any
@@ -530,14 +750,14 @@ delfile(state.filePath)
 end
 end
 
-return SessionStore end function __DARKLUA_BUNDLE_MODULES.d():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.d if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.d=v end return v.c end end do local function __modImpl()
+return SessionStore end function __DARKLUA_BUNDLE_MODULES.g():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.g if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.g=v end return v.c end end do local function __modImpl()
 
 
 
-local EventEmitter=__DARKLUA_BUNDLE_MODULES.a()
-local GatewayOpcode=__DARKLUA_BUNDLE_MODULES.b()
-local Json=__DARKLUA_BUNDLE_MODULES.c()
-local SessionStore=__DARKLUA_BUNDLE_MODULES.d()
+local EventEmitter=__DARKLUA_BUNDLE_MODULES.d()
+local GatewayOpcode=__DARKLUA_BUNDLE_MODULES.e()
+local Json=__DARKLUA_BUNDLE_MODULES.f()
+local SessionStore=__DARKLUA_BUNDLE_MODULES.g()
 
 
 
@@ -592,7 +812,7 @@ end
 error("Unsupported WebSocket signal shape",3)
 end
 
-function GatewayClient.new(options:GatewayClientOptions__DARKLUA_TYPE_h):GatewayClient__DARKLUA_TYPE_i
+function GatewayClient.new(options:GatewayClientOptions__DARKLUA_TYPE_j):GatewayClient__DARKLUA_TYPE_k
 if type(options.Token)~="string"or options.Token==""then
 error("Discord bot token must be a non-empty string",2)
 end
@@ -643,7 +863,7 @@ sessionStore=SessionStore.new(options.SessionFolder,options.SessionFileName),
 resumeRequested=false,
 }
 
-return(setmetatable(self,GatewayClient)::any)::GatewayClient__DARKLUA_TYPE_i
+return(setmetatable(self,GatewayClient)::any)::GatewayClient__DARKLUA_TYPE_k
 end
 
 function GatewayClient:On(eventName:string,callback:(...any)->()):any
@@ -888,7 +1108,7 @@ state.socket=getWebSocketConnect()(gatewayUrl)
 bindSocket(state)
 end
 
-return GatewayClient end function __DARKLUA_BUNDLE_MODULES.e():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.e if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.e=v end return v.c end end do local function __modImpl()
+return GatewayClient end function __DARKLUA_BUNDLE_MODULES.h():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.h if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.h=v end return v.c end end do local function __modImpl()
 
 
 
@@ -938,11 +1158,12 @@ messagePayload.flags=64
 return messagePayload
 end
 
-return Payload end function __DARKLUA_BUNDLE_MODULES.f():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.f if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.f=v end return v.c end end do local function __modImpl()
+return Payload end function __DARKLUA_BUNDLE_MODULES.i():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.i if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.i=v end return v.c end end do local function __modImpl()
 
 
 
-local Payload=__DARKLUA_BUNDLE_MODULES.f()
+local Payload=__DARKLUA_BUNDLE_MODULES.i()
+
 
 
 
@@ -976,7 +1197,7 @@ end
 return rawInteraction.data.options
 end
 
-function Interaction.new(rawInteraction:any,restClient:any):Interaction__DARKLUA_TYPE_j
+function Interaction.new(rawInteraction:any,restClient:any):Interaction__DARKLUA_TYPE_l
 if type(rawInteraction)~="table"then
 error("rawInteraction must be a table",2)
 end
@@ -990,6 +1211,11 @@ if type(rawInteraction.data)=="table"then
 commandName=rawInteraction.data.name
 end
 
+local customId=nil
+if type(rawInteraction.data)=="table"then
+customId=rawInteraction.data.custom_id
+end
+
 local self={
 Id=rawInteraction.id,
 Token=rawInteraction.token,
@@ -997,12 +1223,13 @@ ApplicationId=rawInteraction.application_id,
 Type=rawInteraction.type,
 Data=rawInteraction.data,
 CommandName=commandName,
+CustomId=customId,
 Options=getOptions(rawInteraction),
 Raw=rawInteraction,
 restClient=restClient,
 }
 
-return(setmetatable(self,Interaction)::any)::Interaction__DARKLUA_TYPE_j
+return(setmetatable(self,Interaction)::any)::Interaction__DARKLUA_TYPE_l
 end
 
 function Interaction:Reply(payload:any):any
@@ -1096,11 +1323,11 @@ end
 return option.value
 end
 
-return Interaction end function __DARKLUA_BUNDLE_MODULES.g():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.g if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.g=v end return v.c end end do local function __modImpl()
+return Interaction end function __DARKLUA_BUNDLE_MODULES.j():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.j if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.j=v end return v.c end end do local function __modImpl()
 
 
 
-local Payload=__DARKLUA_BUNDLE_MODULES.f()
+local Payload=__DARKLUA_BUNDLE_MODULES.i()
 
 
 
@@ -1117,7 +1344,7 @@ local Payload=__DARKLUA_BUNDLE_MODULES.f()
 local Message={}
 Message.__index=Message
 
-function Message.new(rawMessage:any,restClient:any):Message__DARKLUA_TYPE_k
+function Message.new(rawMessage:any,restClient:any):Message__DARKLUA_TYPE_m
 if type(rawMessage)~="table"then
 error("rawMessage must be a table",2)
 end
@@ -1136,7 +1363,7 @@ Raw=rawMessage,
 restClient=restClient,
 }
 
-return(setmetatable(self,Message)::any)::Message__DARKLUA_TYPE_k
+return(setmetatable(self,Message)::any)::Message__DARKLUA_TYPE_m
 end
 
 function Message:Reply(payload:any):any
@@ -1154,11 +1381,11 @@ local state=self::any
 return state.restClient:DeleteMessage(state.ChannelId,state.Id)
 end
 
-return Message end function __DARKLUA_BUNDLE_MODULES.h():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.h if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.h=v end return v.c end end do local function __modImpl()
+return Message end function __DARKLUA_BUNDLE_MODULES.k():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.k if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.k=v end return v.c end end do local function __modImpl()
 
 
 
-local Json=__DARKLUA_BUNDLE_MODULES.c()
+local Json=__DARKLUA_BUNDLE_MODULES.f()
 
 
 
@@ -1175,7 +1402,7 @@ local Json=__DARKLUA_BUNDLE_MODULES.c()
 
 local Http={}
 
-local function getRequestFunction():(RequestOptions__DARKLUA_TYPE_l)->HttpResponse__DARKLUA_TYPE_m
+local function getRequestFunction():(RequestOptions__DARKLUA_TYPE_n)->HttpResponse__DARKLUA_TYPE_o
 local requestFunction=(getgenv and getgenv().request)or request or http_request or(http and http.request)
 
 if type(requestFunction)~="function"then
@@ -1185,7 +1412,7 @@ end
 return requestFunction
 end
 
-function Http.Request(options:RequestOptions__DARKLUA_TYPE_l):HttpResponse__DARKLUA_TYPE_m
+function Http.Request(options:RequestOptions__DARKLUA_TYPE_n):HttpResponse__DARKLUA_TYPE_o
 if type(options.Url)~="string"or options.Url==""then
 error("Request Url must be a non-empty string",2)
 end
@@ -1211,7 +1438,7 @@ end
 return response
 end
 
-function Http.JsonRequest(method:string,url:string,headers:{[string]:string},body:any):HttpResponse__DARKLUA_TYPE_m
+function Http.JsonRequest(method:string,url:string,headers:{[string]:string},body:any):HttpResponse__DARKLUA_TYPE_o
 local requestHeaders:{[string]:string}={}
 for key,value in pairs(headers)do
 requestHeaders[key]=value
@@ -1232,7 +1459,7 @@ Body=encodedBody,
 })
 end
 
-return Http end function __DARKLUA_BUNDLE_MODULES.i():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.i if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.i=v end return v.c end end do local function __modImpl()
+return Http end function __DARKLUA_BUNDLE_MODULES.l():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.l if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.l=v end return v.c end end do local function __modImpl()
 
 
 
@@ -1248,12 +1475,12 @@ return Http end function __DARKLUA_BUNDLE_MODULES.i():typeof(__modImpl())local v
 local RateLimiter={}
 RateLimiter.__index=RateLimiter
 
-function RateLimiter.new():RateLimiter__DARKLUA_TYPE_o
+function RateLimiter.new():RateLimiter__DARKLUA_TYPE_q
 local self={
-buckets={}::{[string]:RateLimitState__DARKLUA_TYPE_n},
+buckets={}::{[string]:RateLimitState__DARKLUA_TYPE_p},
 }
 
-return(setmetatable(self,RateLimiter)::any)::RateLimiter__DARKLUA_TYPE_o
+return(setmetatable(self,RateLimiter)::any)::RateLimiter__DARKLUA_TYPE_q
 end
 
 local function parseRetryAfter(headers:{[string]:string},body:string):number
@@ -1308,13 +1535,13 @@ unlockedAt=os.clock()+retryAfter,
 }
 end
 
-return RateLimiter end function __DARKLUA_BUNDLE_MODULES.j():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.j if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.j=v end return v.c end end do local function __modImpl()
+return RateLimiter end function __DARKLUA_BUNDLE_MODULES.m():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.m if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.m=v end return v.c end end do local function __modImpl()
 
 
 
-local Http=__DARKLUA_BUNDLE_MODULES.i()
-local Json=__DARKLUA_BUNDLE_MODULES.c()
-local RateLimiter=__DARKLUA_BUNDLE_MODULES.j()
+local Http=__DARKLUA_BUNDLE_MODULES.l()
+local Json=__DARKLUA_BUNDLE_MODULES.f()
+local RateLimiter=__DARKLUA_BUNDLE_MODULES.m()
 
 
 
@@ -1347,7 +1574,7 @@ error("Discord bot token must be a non-empty string",3)
 end
 end
 
-function RestClient.new(options:RestClientOptions__DARKLUA_TYPE_p):RestClient__DARKLUA_TYPE_q
+function RestClient.new(options:RestClientOptions__DARKLUA_TYPE_r):RestClient__DARKLUA_TYPE_s
 assertToken(options.Token)
 
 local baseUrl=options.BaseUrl
@@ -1361,7 +1588,7 @@ baseUrl=baseUrl,
 rateLimiter=RateLimiter.new(),
 }
 
-return(setmetatable(self,RestClient)::any)::RestClient__DARKLUA_TYPE_q
+return(setmetatable(self,RestClient)::any)::RestClient__DARKLUA_TYPE_s
 end
 
 local function makeHeaders(token:string):{[string]:string}
@@ -1537,14 +1764,14 @@ end
 return self:Request("POST","/webhooks/"..applicationId.."/"..interactionToken,payload)
 end
 
-return RestClient end function __DARKLUA_BUNDLE_MODULES.k():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.k if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.k=v end return v.c end end do local function __modImpl()
+return RestClient end function __DARKLUA_BUNDLE_MODULES.n():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.n if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.n=v end return v.c end end do local function __modImpl()
 
 
 
-local GatewayClient=__DARKLUA_BUNDLE_MODULES.e()
-local Interaction=__DARKLUA_BUNDLE_MODULES.g()
-local Message=__DARKLUA_BUNDLE_MODULES.h()
-local RestClient=__DARKLUA_BUNDLE_MODULES.k()
+local GatewayClient=__DARKLUA_BUNDLE_MODULES.h()
+local Interaction=__DARKLUA_BUNDLE_MODULES.j()
+local Message=__DARKLUA_BUNDLE_MODULES.k()
+local RestClient=__DARKLUA_BUNDLE_MODULES.n()
 
 
 
@@ -1571,7 +1798,7 @@ local RestClient=__DARKLUA_BUNDLE_MODULES.k()
 local Client={}
 Client.__index=Client
 
-function Client.new(options:ClientOptions__DARKLUA_TYPE_r):Client__DARKLUA_TYPE_s
+function Client.new(options:ClientOptions__DARKLUA_TYPE_t):Client__DARKLUA_TYPE_u
 if type(options.Token)~="string"or options.Token==""then
 error("Discord bot token must be a non-empty string",2)
 end
@@ -1602,7 +1829,7 @@ Rest=rest,
 gateway=gateway,
 }
 
-local client=(setmetatable(self,Client)::any)::Client__DARKLUA_TYPE_s
+local client=(setmetatable(self,Client)::any)::Client__DARKLUA_TYPE_u
 
 return client
 end
@@ -1655,7 +1882,7 @@ function Client:SetPresence(presence:any):()
 (self::any).gateway:SetPresence(presence)
 end
 
-return Client end function __DARKLUA_BUNDLE_MODULES.l():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.l if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.l=v end return v.c end end do local function __modImpl()
+return Client end function __DARKLUA_BUNDLE_MODULES.o():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.o if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.o=v end return v.c end end do local function __modImpl()
 
 
 
@@ -1672,15 +1899,15 @@ return Client end function __DARKLUA_BUNDLE_MODULES.l():typeof(__modImpl())local
 local EmbedBuilder={}
 EmbedBuilder.__index=EmbedBuilder
 
-function EmbedBuilder.new():EmbedBuilder__DARKLUA_TYPE_t
+function EmbedBuilder.new():EmbedBuilder__DARKLUA_TYPE_v
 local self={
 embed={}::{[string]:any},
 }
 
-return(setmetatable(self,EmbedBuilder)::any)::EmbedBuilder__DARKLUA_TYPE_t
+return(setmetatable(self,EmbedBuilder)::any)::EmbedBuilder__DARKLUA_TYPE_v
 end
 
-function EmbedBuilder:SetTitle(title:string):EmbedBuilder__DARKLUA_TYPE_t
+function EmbedBuilder:SetTitle(title:string):EmbedBuilder__DARKLUA_TYPE_v
 if type(title)~="string"or title==""then
 error("title must be a non-empty string",2)
 end
@@ -1690,7 +1917,7 @@ state.embed.title=title
 return self
 end
 
-function EmbedBuilder:SetDescription(description:string):EmbedBuilder__DARKLUA_TYPE_t
+function EmbedBuilder:SetDescription(description:string):EmbedBuilder__DARKLUA_TYPE_v
 if type(description)~="string"or description==""then
 error("description must be a non-empty string",2)
 end
@@ -1700,7 +1927,7 @@ state.embed.description=description
 return self
 end
 
-function EmbedBuilder:SetColor(color:number):EmbedBuilder__DARKLUA_TYPE_t
+function EmbedBuilder:SetColor(color:number):EmbedBuilder__DARKLUA_TYPE_v
 if type(color)~="number"then
 error("color must be a number",2)
 end
@@ -1710,7 +1937,7 @@ state.embed.color=color
 return self
 end
 
-function EmbedBuilder:SetUrl(url:string):EmbedBuilder__DARKLUA_TYPE_t
+function EmbedBuilder:SetUrl(url:string):EmbedBuilder__DARKLUA_TYPE_v
 if type(url)~="string"or url==""then
 error("url must be a non-empty string",2)
 end
@@ -1720,7 +1947,7 @@ state.embed.url=url
 return self
 end
 
-function EmbedBuilder:SetTimestamp(timestamp:string):EmbedBuilder__DARKLUA_TYPE_t
+function EmbedBuilder:SetTimestamp(timestamp:string):EmbedBuilder__DARKLUA_TYPE_v
 if type(timestamp)~="string"or timestamp==""then
 error("timestamp must be a non-empty string",2)
 end
@@ -1730,7 +1957,7 @@ state.embed.timestamp=timestamp
 return self
 end
 
-function EmbedBuilder:AddField(name:string,value:string,inline:boolean):EmbedBuilder__DARKLUA_TYPE_t
+function EmbedBuilder:AddField(name:string,value:string,inline:boolean):EmbedBuilder__DARKLUA_TYPE_v
 if type(name)~="string"or name==""then
 error("name must be a non-empty string",2)
 end
@@ -1767,7 +1994,7 @@ end
 return output
 end
 
-return EmbedBuilder end function __DARKLUA_BUNDLE_MODULES.m():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.m if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.m=v end return v.c end end do local function __modImpl()
+return EmbedBuilder end function __DARKLUA_BUNDLE_MODULES.p():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.p if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.p=v end return v.c end end do local function __modImpl()
 
 
 
@@ -1791,7 +2018,7 @@ MessageContent=32768,
 GuildScheduledEvents=65536,
 AutoModerationConfiguration=1048576,
 AutoModerationExecution=2097152,
-}end function __DARKLUA_BUNDLE_MODULES.n():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.n if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.n=v end return v.c end end do local function __modImpl()
+}end function __DARKLUA_BUNDLE_MODULES.q():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.q if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.q=v end return v.c end end do local function __modImpl()
 
 
 
@@ -1803,7 +2030,7 @@ DeferredUpdateMessage=6,
 UpdateMessage=7,
 ApplicationCommandAutocompleteResult=8,
 Modal=9,
-}end function __DARKLUA_BUNDLE_MODULES.o():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.o if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.o=v end return v.c end end do local function __modImpl()
+}end function __DARKLUA_BUNDLE_MODULES.r():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.r if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.r=v end return v.c end end do local function __modImpl()
 
 
 
@@ -1861,7 +2088,7 @@ error("slash command descriptions must be 1 to 100 characters",3)
 end
 end
 
-local function addOption(self:SlashCommandBuilder__DARKLUA_TYPE_v,optionType:number,name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_v
+local function addOption(self:SlashCommandBuilder__DARKLUA_TYPE_x,optionType:number,name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_x
 assertCommandName(name)
 assertDescription(description)
 
@@ -1880,54 +2107,54 @@ required=required,
 return self
 end
 
-function SlashCommandBuilder.new():SlashCommandBuilder__DARKLUA_TYPE_v
+function SlashCommandBuilder.new():SlashCommandBuilder__DARKLUA_TYPE_x
 local self={
 command={
 type=1,
 name=nil::string?,
 description=nil::string?,
-options={}::{SlashCommandOption__DARKLUA_TYPE_u},
+options={}::{SlashCommandOption__DARKLUA_TYPE_w},
 },
 }
 
-return(setmetatable(self,SlashCommandBuilder)::any)::SlashCommandBuilder__DARKLUA_TYPE_v
+return(setmetatable(self,SlashCommandBuilder)::any)::SlashCommandBuilder__DARKLUA_TYPE_x
 end
 
-function SlashCommandBuilder:SetName(name:string):SlashCommandBuilder__DARKLUA_TYPE_v
+function SlashCommandBuilder:SetName(name:string):SlashCommandBuilder__DARKLUA_TYPE_x
 assertCommandName(name)
 local state=self::any
 state.command.name=name
 return self
 end
 
-function SlashCommandBuilder:SetDescription(description:string):SlashCommandBuilder__DARKLUA_TYPE_v
+function SlashCommandBuilder:SetDescription(description:string):SlashCommandBuilder__DARKLUA_TYPE_x
 assertDescription(description)
 local state=self::any
 state.command.description=description
 return self
 end
 
-function SlashCommandBuilder:AddStringOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_v
+function SlashCommandBuilder:AddStringOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_x
 return addOption(self,OptionType.String,name,description,required)
 end
 
-function SlashCommandBuilder:AddIntegerOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_v
+function SlashCommandBuilder:AddIntegerOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_x
 return addOption(self,OptionType.Integer,name,description,required)
 end
 
-function SlashCommandBuilder:AddBooleanOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_v
+function SlashCommandBuilder:AddBooleanOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_x
 return addOption(self,OptionType.Boolean,name,description,required)
 end
 
-function SlashCommandBuilder:AddUserOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_v
+function SlashCommandBuilder:AddUserOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_x
 return addOption(self,OptionType.User,name,description,required)
 end
 
-function SlashCommandBuilder:AddChannelOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_v
+function SlashCommandBuilder:AddChannelOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_x
 return addOption(self,OptionType.Channel,name,description,required)
 end
 
-function SlashCommandBuilder:AddRoleOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_v
+function SlashCommandBuilder:AddRoleOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_x
 return addOption(self,OptionType.Role,name,description,required)
 end
 
@@ -1954,22 +2181,28 @@ end
 return output
 end
 
-return SlashCommandBuilder end function __DARKLUA_BUNDLE_MODULES.p():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.p if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.p=v end return v.c end end end
+return SlashCommandBuilder end function __DARKLUA_BUNDLE_MODULES.s():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.s if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.s=v end return v.c end end end
 
 
 
-local Client=__DARKLUA_BUNDLE_MODULES.l()
-local EmbedBuilder=__DARKLUA_BUNDLE_MODULES.m()
-local GatewayOpcode=__DARKLUA_BUNDLE_MODULES.b()
-local Intents=__DARKLUA_BUNDLE_MODULES.n()
-local InteractionResponseType=__DARKLUA_BUNDLE_MODULES.o()
-local Interaction=__DARKLUA_BUNDLE_MODULES.g()
-local Message=__DARKLUA_BUNDLE_MODULES.h()
-local RestClient=__DARKLUA_BUNDLE_MODULES.k()
-local SessionStore=__DARKLUA_BUNDLE_MODULES.d()
-local SlashCommandBuilder=__DARKLUA_BUNDLE_MODULES.p()
+local ActionRowBuilder=__DARKLUA_BUNDLE_MODULES.a()
+local ButtonBuilder=__DARKLUA_BUNDLE_MODULES.b()
+local ButtonStyle=__DARKLUA_BUNDLE_MODULES.c()
+local Client=__DARKLUA_BUNDLE_MODULES.o()
+local EmbedBuilder=__DARKLUA_BUNDLE_MODULES.p()
+local GatewayOpcode=__DARKLUA_BUNDLE_MODULES.e()
+local Intents=__DARKLUA_BUNDLE_MODULES.q()
+local InteractionResponseType=__DARKLUA_BUNDLE_MODULES.r()
+local Interaction=__DARKLUA_BUNDLE_MODULES.j()
+local Message=__DARKLUA_BUNDLE_MODULES.k()
+local RestClient=__DARKLUA_BUNDLE_MODULES.n()
+local SessionStore=__DARKLUA_BUNDLE_MODULES.g()
+local SlashCommandBuilder=__DARKLUA_BUNDLE_MODULES.s()
 
 return{
+ActionRowBuilder=ActionRowBuilder,
+ButtonBuilder=ButtonBuilder,
+ButtonStyle=ButtonStyle,
 Client=Client,
 EmbedBuilder=EmbedBuilder,
 GatewayOpcode=GatewayOpcode,
