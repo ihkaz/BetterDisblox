@@ -10,11 +10,14 @@ local Intents = require("./Intents")
 local InteractionResponseType = require("./InteractionResponseType")
 local Interaction = require("./Interaction")
 local Message = require("./Message")
+local ModalBuilder = require("./ModalBuilder")
 local RestClient = require("./RestClient")
 local SessionStore = require("./SessionStore")
 local SelectMenuOptionBuilder = require("./SelectMenuOptionBuilder")
 local SlashCommandBuilder = require("./SlashCommandBuilder")
 local StringSelectMenuBuilder = require("./StringSelectMenuBuilder")
+local TextInputBuilder = require("./TextInputBuilder")
+local TextInputStyle = require("./TextInputStyle")
 
 return {
 	ActionRowBuilder = ActionRowBuilder,
@@ -27,9 +30,12 @@ return {
 	Intents = Intents,
 	InteractionResponseType = InteractionResponseType,
 	Message = Message,
+	ModalBuilder = ModalBuilder,
 	RestClient = RestClient,
 	SelectMenuOptionBuilder = SelectMenuOptionBuilder,
 	SessionStore = SessionStore,
 	SlashCommandBuilder = SlashCommandBuilder,
 	StringSelectMenuBuilder = StringSelectMenuBuilder,
+	TextInputBuilder = TextInputBuilder,
+	TextInputStyle = TextInputStyle,
 }

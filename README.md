@@ -17,6 +17,7 @@ This project is early. It currently supports:
 - `SlashCommandBuilder`.
 - `ActionRowBuilder` and `ButtonBuilder`.
 - `StringSelectMenuBuilder` and `SelectMenuOptionBuilder`.
+- `ModalBuilder`, `TextInputBuilder`, and `TextInputStyle`.
 - discord.js-style `Message` and `Interaction` wrapper objects.
 
 ## Requirements
@@ -183,6 +184,35 @@ client:On("INTERACTION_CREATE", function(interaction)
 	end
 
 	interaction:ReplyEphemeral("You picked " .. tostring(interaction.Values[1]))
+end)
+```
+
+## Modals
+
+```lua
+local modal = BetterDisblox.ModalBuilder.new()
+	:SetCustomId("feedback_modal")
+	:SetTitle("Feedback")
+	:AddComponents(
+		BetterDisblox.ActionRowBuilder.new()
+			:AddComponents(
+				BetterDisblox.TextInputBuilder.new()
+					:SetCustomId("feedback_text")
+					:SetLabel("Your feedback")
+					:SetStyle(BetterDisblox.TextInputStyle.Paragraph)
+					:SetRequired(true)
+			)
+	)
+
+interaction:ShowModal(modal)
+
+client:On("INTERACTION_CREATE", function(interaction)
+	if interaction.Type ~= 5 or interaction.CustomId ~= "feedback_modal" then
+		return
+	end
+
+	local feedback = interaction:GetTextInputValue("feedback_text") or ""
+	interaction:ReplyEphemeral("Thanks: " .. feedback)
 end)
 ```
 

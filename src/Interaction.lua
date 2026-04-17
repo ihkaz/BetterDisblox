@@ -19,10 +19,12 @@ export type Interaction = {
 	EditReply: (self: Interaction, payload: any) -> any,
 	DeleteReply: (self: Interaction) -> any,
 	FollowUp: (self: Interaction, payload: any) -> any,
+	ShowModal: (self: Interaction, modal: any) -> any,
 	GetOption: (self: Interaction, name: string) -> any,
 	GetString: (self: Interaction, name: string) -> string?,
 	GetInteger: (self: Interaction, name: string) -> number?,
 	GetBoolean: (self: Interaction, name: string) -> boolean?,
+	GetTextInputValue: (self: Interaction, customId: string) -> string?,
 }
 
 local Interaction = {}
@@ -127,6 +129,15 @@ function Interaction:FollowUp(payload: any): any
 	)
 end
 
+function Interaction:ShowModal(modal: any): any
+	local state = self :: any
+	return state.restClient:CreateInteractionResponse(
+		state.Id,
+		state.Token,
+		Payload.Modal(modal)
+	)
+end
+
 function Interaction:GetOption(name: string): any
 	if type(name) ~= "string" or name == "" then
 		error("option name must be a non-empty string", 2)
@@ -166,6 +177,29 @@ function Interaction:GetBoolean(name: string): boolean?
 	end
 
 	return option.value
+end
+
+function Interaction:GetTextInputValue(customId: string): string?
+	if type(customId) ~= "string" or customId == "" then
+		error("customId must be a non-empty string", 2)
+	end
+
+	local data = (self :: any).Data
+	if type(data) ~= "table" or type(data.components) ~= "table" then
+		return nil
+	end
+
+	for _, row in ipairs(data.components) do
+		if type(row) == "table" and type(row.components) == "table" then
+			for _, component in ipairs(row.components) do
+				if type(component) == "table" and component.custom_id == customId then
+					return component.value
+				end
+			end
+		end
+	end
+
+	return nil
 end
 
 return Interaction

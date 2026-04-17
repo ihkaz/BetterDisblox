@@ -40,6 +40,22 @@ function Payload.DeferredInteractionResponse(ephemeral: boolean): any
 	}
 end
 
+function Payload.Modal(value: any): any
+	local modalPayload = value
+	if type(value) == "table" and type(value.Build) == "function" then
+		modalPayload = value:Build()
+	end
+
+	if type(modalPayload) ~= "table" then
+		error("modal payload must be a table or ModalBuilder", 3)
+	end
+
+	return {
+		type = 9,
+		data = modalPayload,
+	}
+end
+
 function Payload.EphemeralMessage(value: any): any
 	local messagePayload = Payload.Message(value)
 	messagePayload.flags = 64
