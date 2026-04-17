@@ -21,7 +21,7 @@ client:On("INTERACTION_CREATE", function(interaction)
 	end
 
 	local container = BetterDisblox.ContainerBuilder.new()
-		:SetAccentColor(0x57F287)
+		:SetAccentColor("#57F287")
 		:AddComponents(
 			BetterDisblox.TextDisplayBuilder.new()
 				:SetContent("## BetterDisblox"),

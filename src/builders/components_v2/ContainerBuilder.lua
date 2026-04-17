@@ -1,7 +1,9 @@
 --!strict
 
+local Color = require("../../util/Color")
+
 export type ContainerBuilder = {
-	SetAccentColor: (self: ContainerBuilder, color: number) -> ContainerBuilder,
+	SetAccentColor: (self: ContainerBuilder, color: Color.ColorResolvable) -> ContainerBuilder,
 	SetSpoiler: (self: ContainerBuilder, spoiler: boolean) -> ContainerBuilder,
 	AddComponents: (self: ContainerBuilder, ...any) -> ContainerBuilder,
 	SetComponents: (self: ContainerBuilder, components: { any }) -> ContainerBuilder,
@@ -37,13 +39,9 @@ function ContainerBuilder.new(): ContainerBuilder
 	return (setmetatable(self, ContainerBuilder) :: any) :: ContainerBuilder
 end
 
-function ContainerBuilder:SetAccentColor(color: number): ContainerBuilder
-	if type(color) ~= "number" or color < 0 or color > 0xFFFFFF then
-		error("color must be a number from 0x000000 to 0xFFFFFF", 2)
-	end
-
+function ContainerBuilder:SetAccentColor(color: Color.ColorResolvable): ContainerBuilder
 	local component = (self :: any).component
-	component.accent_color = color
+	component.accent_color = Color.Resolve(color)
 	return self
 end
 

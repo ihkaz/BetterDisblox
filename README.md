@@ -20,6 +20,7 @@ This project is early. It currently supports:
 - `ModalBuilder`, `TextInputBuilder`, and `TextInputStyle`.
 - Components v2 foundation: `MessageFlags`, `TextDisplayBuilder`, `ContainerBuilder`, `SectionBuilder`, and `SeparatorBuilder`.
 - `WebhookClient` for Discord webhooks without Gateway/WebSocket.
+- Color resolving for `0xRRGGBB`, `"#RRGGBB"`, and `"RRGGBB"`.
 - discord.js-style `Message` and `Interaction` wrapper objects.
 
 ## Requirements
@@ -95,6 +96,39 @@ client:On("MESSAGE_CREATE", function(message)
 end)
 
 client:Login()
+```
+
+## Colors
+
+Colors can be numbers or hex strings:
+
+```lua
+BetterDisblox.EmbedBuilder.new()
+	:SetTitle("Colors")
+	:SetDescription("Hex strings are supported")
+	:SetColor("#57F287")
+	:Build()
+
+BetterDisblox.ContainerBuilder.new()
+	:SetAccentColor("5865F2")
+	:AddComponents(
+		BetterDisblox.TextDisplayBuilder.new()
+			:SetContent("Discord blurple")
+	)
+	:Build()
+```
+
+Built-in color constants:
+
+```lua
+BetterDisblox.Colors.Blurple
+BetterDisblox.Colors.Green
+BetterDisblox.Colors.Yellow
+BetterDisblox.Colors.Red
+BetterDisblox.Colors.Pink
+BetterDisblox.Colors.DarkGray
+BetterDisblox.Colors.White
+BetterDisblox.Colors.Black
 ```
 
 ## Slash Commands

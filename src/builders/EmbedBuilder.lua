@@ -1,9 +1,11 @@
 --!strict
 
+local Color = require("../util/Color")
+
 export type EmbedBuilder = {
 	SetTitle: (self: EmbedBuilder, title: string) -> EmbedBuilder,
 	SetDescription: (self: EmbedBuilder, description: string) -> EmbedBuilder,
-	SetColor: (self: EmbedBuilder, color: number) -> EmbedBuilder,
+	SetColor: (self: EmbedBuilder, color: Color.ColorResolvable) -> EmbedBuilder,
 	SetUrl: (self: EmbedBuilder, url: string) -> EmbedBuilder,
 	SetTimestamp: (self: EmbedBuilder, timestamp: string) -> EmbedBuilder,
 	AddField: (self: EmbedBuilder, name: string, value: string, inline: boolean) -> EmbedBuilder,
@@ -41,13 +43,9 @@ function EmbedBuilder:SetDescription(description: string): EmbedBuilder
 	return self
 end
 
-function EmbedBuilder:SetColor(color: number): EmbedBuilder
-	if type(color) ~= "number" then
-		error("color must be a number", 2)
-	end
-
+function EmbedBuilder:SetColor(color: Color.ColorResolvable): EmbedBuilder
 	local state = self :: any
-	state.embed.color = color
+	state.embed.color = Color.Resolve(color)
 	return self
 end
 

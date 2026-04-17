@@ -4,6 +4,7 @@ local ActionRowBuilder = require("./builders/components/ActionRowBuilder")
 local ButtonBuilder = require("./builders/components/ButtonBuilder")
 local ButtonStyle = require("./builders/components/ButtonStyle")
 local Client = require("./client/Client")
+local Color = require("./util/Color")
 local ContainerBuilder = require("./builders/components_v2/ContainerBuilder")
 local EmbedBuilder = require("./builders/EmbedBuilder")
 local GatewayOpcode = require("./gateway/GatewayOpcode")
@@ -31,6 +32,8 @@ return {
 	ButtonBuilder = ButtonBuilder,
 	ButtonStyle = ButtonStyle,
 	Client = Client,
+	Color = Color,
+	Colors = Color.Colors,
 	ContainerBuilder = ContainerBuilder,
 	EmbedBuilder = EmbedBuilder,
 	GatewayOpcode = GatewayOpcode,

@@ -10,7 +10,7 @@ local message = webhook:Send({
 		BetterDisblox.EmbedBuilder.new()
 			:SetTitle("Webhook")
 			:SetDescription("No Gateway or bot token required.")
-			:SetColor(0x57F287)
+			:SetColor("#57F287")
 			:Build(),
 	},
 })
