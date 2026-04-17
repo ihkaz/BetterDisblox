@@ -1,6 +1,6 @@
 --!strict
 
-local Json = require("./Json")
+local Json = require("../util/Json")
 
 export type GatewaySession = {
 	sessionId: string?,

@@ -43,6 +43,22 @@ local BetterDisblox = loadstring(readfile("dist/BetterDisblox.lua"))()
 darklua process src/init.lua dist/BetterDisblox.lua
 ```
 
+## Source Tree
+
+```text
+src/
+  init.lua
+  client/
+  gateway/
+  rest/
+  structures/
+  builders/
+    components/
+    components_v2/
+  storage/
+  util/
+```
+
 ## Basic Example
 
 ```lua

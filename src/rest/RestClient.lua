@@ -1,7 +1,7 @@
 --!strict
 
 local Http = require("./Http")
-local Json = require("./Json")
+local Json = require("../util/Json")
 local RateLimiter = require("./RateLimiter")
 
 export type RestClientOptions = {

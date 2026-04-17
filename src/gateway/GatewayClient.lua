@@ -1,9 +1,9 @@
 --!strict
 
-local EventEmitter = require("./EventEmitter")
+local EventEmitter = require("../util/EventEmitter")
 local GatewayOpcode = require("./GatewayOpcode")
-local Json = require("./Json")
-local SessionStore = require("./SessionStore")
+local Json = require("../util/Json")
+local SessionStore = require("../storage/SessionStore")
 
 export type GatewayClientOptions = {
 	Token: string,

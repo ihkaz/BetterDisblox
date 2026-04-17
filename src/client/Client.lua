@@ -1,9 +1,9 @@
 --!strict
 
-local GatewayClient = require("./GatewayClient")
-local Interaction = require("./Interaction")
-local Message = require("./Message")
-local RestClient = require("./RestClient")
+local GatewayClient = require("../gateway/GatewayClient")
+local Interaction = require("../structures/Interaction")
+local Message = require("../structures/Message")
+local RestClient = require("../rest/RestClient")
 
 export type ClientOptions = {
 	Token: string,
