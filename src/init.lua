@@ -24,6 +24,7 @@ local StringSelectMenuBuilder = require("./builders/components/StringSelectMenuB
 local TextInputBuilder = require("./builders/components/TextInputBuilder")
 local TextInputStyle = require("./builders/components/TextInputStyle")
 local TextDisplayBuilder = require("./builders/components_v2/TextDisplayBuilder")
+local WebhookClient = require("./webhook/WebhookClient")
 
 return {
 	ActionRowBuilder = ActionRowBuilder,
@@ -50,4 +51,5 @@ return {
 	TextDisplayBuilder = TextDisplayBuilder,
 	TextInputBuilder = TextInputBuilder,
 	TextInputStyle = TextInputStyle,
+	WebhookClient = WebhookClient,
 }

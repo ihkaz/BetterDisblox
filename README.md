@@ -19,6 +19,7 @@ This project is early. It currently supports:
 - `StringSelectMenuBuilder` and `SelectMenuOptionBuilder`.
 - `ModalBuilder`, `TextInputBuilder`, and `TextInputStyle`.
 - Components v2 foundation: `MessageFlags`, `TextDisplayBuilder`, `ContainerBuilder`, `SectionBuilder`, and `SeparatorBuilder`.
+- `WebhookClient` for Discord webhooks without Gateway/WebSocket.
 - discord.js-style `Message` and `Interaction` wrapper objects.
 
 ## Requirements
@@ -266,6 +267,29 @@ interaction:Reply({
 	flags = BetterDisblox.MessageFlags.IsComponentsV2,
 	components = { container },
 })
+```
+
+## Webhooks
+
+```lua
+local webhook = BetterDisblox.WebhookClient.new("WEBHOOK_URL", {
+	Wait = true,
+})
+
+local message = webhook:Send({
+	content = "Hello from BetterDisblox",
+	embeds = {
+		BetterDisblox.EmbedBuilder.new()
+			:SetTitle("Webhook")
+			:SetDescription("No Gateway or bot token required.")
+			:SetColor(0x57F287)
+			:Build(),
+	},
+})
+
+if message ~= nil then
+	webhook:EditMessage(message.id, "Edited webhook message")
+end
 ```
 
 ## Session Persistence

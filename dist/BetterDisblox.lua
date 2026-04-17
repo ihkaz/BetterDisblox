@@ -266,6 +266,16 @@ Build:(self:TextInputBuilder__DARKLUA_TYPE_E)->{[string]:any},
 type TextDisplayBuilder__DARKLUA_TYPE_F={
 SetContent:(self:TextDisplayBuilder__DARKLUA_TYPE_F,content:string)->TextDisplayBuilder__DARKLUA_TYPE_F,
 Build:(self:TextDisplayBuilder__DARKLUA_TYPE_F)->{[string]:any},
+}
+
+type WebhookClientOptions__DARKLUA_TYPE_G={
+Wait:boolean?,
+}
+
+type WebhookClient__DARKLUA_TYPE_H={
+Send:(self:WebhookClient__DARKLUA_TYPE_H,payload:any)->any,
+EditMessage:(self:WebhookClient__DARKLUA_TYPE_H,messageId:string,payload:any)->any,
+DeleteMessage:(self:WebhookClient__DARKLUA_TYPE_H,messageId:string)->any,
 }local __DARKLUA_BUNDLE_MODULES={cache={}::any}do do local function __modImpl()
 
 
@@ -3148,7 +3158,110 @@ end
 return output
 end
 
-return TextDisplayBuilder end function __DARKLUA_BUNDLE_MODULES.D():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.D if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.D=v end return v.c end end end
+return TextDisplayBuilder end function __DARKLUA_BUNDLE_MODULES.D():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.D if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.D=v end return v.c end end do local function __modImpl()
+
+
+
+local Http=__DARKLUA_BUNDLE_MODULES.l()
+local Payload=__DARKLUA_BUNDLE_MODULES.i()
+
+
+
+
+
+
+
+
+
+
+
+local WebhookClient={}
+WebhookClient.__index=WebhookClient
+
+local function parseWebhookUrl(url:string):(string,string,string)
+if type(url)~="string"or url==""then
+error("webhook url must be a non-empty string",3)
+end
+
+local webhookId,webhookToken=string.match(url,"discord%.com/api/webhooks/([^/]+)/([^/?#]+)")
+if webhookId==nil or webhookToken==nil then
+webhookId,webhookToken=string.match(url,"discordapp%.com/api/webhooks/([^/]+)/([^/?#]+)")
+end
+
+if webhookId==nil or webhookToken==nil then
+error("invalid Discord webhook url",3)
+end
+
+local baseUrl="https://discord.com/api/webhooks/"..webhookId.."/"..webhookToken
+return baseUrl,webhookId,webhookToken
+end
+
+function WebhookClient.new(url:string,options:WebhookClientOptions__DARKLUA_TYPE_G?):WebhookClient__DARKLUA_TYPE_H
+local baseUrl,webhookId,webhookToken=parseWebhookUrl(url)
+local waitForResponse=false
+
+if options~=nil and options.Wait==true then
+waitForResponse=true
+end
+
+local self={
+baseUrl=baseUrl,
+webhookId=webhookId,
+webhookToken=webhookToken,
+waitForResponse=waitForResponse,
+}
+
+return(setmetatable(self,WebhookClient)::any)::WebhookClient__DARKLUA_TYPE_H
+end
+
+local function requestJson(method:string,url:string,payload:any):any
+local response=Http.JsonRequest(method,url,{},payload)
+
+if response.StatusCode==204 then
+return nil
+end
+
+if response.StatusCode<200 or response.StatusCode>=300 then
+error("Discord webhook request failed: "..method.." "..url.." status="..tostring(response.StatusCode).." body="..response.Body,3)
+end
+
+if response.Body==""then
+return nil
+end
+
+return game:GetService("HttpService"):JSONDecode(response.Body)
+end
+
+function WebhookClient:Send(payload:any):any
+local state=self::any
+local url=state.baseUrl
+
+if state.waitForResponse then
+url..="?wait=true"
+end
+
+return requestJson("POST",url,Payload.Message(payload))
+end
+
+function WebhookClient:EditMessage(messageId:string,payload:any):any
+if type(messageId)~="string"or messageId==""then
+error("messageId must be a non-empty string",2)
+end
+
+local state=self::any
+return requestJson("PATCH",state.baseUrl.."/messages/"..messageId,Payload.Message(payload))
+end
+
+function WebhookClient:DeleteMessage(messageId:string):any
+if type(messageId)~="string"or messageId==""then
+error("messageId must be a non-empty string",2)
+end
+
+local state=self::any
+return requestJson("DELETE",state.baseUrl.."/messages/"..messageId,nil)
+end
+
+return WebhookClient end function __DARKLUA_BUNDLE_MODULES.E():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.E if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.E=v end return v.c end end end
 
 
 
@@ -3176,6 +3289,7 @@ local StringSelectMenuBuilder=__DARKLUA_BUNDLE_MODULES.A()
 local TextInputBuilder=__DARKLUA_BUNDLE_MODULES.B()
 local TextInputStyle=__DARKLUA_BUNDLE_MODULES.C()
 local TextDisplayBuilder=__DARKLUA_BUNDLE_MODULES.D()
+local WebhookClient=__DARKLUA_BUNDLE_MODULES.E()
 
 return{
 ActionRowBuilder=ActionRowBuilder,
@@ -3202,4 +3316,5 @@ StringSelectMenuBuilder=StringSelectMenuBuilder,
 TextDisplayBuilder=TextDisplayBuilder,
 TextInputBuilder=TextInputBuilder,
 TextInputStyle=TextInputStyle,
+WebhookClient=WebhookClient,
 }
