@@ -4,6 +4,13 @@ local Color = require("../../util/Color")
 
 export type ContainerBuilder = {
 	SetAccentColor: (self: ContainerBuilder, color: Color.ColorResolvable) -> ContainerBuilder,
+	SetColor: (self: ContainerBuilder, color: Color.ColorResolvable) -> ContainerBuilder,
+	SetBlurple: (self: ContainerBuilder) -> ContainerBuilder,
+	SetGreen: (self: ContainerBuilder) -> ContainerBuilder,
+	SetYellow: (self: ContainerBuilder) -> ContainerBuilder,
+	SetRed: (self: ContainerBuilder) -> ContainerBuilder,
+	SetPink: (self: ContainerBuilder) -> ContainerBuilder,
+	SetDarkGray: (self: ContainerBuilder) -> ContainerBuilder,
 	SetSpoiler: (self: ContainerBuilder, spoiler: boolean) -> ContainerBuilder,
 	AddComponents: (self: ContainerBuilder, ...any) -> ContainerBuilder,
 	SetComponents: (self: ContainerBuilder, components: { any }) -> ContainerBuilder,
@@ -43,6 +50,34 @@ function ContainerBuilder:SetAccentColor(color: Color.ColorResolvable): Containe
 	local component = (self :: any).component
 	component.accent_color = Color.Resolve(color)
 	return self
+end
+
+function ContainerBuilder:SetColor(color: Color.ColorResolvable): ContainerBuilder
+	return self:SetAccentColor(color)
+end
+
+function ContainerBuilder:SetBlurple(): ContainerBuilder
+	return self:SetAccentColor(Color.Colors.Blurple)
+end
+
+function ContainerBuilder:SetGreen(): ContainerBuilder
+	return self:SetAccentColor(Color.Colors.Green)
+end
+
+function ContainerBuilder:SetYellow(): ContainerBuilder
+	return self:SetAccentColor(Color.Colors.Yellow)
+end
+
+function ContainerBuilder:SetRed(): ContainerBuilder
+	return self:SetAccentColor(Color.Colors.Red)
+end
+
+function ContainerBuilder:SetPink(): ContainerBuilder
+	return self:SetAccentColor(Color.Colors.Pink)
+end
+
+function ContainerBuilder:SetDarkGray(): ContainerBuilder
+	return self:SetAccentColor(Color.Colors.DarkGray)
 end
 
 function ContainerBuilder:SetSpoiler(spoiler: boolean): ContainerBuilder

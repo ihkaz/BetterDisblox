@@ -107,10 +107,21 @@ BetterDisblox.EmbedBuilder.new()
 	:SetTitle("Colors")
 	:SetDescription("Hex strings are supported")
 	:SetColor("#57F287")
+	:SetAuthor({
+		name = "ihkaz",
+	})
+	:SetFooter({
+		text = "Powered by BetterDisblox",
+	})
+	:AddFields(
+		{ name = "Style", value = "EmbedBuilder", inline = true },
+		{ name = "Color", value = "#57F287", inline = true }
+	)
+	:SetTimestampNow()
 	:Build()
 
 BetterDisblox.ContainerBuilder.new()
-	:SetAccentColor("5865F2")
+	:SetBlurple()
 	:AddComponents(
 		BetterDisblox.TextDisplayBuilder.new()
 			:SetContent("Discord blurple")
@@ -172,11 +183,11 @@ local row = BetterDisblox.ActionRowBuilder.new()
 		BetterDisblox.ButtonBuilder.new()
 			:SetCustomId("confirm")
 			:SetLabel("Confirm")
-			:SetStyle(BetterDisblox.ButtonStyle.Success),
+			:SetSuccess(),
 		BetterDisblox.ButtonBuilder.new()
 			:SetCustomId("cancel")
 			:SetLabel("Cancel")
-			:SetStyle(BetterDisblox.ButtonStyle.Danger)
+			:SetDanger()
 	)
 	:Build()
 
@@ -272,7 +283,7 @@ end)
 
 ```lua
 local container = BetterDisblox.ContainerBuilder.new()
-	:SetAccentColor(0x57F287)
+	:SetGreen()
 	:AddComponents(
 		BetterDisblox.TextDisplayBuilder.new()
 			:SetContent("## BetterDisblox"),
@@ -289,7 +300,7 @@ local container = BetterDisblox.ContainerBuilder.new()
 				BetterDisblox.ButtonBuilder.new()
 					:SetCustomId("v2_ok")
 					:SetLabel("OK")
-					:SetStyle(BetterDisblox.ButtonStyle.Success)
+					:SetSuccess()
 			),
 
 		BetterDisblox.TextDisplayBuilder.new()
@@ -316,7 +327,11 @@ local message = webhook:Send({
 		BetterDisblox.EmbedBuilder.new()
 			:SetTitle("Webhook")
 			:SetDescription("No Gateway or bot token required.")
-			:SetColor(0x57F287)
+			:SetColor("#57F287")
+			:SetFooter({
+				text = "Powered by BetterDisblox",
+			})
+			:SetTimestampNow()
 			:Build(),
 	},
 })

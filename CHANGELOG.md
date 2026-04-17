@@ -12,5 +12,6 @@
 - Added Components v2 foundation with `MessageFlags`, `TextDisplayBuilder`, `ContainerBuilder`, `SectionBuilder`, and `SeparatorBuilder`.
 - Added `WebhookClient` for Discord webhook send/edit/delete.
 - Added `Color.Resolve` and `Colors` with hex string support for embed and Components v2 colors.
+- Added expanded embed style methods, button style shortcuts, and container color shortcuts.
 - Added discord.js-style `Message` and `Interaction` wrapper objects.
 - Added Darklua bundle output at `dist/BetterDisblox.lua`.

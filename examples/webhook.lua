@@ -11,6 +11,10 @@ local message = webhook:Send({
 			:SetTitle("Webhook")
 			:SetDescription("No Gateway or bot token required.")
 			:SetColor("#57F287")
+			:SetFooter({
+				text = "Powered by BetterDisblox",
+			})
+			:SetTimestampNow()
 			:Build(),
 	},
 })

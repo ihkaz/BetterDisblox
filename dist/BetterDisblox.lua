@@ -9,6 +9,11 @@ SetCustomId:(self:ButtonBuilder__DARKLUA_TYPE_b,customId:string)->ButtonBuilder_
 SetLabel:(self:ButtonBuilder__DARKLUA_TYPE_b,label:string)->ButtonBuilder__DARKLUA_TYPE_b,
 SetStyle:(self:ButtonBuilder__DARKLUA_TYPE_b,style:number)->ButtonBuilder__DARKLUA_TYPE_b,
 SetUrl:(self:ButtonBuilder__DARKLUA_TYPE_b,url:string)->ButtonBuilder__DARKLUA_TYPE_b,
+SetPrimary:(self:ButtonBuilder__DARKLUA_TYPE_b)->ButtonBuilder__DARKLUA_TYPE_b,
+SetSecondary:(self:ButtonBuilder__DARKLUA_TYPE_b)->ButtonBuilder__DARKLUA_TYPE_b,
+SetSuccess:(self:ButtonBuilder__DARKLUA_TYPE_b)->ButtonBuilder__DARKLUA_TYPE_b,
+SetDanger:(self:ButtonBuilder__DARKLUA_TYPE_b)->ButtonBuilder__DARKLUA_TYPE_b,
+SetLink:(self:ButtonBuilder__DARKLUA_TYPE_b,url:string)->ButtonBuilder__DARKLUA_TYPE_b,
 SetDisabled:(self:ButtonBuilder__DARKLUA_TYPE_b,disabled:boolean)->ButtonBuilder__DARKLUA_TYPE_b,
 Build:(self:ButtonBuilder__DARKLUA_TYPE_b)->{[string]:any},
 }
@@ -176,6 +181,13 @@ type ColorResolvable__DARKLUA_TYPE_v=number|string
 
 type ContainerBuilder__DARKLUA_TYPE_w={
 SetAccentColor:(self:ContainerBuilder__DARKLUA_TYPE_w,color:ColorResolvable__DARKLUA_TYPE_v)->ContainerBuilder__DARKLUA_TYPE_w,
+SetColor:(self:ContainerBuilder__DARKLUA_TYPE_w,color:ColorResolvable__DARKLUA_TYPE_v)->ContainerBuilder__DARKLUA_TYPE_w,
+SetBlurple:(self:ContainerBuilder__DARKLUA_TYPE_w)->ContainerBuilder__DARKLUA_TYPE_w,
+SetGreen:(self:ContainerBuilder__DARKLUA_TYPE_w)->ContainerBuilder__DARKLUA_TYPE_w,
+SetYellow:(self:ContainerBuilder__DARKLUA_TYPE_w)->ContainerBuilder__DARKLUA_TYPE_w,
+SetRed:(self:ContainerBuilder__DARKLUA_TYPE_w)->ContainerBuilder__DARKLUA_TYPE_w,
+SetPink:(self:ContainerBuilder__DARKLUA_TYPE_w)->ContainerBuilder__DARKLUA_TYPE_w,
+SetDarkGray:(self:ContainerBuilder__DARKLUA_TYPE_w)->ContainerBuilder__DARKLUA_TYPE_w,
 SetSpoiler:(self:ContainerBuilder__DARKLUA_TYPE_w,spoiler:boolean)->ContainerBuilder__DARKLUA_TYPE_w,
 AddComponents:(self:ContainerBuilder__DARKLUA_TYPE_w,...any)->ContainerBuilder__DARKLUA_TYPE_w,
 SetComponents:(self:ContainerBuilder__DARKLUA_TYPE_w,components:{any})->ContainerBuilder__DARKLUA_TYPE_w,
@@ -188,7 +200,15 @@ SetDescription:(self:EmbedBuilder__DARKLUA_TYPE_x,description:string)->EmbedBuil
 SetColor:(self:EmbedBuilder__DARKLUA_TYPE_x,color:ColorResolvable__DARKLUA_TYPE_v)->EmbedBuilder__DARKLUA_TYPE_x,
 SetUrl:(self:EmbedBuilder__DARKLUA_TYPE_x,url:string)->EmbedBuilder__DARKLUA_TYPE_x,
 SetTimestamp:(self:EmbedBuilder__DARKLUA_TYPE_x,timestamp:string)->EmbedBuilder__DARKLUA_TYPE_x,
+SetTimestampNow:(self:EmbedBuilder__DARKLUA_TYPE_x)->EmbedBuilder__DARKLUA_TYPE_x,
+SetAuthor:(self:EmbedBuilder__DARKLUA_TYPE_x,author:{[string]:any})->EmbedBuilder__DARKLUA_TYPE_x,
+SetFooter:(self:EmbedBuilder__DARKLUA_TYPE_x,footer:{[string]:any})->EmbedBuilder__DARKLUA_TYPE_x,
+SetThumbnail:(self:EmbedBuilder__DARKLUA_TYPE_x,url:string)->EmbedBuilder__DARKLUA_TYPE_x,
+SetImage:(self:EmbedBuilder__DARKLUA_TYPE_x,url:string)->EmbedBuilder__DARKLUA_TYPE_x,
 AddField:(self:EmbedBuilder__DARKLUA_TYPE_x,name:string,value:string,inline:boolean)->EmbedBuilder__DARKLUA_TYPE_x,
+AddFields:(self:EmbedBuilder__DARKLUA_TYPE_x,...any)->EmbedBuilder__DARKLUA_TYPE_x,
+SetFields:(self:EmbedBuilder__DARKLUA_TYPE_x,fields:{any})->EmbedBuilder__DARKLUA_TYPE_x,
+ClearFields:(self:EmbedBuilder__DARKLUA_TYPE_x)->EmbedBuilder__DARKLUA_TYPE_x,
 Build:(self:EmbedBuilder__DARKLUA_TYPE_x)->{[string]:any},
 }
 
@@ -374,6 +394,11 @@ return ActionRowBuilder end function __DARKLUA_BUNDLE_MODULES.a():typeof(__modIm
 
 
 
+
+
+
+
+
 local ButtonBuilder={}
 ButtonBuilder.__index=ButtonBuilder
 
@@ -435,6 +460,26 @@ component.url=url
 component.custom_id=nil
 component.style=LINK_BUTTON_STYLE
 return self
+end
+
+function ButtonBuilder:SetPrimary():ButtonBuilder__DARKLUA_TYPE_b
+return self:SetStyle(1)
+end
+
+function ButtonBuilder:SetSecondary():ButtonBuilder__DARKLUA_TYPE_b
+return self:SetStyle(2)
+end
+
+function ButtonBuilder:SetSuccess():ButtonBuilder__DARKLUA_TYPE_b
+return self:SetStyle(3)
+end
+
+function ButtonBuilder:SetDanger():ButtonBuilder__DARKLUA_TYPE_b
+return self:SetStyle(4)
+end
+
+function ButtonBuilder:SetLink(url:string):ButtonBuilder__DARKLUA_TYPE_b
+return self:SetUrl(url)
 end
 
 function ButtonBuilder:SetDisabled(disabled:boolean):ButtonBuilder__DARKLUA_TYPE_b
@@ -2092,6 +2137,13 @@ local Color=__DARKLUA_BUNDLE_MODULES.p()
 
 
 
+
+
+
+
+
+
+
 local ContainerBuilder={}
 ContainerBuilder.__index=ContainerBuilder
 
@@ -2125,6 +2177,34 @@ function ContainerBuilder:SetAccentColor(color:ColorResolvable__DARKLUA_TYPE_v):
 local component=(self::any).component
 component.accent_color=Color.Resolve(color)
 return self
+end
+
+function ContainerBuilder:SetColor(color:ColorResolvable__DARKLUA_TYPE_v):ContainerBuilder__DARKLUA_TYPE_w
+return self:SetAccentColor(color)
+end
+
+function ContainerBuilder:SetBlurple():ContainerBuilder__DARKLUA_TYPE_w
+return self:SetAccentColor(Color.Colors.Blurple)
+end
+
+function ContainerBuilder:SetGreen():ContainerBuilder__DARKLUA_TYPE_w
+return self:SetAccentColor(Color.Colors.Green)
+end
+
+function ContainerBuilder:SetYellow():ContainerBuilder__DARKLUA_TYPE_w
+return self:SetAccentColor(Color.Colors.Yellow)
+end
+
+function ContainerBuilder:SetRed():ContainerBuilder__DARKLUA_TYPE_w
+return self:SetAccentColor(Color.Colors.Red)
+end
+
+function ContainerBuilder:SetPink():ContainerBuilder__DARKLUA_TYPE_w
+return self:SetAccentColor(Color.Colors.Pink)
+end
+
+function ContainerBuilder:SetDarkGray():ContainerBuilder__DARKLUA_TYPE_w
+return self:SetAccentColor(Color.Colors.DarkGray)
 end
 
 function ContainerBuilder:SetSpoiler(spoiler:boolean):ContainerBuilder__DARKLUA_TYPE_w
@@ -2202,6 +2282,14 @@ local Color=__DARKLUA_BUNDLE_MODULES.p()
 
 
 
+
+
+
+
+
+
+
+
 local EmbedBuilder={}
 EmbedBuilder.__index=EmbedBuilder
 
@@ -2259,6 +2347,102 @@ state.embed.timestamp=timestamp
 return self
 end
 
+function EmbedBuilder:SetTimestampNow():EmbedBuilder__DARKLUA_TYPE_x
+local state=self::any
+state.embed.timestamp=os.date("!%Y-%m-%dT%H:%M:%SZ")
+return self
+end
+
+local function copyObject(name:string,value:{[string]:any}):{[string]:any}
+if type(value)~="table"then
+error(name.." must be a table",3)
+end
+
+local output:{[string]:any}={}
+for key,fieldValue in pairs(value)do
+output[key]=fieldValue
+end
+
+return output
+end
+
+function EmbedBuilder:SetAuthor(author:{[string]:any}):EmbedBuilder__DARKLUA_TYPE_x
+local copiedAuthor=copyObject("author",author)
+if type(copiedAuthor.name)~="string"or copiedAuthor.name==""then
+error("author.name must be a non-empty string",2)
+end
+
+local state=self::any
+state.embed.author=copiedAuthor
+return self
+end
+
+function EmbedBuilder:SetFooter(footer:{[string]:any}):EmbedBuilder__DARKLUA_TYPE_x
+local copiedFooter=copyObject("footer",footer)
+if type(copiedFooter.text)~="string"or copiedFooter.text==""then
+error("footer.text must be a non-empty string",2)
+end
+
+local state=self::any
+state.embed.footer=copiedFooter
+return self
+end
+
+function EmbedBuilder:SetThumbnail(url:string):EmbedBuilder__DARKLUA_TYPE_x
+if type(url)~="string"or url==""then
+error("thumbnail url must be a non-empty string",2)
+end
+
+local state=self::any
+state.embed.thumbnail={
+url=url,
+}
+
+return self
+end
+
+function EmbedBuilder:SetImage(url:string):EmbedBuilder__DARKLUA_TYPE_x
+if type(url)~="string"or url==""then
+error("image url must be a non-empty string",2)
+end
+
+local state=self::any
+state.embed.image={
+url=url,
+}
+
+return self
+end
+
+local function normalizeField(field:any):{[string]:any}
+if type(field)~="table"then
+error("field must be a table",3)
+end
+
+if type(field.name)~="string"or field.name==""then
+error("field.name must be a non-empty string",3)
+end
+
+if type(field.value)~="string"or field.value==""then
+error("field.value must be a non-empty string",3)
+end
+
+local inline=field.inline
+if inline==nil then
+inline=false
+end
+
+if type(inline)~="boolean"then
+error("field.inline must be a boolean when provided",3)
+end
+
+return{
+name=field.name,
+value=field.value,
+inline=inline,
+}
+end
+
 function EmbedBuilder:AddField(name:string,value:string,inline:boolean):EmbedBuilder__DARKLUA_TYPE_x
 if type(name)~="string"or name==""then
 error("name must be a non-empty string",2)
@@ -2283,6 +2467,41 @@ value=value,
 inline=inline,
 })
 
+return self
+end
+
+function EmbedBuilder:AddFields(...:any):EmbedBuilder__DARKLUA_TYPE_x
+local state=self::any
+if state.embed.fields==nil then
+state.embed.fields={}
+end
+
+local fields=table.pack(...)
+for index=1,fields.n do
+table.insert(state.embed.fields,normalizeField(fields[index]))
+end
+
+return self
+end
+
+function EmbedBuilder:SetFields(fields:{any}):EmbedBuilder__DARKLUA_TYPE_x
+if type(fields)~="table"then
+error("fields must be a table",2)
+end
+
+local normalizedFields:{any}={}
+for _,field in ipairs(fields)do
+table.insert(normalizedFields,normalizeField(field))
+end
+
+local state=self::any
+state.embed.fields=normalizedFields
+return self
+end
+
+function EmbedBuilder:ClearFields():EmbedBuilder__DARKLUA_TYPE_x
+local state=self::any
+state.embed.fields={}
 return self
 end
 

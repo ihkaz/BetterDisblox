@@ -21,7 +21,7 @@ client:On("INTERACTION_CREATE", function(interaction)
 	end
 
 	local container = BetterDisblox.ContainerBuilder.new()
-		:SetAccentColor("#57F287")
+		:SetGreen()
 		:AddComponents(
 			BetterDisblox.TextDisplayBuilder.new()
 				:SetContent("## BetterDisblox"),
@@ -38,7 +38,7 @@ client:On("INTERACTION_CREATE", function(interaction)
 					BetterDisblox.ButtonBuilder.new()
 						:SetCustomId("v2_ok")
 						:SetLabel("OK")
-						:SetStyle(BetterDisblox.ButtonStyle.Success)
+						:SetSuccess()
 				),
 
 			BetterDisblox.TextDisplayBuilder.new()

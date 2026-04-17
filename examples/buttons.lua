@@ -22,11 +22,11 @@ client:On("INTERACTION_CREATE", function(interaction)
 				BetterDisblox.ButtonBuilder.new()
 					:SetCustomId("confirm")
 					:SetLabel("Confirm")
-					:SetStyle(BetterDisblox.ButtonStyle.Success),
+					:SetSuccess(),
 				BetterDisblox.ButtonBuilder.new()
 					:SetCustomId("cancel")
 					:SetLabel("Cancel")
-					:SetStyle(BetterDisblox.ButtonStyle.Danger)
+					:SetDanger()
 			)
 			:Build()
 

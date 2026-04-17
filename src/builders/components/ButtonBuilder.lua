@@ -5,6 +5,11 @@ export type ButtonBuilder = {
 	SetLabel: (self: ButtonBuilder, label: string) -> ButtonBuilder,
 	SetStyle: (self: ButtonBuilder, style: number) -> ButtonBuilder,
 	SetUrl: (self: ButtonBuilder, url: string) -> ButtonBuilder,
+	SetPrimary: (self: ButtonBuilder) -> ButtonBuilder,
+	SetSecondary: (self: ButtonBuilder) -> ButtonBuilder,
+	SetSuccess: (self: ButtonBuilder) -> ButtonBuilder,
+	SetDanger: (self: ButtonBuilder) -> ButtonBuilder,
+	SetLink: (self: ButtonBuilder, url: string) -> ButtonBuilder,
 	SetDisabled: (self: ButtonBuilder, disabled: boolean) -> ButtonBuilder,
 	Build: (self: ButtonBuilder) -> { [string]: any },
 }
@@ -70,6 +75,26 @@ function ButtonBuilder:SetUrl(url: string): ButtonBuilder
 	component.custom_id = nil
 	component.style = LINK_BUTTON_STYLE
 	return self
+end
+
+function ButtonBuilder:SetPrimary(): ButtonBuilder
+	return self:SetStyle(1)
+end
+
+function ButtonBuilder:SetSecondary(): ButtonBuilder
+	return self:SetStyle(2)
+end
+
+function ButtonBuilder:SetSuccess(): ButtonBuilder
+	return self:SetStyle(3)
+end
+
+function ButtonBuilder:SetDanger(): ButtonBuilder
+	return self:SetStyle(4)
+end
+
+function ButtonBuilder:SetLink(url: string): ButtonBuilder
+	return self:SetUrl(url)
 end
 
 function ButtonBuilder:SetDisabled(disabled: boolean): ButtonBuilder
