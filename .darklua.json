@@ -1,0 +1,13 @@
+{
+  "bundle": {
+    "require_mode": {
+      "name": "path",
+      "module_folder_name": "init"
+    }
+  },
+  "rules": [
+    "remove_comments",
+    "remove_spaces",
+    "compute_expression"
+  ]
+}

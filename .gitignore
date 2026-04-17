@@ -1,0 +1,11 @@
+.DS_Store
+*.tmp
+*.log
+.codex
+
+# Local executor/runtime files
+BetterDisblox/
+NamingStandard/
+
+# Keep the canonical bundle, ignore old generated names.
+dist/DiscordExecutor.lua
