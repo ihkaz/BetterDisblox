@@ -1,0 +1,39 @@
+local BetterDisblox = loadstring(readfile("dist/BetterDisblox.lua"))()
+
+local client = BetterDisblox.Client.new({
+	Token = "BOT_TOKEN",
+	Intents = BetterDisblox.Intents.Guilds,
+	SessionPersistence = true,
+})
+
+local commands = {
+	BetterDisblox.SlashCommandBuilder.new()
+		:SetName("v2")
+		:SetDescription("Sends a Components v2 message")
+		:Build(),
+}
+
+client.Rest:BulkOverwriteGuildApplicationCommands("APPLICATION_ID", "GUILD_ID", commands)
+
+client:On("INTERACTION_CREATE", function(interaction)
+	if interaction.Type ~= 2 or interaction.CommandName ~= "v2" then
+		return
+	end
+
+	local container = BetterDisblox.ContainerBuilder.new()
+		:SetAccentColor(0x57F287)
+		:AddComponents(
+			BetterDisblox.TextDisplayBuilder.new()
+				:SetContent("## BetterDisblox"),
+			BetterDisblox.TextDisplayBuilder.new()
+				:SetContent("Components v2 from a Roblox executor.")
+		)
+		:Build()
+
+	interaction:Reply({
+		flags = BetterDisblox.MessageFlags.IsComponentsV2,
+		components = { container },
+	})
+end)
+
+client:Login()

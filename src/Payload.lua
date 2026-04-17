@@ -62,4 +62,10 @@ function Payload.EphemeralMessage(value: any): any
 	return messagePayload
 end
 
+function Payload.WithFlags(value: any, flags: number): any
+	local messagePayload = Payload.Message(value)
+	messagePayload.flags = flags
+	return messagePayload
+end
+
 return Payload

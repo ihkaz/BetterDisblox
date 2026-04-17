@@ -18,6 +18,7 @@ This project is early. It currently supports:
 - `ActionRowBuilder` and `ButtonBuilder`.
 - `StringSelectMenuBuilder` and `SelectMenuOptionBuilder`.
 - `ModalBuilder`, `TextInputBuilder`, and `TextInputStyle`.
+- Components v2 foundation: `MessageFlags`, `TextDisplayBuilder`, and `ContainerBuilder`.
 - discord.js-style `Message` and `Interaction` wrapper objects.
 
 ## Requirements
@@ -214,6 +215,25 @@ client:On("INTERACTION_CREATE", function(interaction)
 	local feedback = interaction:GetTextInputValue("feedback_text") or ""
 	interaction:ReplyEphemeral("Thanks: " .. feedback)
 end)
+```
+
+## Components v2
+
+```lua
+local container = BetterDisblox.ContainerBuilder.new()
+	:SetAccentColor(0x57F287)
+	:AddComponents(
+		BetterDisblox.TextDisplayBuilder.new()
+			:SetContent("## BetterDisblox"),
+		BetterDisblox.TextDisplayBuilder.new()
+			:SetContent("Components v2 from a Roblox executor.")
+	)
+	:Build()
+
+interaction:Reply({
+	flags = BetterDisblox.MessageFlags.IsComponentsV2,
+	components = { container },
+})
 ```
 
 ## Session Persistence
