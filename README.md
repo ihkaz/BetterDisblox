@@ -18,7 +18,7 @@ This project is early. It currently supports:
 - `ActionRowBuilder` and `ButtonBuilder`.
 - `StringSelectMenuBuilder` and `SelectMenuOptionBuilder`.
 - `ModalBuilder`, `TextInputBuilder`, and `TextInputStyle`.
-- Components v2 foundation: `MessageFlags`, `TextDisplayBuilder`, and `ContainerBuilder`.
+- Components v2 foundation: `MessageFlags`, `TextDisplayBuilder`, `ContainerBuilder`, `SectionBuilder`, and `SeparatorBuilder`.
 - discord.js-style `Message` and `Interaction` wrapper objects.
 
 ## Requirements
@@ -241,8 +241,24 @@ local container = BetterDisblox.ContainerBuilder.new()
 	:AddComponents(
 		BetterDisblox.TextDisplayBuilder.new()
 			:SetContent("## BetterDisblox"),
+
+		BetterDisblox.SeparatorBuilder.new()
+			:SetSpacing(BetterDisblox.SeparatorSpacing.Large),
+
+		BetterDisblox.SectionBuilder.new()
+			:AddComponents(
+				BetterDisblox.TextDisplayBuilder.new()
+					:SetContent("Components v2 from a Roblox executor.")
+			)
+			:SetAccessory(
+				BetterDisblox.ButtonBuilder.new()
+					:SetCustomId("v2_ok")
+					:SetLabel("OK")
+					:SetStyle(BetterDisblox.ButtonStyle.Success)
+			),
+
 		BetterDisblox.TextDisplayBuilder.new()
-			:SetContent("Components v2 from a Roblox executor.")
+			:SetContent("Built with BetterDisblox.")
 	)
 	:Build()
 

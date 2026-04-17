@@ -9,6 +9,6 @@
 - Added `ActionRowBuilder`, `ButtonBuilder`, and `ButtonStyle`.
 - Added `StringSelectMenuBuilder`, `SelectMenuOptionBuilder`, and `interaction.Values`.
 - Added `ModalBuilder`, `TextInputBuilder`, `TextInputStyle`, `interaction:ShowModal`, and `interaction:GetTextInputValue`.
-- Added Components v2 foundation with `MessageFlags`, `TextDisplayBuilder`, and `ContainerBuilder`.
+- Added Components v2 foundation with `MessageFlags`, `TextDisplayBuilder`, `ContainerBuilder`, `SectionBuilder`, and `SeparatorBuilder`.
 - Added discord.js-style `Message` and `Interaction` wrapper objects.
 - Added Darklua bundle output at `dist/BetterDisblox.lua`.
