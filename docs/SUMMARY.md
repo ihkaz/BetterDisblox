@@ -12,7 +12,6 @@
 * [Collection](collection.md)
 * [Session Persistence](session-persistence.md)
 * [Examples](examples.md)
-* [GitBook Sync](gitbook-sync.md)
 * [Security](security.md)
 * [API Reference](api-reference/README.md)
   * [Client](api-reference/client.md)
