@@ -22,6 +22,7 @@ This project is early. It currently supports:
 - `WebhookClient` for Discord webhooks without Gateway/WebSocket.
 - Color resolving for `0xRRGGBB`, `"#RRGGBB"`, and `"RRGGBB"`.
 - discord.js-style `Message` and `Interaction` wrapper objects.
+- `CommandRegistry` for slash command routing.
 
 ## Requirements
 
@@ -174,6 +175,26 @@ end)
 ```
 
 Available methods include `set`, `get`, `has`, `delete`, `clear`, `size`, `keys`, `values`, `entries`, `first`, `find`, `filter`, `map`, and `forEach`. PascalCase aliases are also available.
+
+## Command Registry
+
+Use `CommandRegistry` to route slash commands by name:
+
+```lua
+local registry = BetterDisblox.CommandRegistry.new()
+
+registry:register("ping", function(interaction)
+	interaction:reply("pong")
+end)
+
+registry:register("say", function(interaction)
+	interaction:reply(interaction:GetString("text") or "")
+end)
+
+client:On("INTERACTION_CREATE", function(interaction)
+	registry:handle(interaction)
+end)
+```
 
 ## Slash Commands
 

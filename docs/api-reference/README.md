@@ -8,6 +8,7 @@ Reference pages for the public BetterDisblox API.
 - [Interaction](interaction.md)
 - [Message](message.md)
 - [Collection](collection.md)
+- [CommandRegistry](command-registry.md)
 - [RestClient](rest-client.md)
 - [WebhookClient](webhook-client.md)
 

@@ -19,4 +19,5 @@
 - Added discord.js-style `Message` and `Interaction` wrapper objects.
 - Added interaction state tracking, camelCase aliases, type guards, `interaction:DeferUpdate`, and `interaction:Update`.
 - Added `Collection` utility for command registries and future caches.
+- Added `CommandRegistry` for discord.js-style slash command routing.
 - Added Darklua bundle output at `dist/BetterDisblox.lua`.

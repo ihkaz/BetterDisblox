@@ -6,6 +6,7 @@ local ButtonStyle = require("./builders/components/ButtonStyle")
 local Client = require("./client/Client")
 local Color = require("./util/Color")
 local Collection = require("./util/Collection")
+local CommandRegistry = require("./commands/CommandRegistry")
 local ContainerBuilder = require("./builders/components_v2/ContainerBuilder")
 local EmbedBuilder = require("./builders/EmbedBuilder")
 local FileBuilder = require("./builders/components_v2/FileBuilder")
@@ -39,6 +40,7 @@ return {
 	Color = Color,
 	Colors = Color.Colors,
 	Collection = Collection,
+	CommandRegistry = CommandRegistry,
 	ContainerBuilder = ContainerBuilder,
 	EmbedBuilder = EmbedBuilder,
 	FileBuilder = FileBuilder,
