@@ -18,5 +18,8 @@
   * [Interaction](api-reference/interaction.md)
   * [Message](api-reference/message.md)
   * [Collection](api-reference/collection.md)
+  * [RestClient](api-reference/rest-client.md)
+  * [Colors](api-reference/colors.md)
+  * [Intents](api-reference/intents.md)
   * [Builders](api-reference/builders.md)
   * [WebhookClient](api-reference/webhook-client.md)
