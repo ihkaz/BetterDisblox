@@ -105,6 +105,10 @@ end)
 client:Login()
 ```
 
+## Pro Dashboard Example
+
+See [examples/pro-dashboard.lua](examples/pro-dashboard.lua) for a larger slash command example with `CommandRegistry`, Components v2, buttons, and a modal.
+
 ## Colors
 
 Colors can be numbers or hex strings:
