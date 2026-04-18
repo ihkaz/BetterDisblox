@@ -16,7 +16,7 @@ local commands = {
 client.Rest:BulkOverwriteGuildApplicationCommands("APPLICATION_ID", "GUILD_ID", commands)
 
 client:On("INTERACTION_CREATE", function(interaction)
-	if interaction.Type == 2 and interaction.CommandName == "feedback" then
+	if interaction:isChatInputCommand() and interaction.CommandName == "feedback" then
 		local modal = BetterDisblox.ModalBuilder.new()
 			:SetCustomId("feedback_modal")
 			:SetTitle("Feedback")
@@ -32,13 +32,13 @@ client:On("INTERACTION_CREATE", function(interaction)
 					)
 			)
 
-		interaction:ShowModal(modal)
+		interaction:showModal(modal)
 		return
 	end
 
-	if interaction.Type == 5 and interaction.CustomId == "feedback_modal" then
+	if interaction:isModalSubmit() and interaction.CustomId == "feedback_modal" then
 		local feedback = interaction:GetTextInputValue("feedback_text") or ""
-		interaction:ReplyEphemeral("Thanks: " .. feedback)
+		interaction:replyEphemeral("Thanks: " .. feedback)
 	end
 end)
 

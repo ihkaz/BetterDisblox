@@ -21,17 +21,17 @@ local commands = {
 client.Rest:BulkOverwriteGuildApplicationCommands("APPLICATION_ID", "GUILD_ID", commands)
 
 client:On("INTERACTION_CREATE", function(interaction)
-	if interaction.Type ~= 2 then
+	if not interaction:isChatInputCommand() then
 		return
 	end
 
 	if interaction.CommandName == "ping" then
-		interaction:Reply("pong")
+		interaction:reply("pong")
 		return
 	end
 
 	if interaction.CommandName == "say" then
-		interaction:Reply(interaction:GetString("text") or "")
+		interaction:reply(interaction:GetString("text") or "")
 	end
 end)
 

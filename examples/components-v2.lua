@@ -16,7 +16,7 @@ local commands = {
 client.Rest:BulkOverwriteGuildApplicationCommands("APPLICATION_ID", "GUILD_ID", commands)
 
 client:On("INTERACTION_CREATE", function(interaction)
-	if interaction.Type ~= 2 or interaction.CommandName ~= "v2" then
+	if not interaction:isChatInputCommand() or interaction.CommandName ~= "v2" then
 		return
 	end
 
@@ -51,7 +51,7 @@ client:On("INTERACTION_CREATE", function(interaction)
 		)
 		:Build()
 
-	interaction:Reply({
+	interaction:reply({
 		flags = BetterDisblox.MessageFlags.IsComponentsV2,
 		components = { container },
 	})

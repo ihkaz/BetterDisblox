@@ -14,7 +14,7 @@ end)
 
 client:On("MESSAGE_CREATE", function(message)
 	if message.Content == "!ping" then
-		message:Reply("pong")
+		message:reply("pong")
 	end
 end)
 

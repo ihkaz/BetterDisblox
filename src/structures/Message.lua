@@ -10,8 +10,11 @@ export type Message = {
 	Author: any,
 	Raw: any,
 	Reply: (self: Message, payload: any) -> any,
+	reply: (self: Message, payload: any) -> any,
 	Edit: (self: Message, payload: any) -> any,
+	edit: (self: Message, payload: any) -> any,
 	Delete: (self: Message) -> any,
+	delete: (self: Message) -> any,
 }
 
 local Message = {}
@@ -53,5 +56,9 @@ function Message:Delete(): any
 	local state = self :: any
 	return state.restClient:DeleteMessage(state.ChannelId, state.Id)
 end
+
+Message.reply = Message.Reply
+Message.edit = Message.Edit
+Message.delete = Message.Delete
 
 return Message

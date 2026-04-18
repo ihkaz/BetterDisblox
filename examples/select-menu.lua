@@ -16,7 +16,7 @@ local commands = {
 client.Rest:BulkOverwriteGuildApplicationCommands("APPLICATION_ID", "GUILD_ID", commands)
 
 client:On("INTERACTION_CREATE", function(interaction)
-	if interaction.Type == 2 and interaction.CommandName == "colors" then
+	if interaction:isChatInputCommand() and interaction.CommandName == "colors" then
 		local menu = BetterDisblox.StringSelectMenuBuilder.new()
 			:SetCustomId("choose_color")
 			:SetPlaceholder("Choose a color")
@@ -42,15 +42,15 @@ client:On("INTERACTION_CREATE", function(interaction)
 			:AddComponents(menu)
 			:Build()
 
-		interaction:Reply({
+		interaction:reply({
 			content = "Pick one",
 			components = { row },
 		})
 		return
 	end
 
-	if interaction.Type == 3 and interaction.CustomId == "choose_color" then
-		interaction:ReplyEphemeral("You picked " .. tostring(interaction.Values[1]))
+	if interaction:isStringSelectMenu() and interaction.CustomId == "choose_color" then
+		interaction:replyEphemeral("You picked " .. tostring(interaction.Values[1]))
 	end
 end)
 

@@ -16,7 +16,7 @@ local commands = {
 client.Rest:BulkOverwriteGuildApplicationCommands("APPLICATION_ID", "GUILD_ID", commands)
 
 client:On("INTERACTION_CREATE", function(interaction)
-	if interaction.Type == 2 and interaction.CommandName == "buttons" then
+	if interaction:isChatInputCommand() and interaction.CommandName == "buttons" then
 		local row = BetterDisblox.ActionRowBuilder.new()
 			:AddComponents(
 				BetterDisblox.ButtonBuilder.new()
@@ -30,20 +30,20 @@ client:On("INTERACTION_CREATE", function(interaction)
 			)
 			:Build()
 
-		interaction:Reply({
+		interaction:reply({
 			content = "Choose an action",
 			components = { row },
 		})
 		return
 	end
 
-	if interaction.Type == 3 and interaction.CustomId == "confirm" then
-		interaction:ReplyEphemeral("Confirmed")
+	if interaction:isButton() and interaction.CustomId == "confirm" then
+		interaction:replyEphemeral("Confirmed")
 		return
 	end
 
-	if interaction.Type == 3 and interaction.CustomId == "cancel" then
-		interaction:ReplyEphemeral("Cancelled")
+	if interaction:isButton() and interaction.CustomId == "cancel" then
+		interaction:replyEphemeral("Cancelled")
 	end
 end)
 

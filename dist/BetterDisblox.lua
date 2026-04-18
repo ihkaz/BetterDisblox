@@ -133,8 +133,11 @@ Content:string,
 Author:any,
 Raw:any,
 Reply:(self:Message__DARKLUA_TYPE_m,payload:any)->any,
+reply:(self:Message__DARKLUA_TYPE_m,payload:any)->any,
 Edit:(self:Message__DARKLUA_TYPE_m,payload:any)->any,
+edit:(self:Message__DARKLUA_TYPE_m,payload:any)->any,
 Delete:(self:Message__DARKLUA_TYPE_m)->any,
+delete:(self:Message__DARKLUA_TYPE_m)->any,
 }
 
 type RequestOptions__DARKLUA_TYPE_n={
@@ -1773,6 +1776,9 @@ local Payload=__DARKLUA_BUNDLE_MODULES.i()
 
 
 
+
+
+
 local Message={}
 Message.__index=Message
 
@@ -1812,6 +1818,10 @@ function Message:Delete():any
 local state=self::any
 return state.restClient:DeleteMessage(state.ChannelId,state.Id)
 end
+
+Message.reply=Message.Reply
+Message.edit=Message.Edit
+Message.delete=Message.Delete
 
 return Message end function __DARKLUA_BUNDLE_MODULES.k():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.k if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.k=v end return v.c end end do local function __modImpl()
 

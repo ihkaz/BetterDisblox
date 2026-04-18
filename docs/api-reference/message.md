@@ -16,11 +16,19 @@
 ## Methods
 
 ```lua
-message:Reply("pong")
+message:reply("pong")
 
-message:Edit({
+message:edit({
 	content = "Edited",
 })
 
+message:delete()
+```
+
+PascalCase aliases are also available:
+
+```lua
+message:Reply("pong")
+message:Edit("Edited")
 message:Delete()
 ```
