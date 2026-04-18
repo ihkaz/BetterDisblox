@@ -1443,8 +1443,12 @@ local function getSocketMessage(...:any):string?
 local arguments=table.pack(...)
 
 for index=1,arguments.n do
-if type(arguments[index])=="string"then
-return arguments[index]
+local argument=arguments[index]
+if type(argument)=="string"then
+local trimmed=string.match(argument,"^%s*(.-)%s*$")
+if string.sub(trimmed,1,1)=="{"or string.sub(trimmed,1,1)=="["then
+return trimmed
+end
 end
 end
 
@@ -1466,6 +1470,12 @@ end
 if type(argument.message)=="string"then
 return argument.message
 end
+end
+end
+
+for index=1,arguments.n do
+if type(arguments[index])=="string"then
+return arguments[index]
 end
 end
 

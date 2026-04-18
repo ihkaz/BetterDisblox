@@ -24,4 +24,5 @@
 - Improved Discord API compatibility for Components v2 payload validation, webhook components, REST command builders, nil response bodies, modal value lookup, and action row validation.
 - Added Gateway debug diagnostics with `client:EnableConsoleDebug()`.
 - Improved Gateway WebSocket message parsing for executors that pass extra callback arguments.
+- Preferred JSON-looking Gateway WebSocket callback arguments when executors pass event names before payloads.
 - Added Darklua bundle output at `dist/BetterDisblox.lua`.
