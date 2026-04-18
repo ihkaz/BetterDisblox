@@ -148,6 +148,33 @@ BetterDisblox.Colors.White
 BetterDisblox.Colors.Black
 ```
 
+## Collection
+
+Use `Collection` for command registries, caches, or any keyed data:
+
+```lua
+local commands = BetterDisblox.Collection.new()
+
+commands:set("ping", function(interaction)
+	interaction:reply("pong")
+end)
+
+client:On("INTERACTION_CREATE", function(interaction)
+	if not interaction:isChatInputCommand() then
+		return
+	end
+
+	local command = commands:get(interaction.CommandName)
+	if command == nil then
+		return
+	end
+
+	command(interaction)
+end)
+```
+
+Available methods include `set`, `get`, `has`, `delete`, `clear`, `size`, `keys`, `values`, `entries`, `first`, `find`, `filter`, `map`, and `forEach`. PascalCase aliases are also available.
+
 ## Slash Commands
 
 ```lua

@@ -18,4 +18,5 @@
 - Added expanded embed style methods, button style shortcuts, and container color shortcuts.
 - Added discord.js-style `Message` and `Interaction` wrapper objects.
 - Added interaction state tracking, camelCase aliases, type guards, `interaction:DeferUpdate`, and `interaction:Update`.
+- Added `Collection` utility for command registries and future caches.
 - Added Darklua bundle output at `dist/BetterDisblox.lua`.
