@@ -46,8 +46,20 @@ function Http.Request(options: RequestOptions): HttpResponse
 		error("request(options) response is missing numeric StatusCode", 2)
 	end
 
+	if response.Body == nil then
+		response.Body = ""
+	end
+
 	if type(response.Body) ~= "string" then
-		error("request(options) response is missing string Body", 2)
+		error("request(options) response Body must be a string when present", 2)
+	end
+
+	if response.Headers == nil then
+		response.Headers = {}
+	end
+
+	if type(response.Headers) ~= "table" then
+		error("request(options) response Headers must be a table when present", 2)
 	end
 
 	return response

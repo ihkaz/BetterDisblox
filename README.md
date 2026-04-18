@@ -448,6 +448,8 @@ webhook:Send({
 })
 ```
 
+When `IsComponentsV2` is set, send text through `TextDisplayBuilder` instead of `content` or embeds.
+
 ## REST Helpers
 
 ```lua

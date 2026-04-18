@@ -282,13 +282,38 @@ function Interaction:GetTextInputValue(customId: string): string?
 		return nil
 	end
 
-	for _, row in ipairs(data.components) do
-		if type(row) == "table" and type(row.components) == "table" then
-			for _, component in ipairs(row.components) do
-				if type(component) == "table" and component.custom_id == customId then
-					return component.value
+	local function findValue(component: any): string?
+		if type(component) ~= "table" then
+			return nil
+		end
+
+		if component.custom_id == customId and type(component.value) == "string" then
+			return component.value
+		end
+
+		if type(component.component) == "table" then
+			local childValue = findValue(component.component)
+			if childValue ~= nil then
+				return childValue
+			end
+		end
+
+		if type(component.components) == "table" then
+			for _, child in ipairs(component.components) do
+				local childValue = findValue(child)
+				if childValue ~= nil then
+					return childValue
 				end
 			end
+		end
+
+		return nil
+	end
+
+	for _, component in ipairs(data.components) do
+		local value = findValue(component)
+		if value ~= nil then
+			return value
 		end
 	end
 

@@ -58,3 +58,5 @@ webhook:Send({
 	components = { container },
 })
 ```
+
+BetterDisblox automatically adds `with_components=true` to webhook send/edit requests when the payload includes `components`.

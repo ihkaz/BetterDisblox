@@ -2,6 +2,7 @@
 
 local Http = require("./Http")
 local Json = require("../util/Json")
+local Payload = require("../structures/Payload")
 local RateLimiter = require("./RateLimiter")
 
 export type RestClientOptions = {
@@ -114,6 +115,35 @@ local function assertNonEmptyString(name: string, value: string): ()
 	end
 end
 
+local function normalizeBuildable(value: any): any
+	if type(value) == "table" and type(value.Build) == "function" then
+		return value:Build()
+	end
+
+	return value
+end
+
+local function normalizeCommandPayload(payload: any): any
+	if type(payload) ~= "table" then
+		error("command payload must be a table or builder", 3)
+	end
+
+	return normalizeBuildable(payload)
+end
+
+local function normalizeCommandList(payload: { any }): { any }
+	if type(payload) ~= "table" then
+		error("payload must be a table", 3)
+	end
+
+	local commands: { any } = {}
+	for _, command in ipairs(payload) do
+		table.insert(commands, normalizeCommandPayload(command))
+	end
+
+	return commands
+end
+
 local function appendQuery(route: string, options: { [string]: any }?): string
 	if options == nil then
 		return route
@@ -166,7 +196,7 @@ function RestClient:CreateMessage(channelId: string, payload: any): any
 		error("channelId must be a non-empty string", 2)
 	end
 
-	return self:Request("POST", "/channels/" .. channelId .. "/messages", payload)
+	return self:Request("POST", "/channels/" .. channelId .. "/messages", Payload.Message(payload))
 end
 
 function RestClient:EditMessage(channelId: string, messageId: string, payload: any): any
@@ -178,7 +208,7 @@ function RestClient:EditMessage(channelId: string, messageId: string, payload: a
 		error("messageId must be a non-empty string", 2)
 	end
 
-	return self:Request("PATCH", "/channels/" .. channelId .. "/messages/" .. messageId, payload)
+	return self:Request("PATCH", "/channels/" .. channelId .. "/messages/" .. messageId, Payload.Message(payload))
 end
 
 function RestClient:DeleteMessage(channelId: string, messageId: string): any
@@ -224,7 +254,7 @@ function RestClient:CreateGlobalApplicationCommand(applicationId: string, payloa
 		error("applicationId must be a non-empty string", 2)
 	end
 
-	return self:Request("POST", "/applications/" .. applicationId .. "/commands", payload)
+	return self:Request("POST", "/applications/" .. applicationId .. "/commands", normalizeCommandPayload(payload))
 end
 
 function RestClient:BulkOverwriteGlobalApplicationCommands(applicationId: string, payload: { any }): any
@@ -232,11 +262,7 @@ function RestClient:BulkOverwriteGlobalApplicationCommands(applicationId: string
 		error("applicationId must be a non-empty string", 2)
 	end
 
-	if type(payload) ~= "table" then
-		error("payload must be a table", 2)
-	end
-
-	return self:Request("PUT", "/applications/" .. applicationId .. "/commands", payload)
+	return self:Request("PUT", "/applications/" .. applicationId .. "/commands", normalizeCommandList(payload))
 end
 
 function RestClient:CreateGuildApplicationCommand(applicationId: string, guildId: string, payload: any): any
@@ -248,7 +274,7 @@ function RestClient:CreateGuildApplicationCommand(applicationId: string, guildId
 		error("guildId must be a non-empty string", 2)
 	end
 
-	return self:Request("POST", "/applications/" .. applicationId .. "/guilds/" .. guildId .. "/commands", payload)
+	return self:Request("POST", "/applications/" .. applicationId .. "/guilds/" .. guildId .. "/commands", normalizeCommandPayload(payload))
 end
 
 function RestClient:BulkOverwriteGuildApplicationCommands(applicationId: string, guildId: string, payload: { any }): any
@@ -260,11 +286,7 @@ function RestClient:BulkOverwriteGuildApplicationCommands(applicationId: string,
 		error("guildId must be a non-empty string", 2)
 	end
 
-	if type(payload) ~= "table" then
-		error("payload must be a table", 2)
-	end
-
-	return self:Request("PUT", "/applications/" .. applicationId .. "/guilds/" .. guildId .. "/commands", payload)
+	return self:Request("PUT", "/applications/" .. applicationId .. "/guilds/" .. guildId .. "/commands", normalizeCommandList(payload))
 end
 
 function RestClient:CreateInteractionResponse(interactionId: string, interactionToken: string, payload: any): any

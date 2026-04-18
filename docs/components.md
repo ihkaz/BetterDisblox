@@ -30,6 +30,8 @@ interaction:reply({
 
 Components v2 requires the `IsComponentsV2` message flag.
 
+When `IsComponentsV2` is set, do not include `content`, `embeds`, `stickers`, or `poll` in the same message payload. Use `TextDisplayBuilder` and other Components v2 builders instead.
+
 ```lua
 local container = BetterDisblox.ContainerBuilder.new()
 	:SetGreen()

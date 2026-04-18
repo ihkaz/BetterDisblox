@@ -77,6 +77,8 @@ client.Rest:CreateGuildApplicationCommand("APPLICATION_ID", "GUILD_ID", command)
 client.Rest:BulkOverwriteGuildApplicationCommands("APPLICATION_ID", "GUILD_ID", commands)
 ```
 
+Command builders can be passed directly. BetterDisblox calls `Build()` before sending the REST request.
+
 Guild command updates are usually faster for testing. Global command updates can take longer to appear in Discord.
 
 ## Interaction Internals

@@ -416,6 +416,7 @@ Wait:boolean?,
 Username:string?,
 AvatarUrl:string?,
 ThreadId:string?,
+WithComponents:boolean?,
 }
 
 type WebhookClient__DARKLUA_TYPE_R={
@@ -436,6 +437,13 @@ local ActionRowBuilder={}
 ActionRowBuilder.__index=ActionRowBuilder
 
 local COMPONENT_TYPE_ACTION_ROW=1
+local COMPONENT_TYPE_BUTTON=2
+local COMPONENT_TYPE_STRING_SELECT=3
+local COMPONENT_TYPE_TEXT_INPUT=4
+local COMPONENT_TYPE_USER_SELECT=5
+local COMPONENT_TYPE_ROLE_SELECT=6
+local COMPONENT_TYPE_MENTIONABLE_SELECT=7
+local COMPONENT_TYPE_CHANNEL_SELECT=8
 local MAX_COMPONENTS=5
 
 function ActionRowBuilder.new():ActionRowBuilder__DARKLUA_TYPE_a
@@ -456,6 +464,50 @@ return component:Build()
 end
 
 return component
+end
+
+local function isSingleComponentType(componentType:any):boolean
+return componentType==COMPONENT_TYPE_STRING_SELECT
+or componentType==COMPONENT_TYPE_TEXT_INPUT
+or componentType==COMPONENT_TYPE_USER_SELECT
+or componentType==COMPONENT_TYPE_ROLE_SELECT
+or componentType==COMPONENT_TYPE_MENTIONABLE_SELECT
+or componentType==COMPONENT_TYPE_CHANNEL_SELECT
+end
+
+local function validateComponents(components:{any}):()
+if#components<1 then
+error("action rows require at least one component",3)
+end
+
+if#components>MAX_COMPONENTS then
+error("action rows can contain at most five components",3)
+end
+
+local firstComponent=components[1]
+if type(firstComponent)~="table"or type(firstComponent.type)~="number"then
+error("action row components require a numeric type",3)
+end
+
+if firstComponent.type==COMPONENT_TYPE_BUTTON then
+for _,component in ipairs(components)do
+if type(component)~="table"or component.type~=COMPONENT_TYPE_BUTTON then
+error("action rows cannot mix buttons with other component types",3)
+end
+end
+
+return
+end
+
+if isSingleComponentType(firstComponent.type)then
+if#components~=1 then
+error("action rows can contain only one select menu or text input",3)
+end
+
+return
+end
+
+error("unsupported action row component type: "..tostring(firstComponent.type),3)
 end
 
 function ActionRowBuilder:AddComponents(...:any):ActionRowBuilder__DARKLUA_TYPE_a
@@ -495,9 +547,7 @@ end
 function ActionRowBuilder:Build():{[string]:any}
 local state=self::any
 
-if#state.components<1 then
-error("action rows require at least one component",2)
-end
+validateComponents(state.components)
 
 return{
 type=COMPONENT_TYPE_ACTION_ROW,
@@ -1363,6 +1413,54 @@ return GatewayClient end function __DARKLUA_BUNDLE_MODULES.h():typeof(__modImpl(
 
 local Payload={}
 
+local MESSAGE_FLAG_EPHEMERAL=64
+local MESSAGE_FLAG_IS_COMPONENTS_V2=32768
+
+local function copyTable(value:{[any]:any}):{[any]:any}
+local output:{[any]:any}={}
+for key,tableValue in pairs(value)do
+output[key]=tableValue
+end
+
+return output
+end
+
+local function hasFlag(flags:number,flag:number):boolean
+return math.floor(flags/flag)%2==1
+end
+
+local function addFlag(flags:number?,flag:number):number
+if flags==nil then
+return flag
+end
+
+if hasFlag(flags,flag)then
+return flags
+end
+
+return flags+flag
+end
+
+local function assertMessagePayload(payload:any):()
+if type(payload.flags)=="number"and hasFlag(payload.flags,MESSAGE_FLAG_IS_COMPONENTS_V2)then
+if payload.content~=nil then
+error("Components v2 payloads cannot include content; use TextDisplayBuilder instead",3)
+end
+
+if payload.embeds~=nil then
+error("Components v2 payloads cannot include embeds; use Components v2 builders instead",3)
+end
+
+if payload.stickers~=nil then
+error("Components v2 payloads cannot include stickers",3)
+end
+
+if payload.poll~=nil then
+error("Components v2 payloads cannot include poll",3)
+end
+end
+end
+
 function Payload.Message(value:any):any
 if type(value)=="string"then
 return{
@@ -1374,7 +1472,9 @@ if type(value)~="table"then
 error("message payload must be a string or table",3)
 end
 
-return value
+local messagePayload=copyTable(value)
+assertMessagePayload(messagePayload)
+return messagePayload
 end
 
 function Payload.InteractionResponse(value:any):any
@@ -1391,7 +1491,7 @@ local data=nil
 
 if ephemeral then
 data={
-flags=64,
+flags=MESSAGE_FLAG_EPHEMERAL,
 }
 end
 
@@ -1434,13 +1534,18 @@ end
 
 function Payload.EphemeralMessage(value:any):any
 local messagePayload=Payload.Message(value)
-messagePayload.flags=64
+messagePayload.flags=addFlag(messagePayload.flags,MESSAGE_FLAG_EPHEMERAL)
 return messagePayload
 end
 
 function Payload.WithFlags(value:any,flags:number):any
+if type(flags)~="number"then
+error("flags must be a number",2)
+end
+
 local messagePayload=Payload.Message(value)
 messagePayload.flags=flags
+assertMessagePayload(messagePayload)
 return messagePayload
 end
 
@@ -1730,13 +1835,38 @@ if type(data)~="table"or type(data.components)~="table"then
 return nil
 end
 
-for _,row in ipairs(data.components)do
-if type(row)=="table"and type(row.components)=="table"then
-for _,component in ipairs(row.components)do
-if type(component)=="table"and component.custom_id==customId then
+local function findValue(component:any):string?
+if type(component)~="table"then
+return nil
+end
+
+if component.custom_id==customId and type(component.value)=="string"then
 return component.value
 end
+
+if type(component.component)=="table"then
+local childValue=findValue(component.component)
+if childValue~=nil then
+return childValue
 end
+end
+
+if type(component.components)=="table"then
+for _,child in ipairs(component.components)do
+local childValue=findValue(child)
+if childValue~=nil then
+return childValue
+end
+end
+end
+
+return nil
+end
+
+for _,component in ipairs(data.components)do
+local value=findValue(component)
+if value~=nil then
+return value
 end
 end
 
@@ -1873,8 +2003,20 @@ if type(response.StatusCode)~="number"then
 error("request(options) response is missing numeric StatusCode",2)
 end
 
+if response.Body==nil then
+response.Body=""
+end
+
 if type(response.Body)~="string"then
-error("request(options) response is missing string Body",2)
+error("request(options) response Body must be a string when present",2)
+end
+
+if response.Headers==nil then
+response.Headers={}
+end
+
+if type(response.Headers)~="table"then
+error("request(options) response Headers must be a table when present",2)
 end
 
 return response
@@ -1983,6 +2125,7 @@ return RateLimiter end function __DARKLUA_BUNDLE_MODULES.m():typeof(__modImpl())
 
 local Http=__DARKLUA_BUNDLE_MODULES.l()
 local Json=__DARKLUA_BUNDLE_MODULES.f()
+local Payload=__DARKLUA_BUNDLE_MODULES.i()
 local RateLimiter=__DARKLUA_BUNDLE_MODULES.m()
 
 
@@ -2095,6 +2238,35 @@ error(name.." must be a non-empty string",3)
 end
 end
 
+local function normalizeBuildable(value:any):any
+if type(value)=="table"and type(value.Build)=="function"then
+return value:Build()
+end
+
+return value
+end
+
+local function normalizeCommandPayload(payload:any):any
+if type(payload)~="table"then
+error("command payload must be a table or builder",3)
+end
+
+return normalizeBuildable(payload)
+end
+
+local function normalizeCommandList(payload:{any}):{any}
+if type(payload)~="table"then
+error("payload must be a table",3)
+end
+
+local commands:{any}={}
+for _,command in ipairs(payload)do
+table.insert(commands,normalizeCommandPayload(command))
+end
+
+return commands
+end
+
 local function appendQuery(route:string,options:{[string]:any}?):string
 if options==nil then
 return route
@@ -2147,7 +2319,7 @@ if type(channelId)~="string"or channelId==""then
 error("channelId must be a non-empty string",2)
 end
 
-return self:Request("POST","/channels/"..channelId.."/messages",payload)
+return self:Request("POST","/channels/"..channelId.."/messages",Payload.Message(payload))
 end
 
 function RestClient:EditMessage(channelId:string,messageId:string,payload:any):any
@@ -2159,7 +2331,7 @@ if type(messageId)~="string"or messageId==""then
 error("messageId must be a non-empty string",2)
 end
 
-return self:Request("PATCH","/channels/"..channelId.."/messages/"..messageId,payload)
+return self:Request("PATCH","/channels/"..channelId.."/messages/"..messageId,Payload.Message(payload))
 end
 
 function RestClient:DeleteMessage(channelId:string,messageId:string):any
@@ -2205,7 +2377,7 @@ if type(applicationId)~="string"or applicationId==""then
 error("applicationId must be a non-empty string",2)
 end
 
-return self:Request("POST","/applications/"..applicationId.."/commands",payload)
+return self:Request("POST","/applications/"..applicationId.."/commands",normalizeCommandPayload(payload))
 end
 
 function RestClient:BulkOverwriteGlobalApplicationCommands(applicationId:string,payload:{any}):any
@@ -2213,11 +2385,7 @@ if type(applicationId)~="string"or applicationId==""then
 error("applicationId must be a non-empty string",2)
 end
 
-if type(payload)~="table"then
-error("payload must be a table",2)
-end
-
-return self:Request("PUT","/applications/"..applicationId.."/commands",payload)
+return self:Request("PUT","/applications/"..applicationId.."/commands",normalizeCommandList(payload))
 end
 
 function RestClient:CreateGuildApplicationCommand(applicationId:string,guildId:string,payload:any):any
@@ -2229,7 +2397,7 @@ if type(guildId)~="string"or guildId==""then
 error("guildId must be a non-empty string",2)
 end
 
-return self:Request("POST","/applications/"..applicationId.."/guilds/"..guildId.."/commands",payload)
+return self:Request("POST","/applications/"..applicationId.."/guilds/"..guildId.."/commands",normalizeCommandPayload(payload))
 end
 
 function RestClient:BulkOverwriteGuildApplicationCommands(applicationId:string,guildId:string,payload:{any}):any
@@ -2241,11 +2409,7 @@ if type(guildId)~="string"or guildId==""then
 error("guildId must be a non-empty string",2)
 end
 
-if type(payload)~="table"then
-error("payload must be a table",2)
-end
-
-return self:Request("PUT","/applications/"..applicationId.."/guilds/"..guildId.."/commands",payload)
+return self:Request("PUT","/applications/"..applicationId.."/guilds/"..guildId.."/commands",normalizeCommandList(payload))
 end
 
 function RestClient:CreateInteractionResponse(interactionId:string,interactionToken:string,payload:any):any
@@ -4402,6 +4566,7 @@ local Payload=__DARKLUA_BUNDLE_MODULES.i()
 
 
 
+
 local WebhookClient={}
 WebhookClient.__index=WebhookClient
 
@@ -4484,7 +4649,7 @@ end
 return messagePayload
 end
 
-local function applyWebhookQuery(url:string,state:any,options:WebhookClientOptions__DARKLUA_TYPE_Q?):string
+local function applyWebhookQuery(url:string,state:any,options:WebhookClientOptions__DARKLUA_TYPE_Q?,payload:any):string
 local threadId=state.threadId
 if options~=nil and options.ThreadId~=nil then
 threadId=options.ThreadId
@@ -4492,6 +4657,10 @@ end
 
 if threadId~=nil then
 url=appendQuery(url,"thread_id",threadId)
+end
+
+if(options~=nil and options.WithComponents==true)or(type(payload)=="table"and payload.components~=nil)then
+url=appendQuery(url,"with_components","true")
 end
 
 return url
@@ -4523,8 +4692,9 @@ if state.waitForResponse or(options~=nil and options.Wait==true)then
 url=appendQuery(url,"wait","true")
 end
 
-url=applyWebhookQuery(url,state,options)
-return requestJson("POST",url,applyWebhookPayloadDefaults(payload,state,options))
+local messagePayload=applyWebhookPayloadDefaults(payload,state,options)
+url=applyWebhookQuery(url,state,options,messagePayload)
+return requestJson("POST",url,messagePayload)
 end
 
 function WebhookClient:EditMessage(messageId:string,payload:any,options:WebhookClientOptions__DARKLUA_TYPE_Q?):any
@@ -4533,8 +4703,9 @@ error("messageId must be a non-empty string",2)
 end
 
 local state=self::any
-local url=applyWebhookQuery(state.baseUrl.."/messages/"..messageId,state,options)
-return requestJson("PATCH",url,applyWebhookPayloadDefaults(payload,state,options))
+local messagePayload=applyWebhookPayloadDefaults(payload,state,options)
+local url=applyWebhookQuery(state.baseUrl.."/messages/"..messageId,state,options,messagePayload)
+return requestJson("PATCH",url,messagePayload)
 end
 
 function WebhookClient:DeleteMessage(messageId:string,options:WebhookClientOptions__DARKLUA_TYPE_Q?):any
@@ -4543,7 +4714,7 @@ error("messageId must be a non-empty string",2)
 end
 
 local state=self::any
-local url=applyWebhookQuery(state.baseUrl.."/messages/"..messageId,state,options)
+local url=applyWebhookQuery(state.baseUrl.."/messages/"..messageId,state,options,nil)
 return requestJson("DELETE",url,nil)
 end
 

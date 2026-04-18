@@ -8,6 +8,7 @@ export type WebhookClientOptions = {
 	Username: string?,
 	AvatarUrl: string?,
 	ThreadId: string?,
+	WithComponents: boolean?,
 }
 
 export type WebhookClient = {
@@ -98,7 +99,7 @@ local function applyWebhookPayloadDefaults(payload: any, state: any, options: We
 	return messagePayload
 end
 
-local function applyWebhookQuery(url: string, state: any, options: WebhookClientOptions?): string
+local function applyWebhookQuery(url: string, state: any, options: WebhookClientOptions?, payload: any): string
 	local threadId = state.threadId
 	if options ~= nil and options.ThreadId ~= nil then
 		threadId = options.ThreadId
@@ -106,6 +107,10 @@ local function applyWebhookQuery(url: string, state: any, options: WebhookClient
 
 	if threadId ~= nil then
 		url = appendQuery(url, "thread_id", threadId)
+	end
+
+	if (options ~= nil and options.WithComponents == true) or (type(payload) == "table" and payload.components ~= nil) then
+		url = appendQuery(url, "with_components", "true")
 	end
 
 	return url
@@ -137,8 +142,9 @@ function WebhookClient:Send(payload: any, options: WebhookClientOptions?): any
 		url = appendQuery(url, "wait", "true")
 	end
 
-	url = applyWebhookQuery(url, state, options)
-	return requestJson("POST", url, applyWebhookPayloadDefaults(payload, state, options))
+	local messagePayload = applyWebhookPayloadDefaults(payload, state, options)
+	url = applyWebhookQuery(url, state, options, messagePayload)
+	return requestJson("POST", url, messagePayload)
 end
 
 function WebhookClient:EditMessage(messageId: string, payload: any, options: WebhookClientOptions?): any
@@ -147,8 +153,9 @@ function WebhookClient:EditMessage(messageId: string, payload: any, options: Web
 	end
 
 	local state = self :: any
-	local url = applyWebhookQuery(state.baseUrl .. "/messages/" .. messageId, state, options)
-	return requestJson("PATCH", url, applyWebhookPayloadDefaults(payload, state, options))
+	local messagePayload = applyWebhookPayloadDefaults(payload, state, options)
+	local url = applyWebhookQuery(state.baseUrl .. "/messages/" .. messageId, state, options, messagePayload)
+	return requestJson("PATCH", url, messagePayload)
 end
 
 function WebhookClient:DeleteMessage(messageId: string, options: WebhookClientOptions?): any
@@ -157,7 +164,7 @@ function WebhookClient:DeleteMessage(messageId: string, options: WebhookClientOp
 	end
 
 	local state = self :: any
-	local url = applyWebhookQuery(state.baseUrl .. "/messages/" .. messageId, state, options)
+	local url = applyWebhookQuery(state.baseUrl .. "/messages/" .. messageId, state, options, nil)
 	return requestJson("DELETE", url, nil)
 end
 
