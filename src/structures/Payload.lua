@@ -40,6 +40,21 @@ function Payload.DeferredInteractionResponse(ephemeral: boolean): any
 	}
 end
 
+function Payload.DeferredUpdateInteractionResponse(): any
+	return {
+		type = 6,
+	}
+end
+
+function Payload.UpdateInteractionResponse(value: any): any
+	local messagePayload = Payload.Message(value)
+
+	return {
+		type = 7,
+		data = messagePayload,
+	}
+end
+
 function Payload.Modal(value: any): any
 	local modalPayload = value
 	if type(value) == "table" and type(value.Build) == "function" then

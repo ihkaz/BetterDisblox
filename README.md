@@ -166,17 +166,39 @@ local commands = {
 client.Rest:BulkOverwriteGuildApplicationCommands("APPLICATION_ID", "GUILD_ID", commands)
 
 client:On("INTERACTION_CREATE", function(interaction)
-	if interaction.Type ~= 2 then
+	if not interaction:IsChatInputCommand() then
 		return
 	end
 
 	if interaction.CommandName == "ping" then
-		interaction:Reply("pong")
+		interaction:reply("pong")
 		return
 	end
 
 	if interaction.CommandName == "say" then
-		interaction:Reply(interaction:GetString("text") or "")
+		interaction:reply(interaction:GetString("text") or "")
+	end
+end)
+```
+
+Interaction methods use both PascalCase and discord.js-style camelCase names:
+
+```lua
+client:On("INTERACTION_CREATE", function(interaction)
+	if interaction:isChatInputCommand() and interaction.CommandName == "slow" then
+		interaction:deferReply(false)
+		interaction:editReply("Done")
+		return
+	end
+
+	if interaction:isButton() and interaction.CustomId == "refresh" then
+		interaction:deferUpdate()
+		interaction:editReply("Refreshed")
+		return
+	end
+
+	if interaction:isStringSelectMenu() then
+		interaction:replyEphemeral("Selected: " .. tostring(interaction.Values[1]))
 	end
 end)
 ```
@@ -203,7 +225,7 @@ interaction:Reply({
 })
 
 client:On("INTERACTION_CREATE", function(interaction)
-	if interaction.Type ~= 3 then
+	if not interaction:IsMessageComponent() then
 		return
 	end
 
@@ -248,7 +270,7 @@ interaction:Reply({
 })
 
 client:On("INTERACTION_CREATE", function(interaction)
-	if interaction.Type ~= 3 or interaction.CustomId ~= "choose_color" then
+	if not interaction:IsStringSelectMenu() or interaction.CustomId ~= "choose_color" then
 		return
 	end
 
@@ -276,7 +298,7 @@ local modal = BetterDisblox.ModalBuilder.new()
 interaction:ShowModal(modal)
 
 client:On("INTERACTION_CREATE", function(interaction)
-	if interaction.Type ~= 5 or interaction.CustomId ~= "feedback_modal" then
+	if not interaction:IsModalSubmit() or interaction.CustomId ~= "feedback_modal" then
 		return
 	end
 

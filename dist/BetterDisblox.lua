@@ -87,13 +87,37 @@ CustomId:string?,
 Values:{string},
 Options:{any},
 Raw:any,
+Deferred:boolean,
+Replied:boolean,
+Ephemeral:boolean,
 Reply:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
+reply:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
 ReplyEphemeral:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
+replyEphemeral:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
 DeferReply:(self:Interaction__DARKLUA_TYPE_l,ephemeral:boolean)->any,
+deferReply:(self:Interaction__DARKLUA_TYPE_l,ephemeral:boolean)->any,
+DeferUpdate:(self:Interaction__DARKLUA_TYPE_l)->any,
+deferUpdate:(self:Interaction__DARKLUA_TYPE_l)->any,
 EditReply:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
+editReply:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
 DeleteReply:(self:Interaction__DARKLUA_TYPE_l)->any,
+deleteReply:(self:Interaction__DARKLUA_TYPE_l)->any,
 FollowUp:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
+followUp:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
 ShowModal:(self:Interaction__DARKLUA_TYPE_l,modal:any)->any,
+showModal:(self:Interaction__DARKLUA_TYPE_l,modal:any)->any,
+Update:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
+update:(self:Interaction__DARKLUA_TYPE_l,payload:any)->any,
+IsChatInputCommand:(self:Interaction__DARKLUA_TYPE_l)->boolean,
+isChatInputCommand:(self:Interaction__DARKLUA_TYPE_l)->boolean,
+IsMessageComponent:(self:Interaction__DARKLUA_TYPE_l)->boolean,
+isMessageComponent:(self:Interaction__DARKLUA_TYPE_l)->boolean,
+IsButton:(self:Interaction__DARKLUA_TYPE_l)->boolean,
+isButton:(self:Interaction__DARKLUA_TYPE_l)->boolean,
+IsStringSelectMenu:(self:Interaction__DARKLUA_TYPE_l)->boolean,
+isStringSelectMenu:(self:Interaction__DARKLUA_TYPE_l)->boolean,
+IsModalSubmit:(self:Interaction__DARKLUA_TYPE_l)->boolean,
+isModalSubmit:(self:Interaction__DARKLUA_TYPE_l)->boolean,
 GetOption:(self:Interaction__DARKLUA_TYPE_l,name:string)->any,
 GetString:(self:Interaction__DARKLUA_TYPE_l,name:string)->string?,
 GetInteger:(self:Interaction__DARKLUA_TYPE_l,name:string)->number?,
@@ -1310,6 +1334,21 @@ data=data,
 }
 end
 
+function Payload.DeferredUpdateInteractionResponse():any
+return{
+type=6,
+}
+end
+
+function Payload.UpdateInteractionResponse(value:any):any
+local messagePayload=Payload.Message(value)
+
+return{
+type=7,
+data=messagePayload,
+}
+end
+
 function Payload.Modal(value:any):any
 local modalPayload=value
 if type(value)=="table"and type(value.Build)=="function"then
@@ -1343,6 +1382,30 @@ return Payload end function __DARKLUA_BUNDLE_MODULES.i():typeof(__modImpl())loca
 
 
 local Payload=__DARKLUA_BUNDLE_MODULES.i()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1415,6 +1478,9 @@ CustomId=customId,
 Values=values,
 Options=getOptions(rawInteraction),
 Raw=rawInteraction,
+Deferred=false,
+Replied=false,
+Ephemeral=false,
 restClient=restClient,
 }
 
@@ -1423,38 +1489,63 @@ end
 
 function Interaction:Reply(payload:any):any
 local state=self::any
-return state.restClient:CreateInteractionResponse(
+local response=state.restClient:CreateInteractionResponse(
 state.Id,
 state.Token,
 Payload.InteractionResponse(payload)
 )
+state.Replied=true
+return response
 end
 
 function Interaction:ReplyEphemeral(payload:any):any
 local state=self::any
-return state.restClient:CreateInteractionResponse(
+local response=state.restClient:CreateInteractionResponse(
 state.Id,
 state.Token,
 Payload.InteractionResponse(Payload.EphemeralMessage(payload))
 )
+state.Replied=true
+state.Ephemeral=true
+return response
 end
 
 function Interaction:DeferReply(ephemeral:boolean):any
 local state=self::any
-return state.restClient:CreateInteractionResponse(
+local response=state.restClient:CreateInteractionResponse(
 state.Id,
 state.Token,
 Payload.DeferredInteractionResponse(ephemeral)
 )
+state.Deferred=true
+state.Ephemeral=ephemeral
+return response
+end
+
+function Interaction:DeferUpdate():any
+if not self:IsMessageComponent()then
+error("DeferUpdate can only be used with message component interactions",2)
+end
+
+local state=self::any
+local response=state.restClient:CreateInteractionResponse(
+state.Id,
+state.Token,
+Payload.DeferredUpdateInteractionResponse()
+)
+state.Deferred=true
+return response
 end
 
 function Interaction:EditReply(payload:any):any
 local state=self::any
-return state.restClient:EditOriginalInteractionResponse(
+local response=state.restClient:EditOriginalInteractionResponse(
 state.ApplicationId,
 state.Token,
 Payload.Message(payload)
 )
+state.Replied=true
+return response
 end
 
 function Interaction:DeleteReply():any
@@ -1464,20 +1555,61 @@ end
 
 function Interaction:FollowUp(payload:any):any
 local state=self::any
-return state.restClient:CreateFollowupMessage(
+local response=state.restClient:CreateFollowupMessage(
 state.ApplicationId,
 state.Token,
 Payload.Message(payload)
 )
+state.Replied=true
+return response
 end
 
 function Interaction:ShowModal(modal:any):any
 local state=self::any
-return state.restClient:CreateInteractionResponse(
+local response=state.restClient:CreateInteractionResponse(
 state.Id,
 state.Token,
 Payload.Modal(modal)
 )
+state.Replied=true
+return response
+end
+
+function Interaction:Update(payload:any):any
+if not self:IsMessageComponent()then
+error("Update can only be used with message component interactions",2)
+end
+
+local state=self::any
+local response=state.restClient:CreateInteractionResponse(
+state.Id,
+state.Token,
+Payload.UpdateInteractionResponse(payload)
+)
+state.Replied=true
+return response
+end
+
+function Interaction:IsChatInputCommand():boolean
+return(self::any).Type==2
+end
+
+function Interaction:IsMessageComponent():boolean
+return(self::any).Type==3
+end
+
+function Interaction:IsButton():boolean
+local data=(self::any).Data
+return self:IsMessageComponent()and type(data)=="table"and data.component_type==2
+end
+
+function Interaction:IsStringSelectMenu():boolean
+local data=(self::any).Data
+return self:IsMessageComponent()and type(data)=="table"and data.component_type==3
+end
+
+function Interaction:IsModalSubmit():boolean
+return(self::any).Type==5
 end
 
 function Interaction:GetOption(name:string):any
@@ -1543,6 +1675,21 @@ end
 
 return nil
 end
+
+Interaction.reply=Interaction.Reply
+Interaction.replyEphemeral=Interaction.ReplyEphemeral
+Interaction.deferReply=Interaction.DeferReply
+Interaction.deferUpdate=Interaction.DeferUpdate
+Interaction.editReply=Interaction.EditReply
+Interaction.deleteReply=Interaction.DeleteReply
+Interaction.followUp=Interaction.FollowUp
+Interaction.showModal=Interaction.ShowModal
+Interaction.update=Interaction.Update
+Interaction.isChatInputCommand=Interaction.IsChatInputCommand
+Interaction.isMessageComponent=Interaction.IsMessageComponent
+Interaction.isButton=Interaction.IsButton
+Interaction.isStringSelectMenu=Interaction.IsStringSelectMenu
+Interaction.isModalSubmit=Interaction.IsModalSubmit
 
 return Interaction end function __DARKLUA_BUNDLE_MODULES.j():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.j if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.j=v end return v.c end end do local function __modImpl()
 

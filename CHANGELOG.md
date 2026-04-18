@@ -17,4 +17,5 @@
 - Added `Color.Resolve` and `Colors` with hex string support for embed and Components v2 colors.
 - Added expanded embed style methods, button style shortcuts, and container color shortcuts.
 - Added discord.js-style `Message` and `Interaction` wrapper objects.
+- Added interaction state tracking, camelCase aliases, type guards, `interaction:DeferUpdate`, and `interaction:Update`.
 - Added Darklua bundle output at `dist/BetterDisblox.lua`.

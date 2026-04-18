@@ -13,13 +13,37 @@ export type Interaction = {
 	Values: { string },
 	Options: { any },
 	Raw: any,
+	Deferred: boolean,
+	Replied: boolean,
+	Ephemeral: boolean,
 	Reply: (self: Interaction, payload: any) -> any,
+	reply: (self: Interaction, payload: any) -> any,
 	ReplyEphemeral: (self: Interaction, payload: any) -> any,
+	replyEphemeral: (self: Interaction, payload: any) -> any,
 	DeferReply: (self: Interaction, ephemeral: boolean) -> any,
+	deferReply: (self: Interaction, ephemeral: boolean) -> any,
+	DeferUpdate: (self: Interaction) -> any,
+	deferUpdate: (self: Interaction) -> any,
 	EditReply: (self: Interaction, payload: any) -> any,
+	editReply: (self: Interaction, payload: any) -> any,
 	DeleteReply: (self: Interaction) -> any,
+	deleteReply: (self: Interaction) -> any,
 	FollowUp: (self: Interaction, payload: any) -> any,
+	followUp: (self: Interaction, payload: any) -> any,
 	ShowModal: (self: Interaction, modal: any) -> any,
+	showModal: (self: Interaction, modal: any) -> any,
+	Update: (self: Interaction, payload: any) -> any,
+	update: (self: Interaction, payload: any) -> any,
+	IsChatInputCommand: (self: Interaction) -> boolean,
+	isChatInputCommand: (self: Interaction) -> boolean,
+	IsMessageComponent: (self: Interaction) -> boolean,
+	isMessageComponent: (self: Interaction) -> boolean,
+	IsButton: (self: Interaction) -> boolean,
+	isButton: (self: Interaction) -> boolean,
+	IsStringSelectMenu: (self: Interaction) -> boolean,
+	isStringSelectMenu: (self: Interaction) -> boolean,
+	IsModalSubmit: (self: Interaction) -> boolean,
+	isModalSubmit: (self: Interaction) -> boolean,
 	GetOption: (self: Interaction, name: string) -> any,
 	GetString: (self: Interaction, name: string) -> string?,
 	GetInteger: (self: Interaction, name: string) -> number?,
@@ -73,6 +97,9 @@ function Interaction.new(rawInteraction: any, restClient: any): Interaction
 		Values = values,
 		Options = getOptions(rawInteraction),
 		Raw = rawInteraction,
+		Deferred = false,
+		Replied = false,
+		Ephemeral = false,
 		restClient = restClient,
 	}
 
@@ -81,38 +108,63 @@ end
 
 function Interaction:Reply(payload: any): any
 	local state = self :: any
-	return state.restClient:CreateInteractionResponse(
+	local response = state.restClient:CreateInteractionResponse(
 		state.Id,
 		state.Token,
 		Payload.InteractionResponse(payload)
 	)
+	state.Replied = true
+	return response
 end
 
 function Interaction:ReplyEphemeral(payload: any): any
 	local state = self :: any
-	return state.restClient:CreateInteractionResponse(
+	local response = state.restClient:CreateInteractionResponse(
 		state.Id,
 		state.Token,
 		Payload.InteractionResponse(Payload.EphemeralMessage(payload))
 	)
+	state.Replied = true
+	state.Ephemeral = true
+	return response
 end
 
 function Interaction:DeferReply(ephemeral: boolean): any
 	local state = self :: any
-	return state.restClient:CreateInteractionResponse(
+	local response = state.restClient:CreateInteractionResponse(
 		state.Id,
 		state.Token,
 		Payload.DeferredInteractionResponse(ephemeral)
 	)
+	state.Deferred = true
+	state.Ephemeral = ephemeral
+	return response
+end
+
+function Interaction:DeferUpdate(): any
+	if not self:IsMessageComponent() then
+		error("DeferUpdate can only be used with message component interactions", 2)
+	end
+
+	local state = self :: any
+	local response = state.restClient:CreateInteractionResponse(
+		state.Id,
+		state.Token,
+		Payload.DeferredUpdateInteractionResponse()
+	)
+	state.Deferred = true
+	return response
 end
 
 function Interaction:EditReply(payload: any): any
 	local state = self :: any
-	return state.restClient:EditOriginalInteractionResponse(
+	local response = state.restClient:EditOriginalInteractionResponse(
 		state.ApplicationId,
 		state.Token,
 		Payload.Message(payload)
 	)
+	state.Replied = true
+	return response
 end
 
 function Interaction:DeleteReply(): any
@@ -122,20 +174,61 @@ end
 
 function Interaction:FollowUp(payload: any): any
 	local state = self :: any
-	return state.restClient:CreateFollowupMessage(
+	local response = state.restClient:CreateFollowupMessage(
 		state.ApplicationId,
 		state.Token,
 		Payload.Message(payload)
 	)
+	state.Replied = true
+	return response
 end
 
 function Interaction:ShowModal(modal: any): any
 	local state = self :: any
-	return state.restClient:CreateInteractionResponse(
+	local response = state.restClient:CreateInteractionResponse(
 		state.Id,
 		state.Token,
 		Payload.Modal(modal)
 	)
+	state.Replied = true
+	return response
+end
+
+function Interaction:Update(payload: any): any
+	if not self:IsMessageComponent() then
+		error("Update can only be used with message component interactions", 2)
+	end
+
+	local state = self :: any
+	local response = state.restClient:CreateInteractionResponse(
+		state.Id,
+		state.Token,
+		Payload.UpdateInteractionResponse(payload)
+	)
+	state.Replied = true
+	return response
+end
+
+function Interaction:IsChatInputCommand(): boolean
+	return (self :: any).Type == 2
+end
+
+function Interaction:IsMessageComponent(): boolean
+	return (self :: any).Type == 3
+end
+
+function Interaction:IsButton(): boolean
+	local data = (self :: any).Data
+	return self:IsMessageComponent() and type(data) == "table" and data.component_type == 2
+end
+
+function Interaction:IsStringSelectMenu(): boolean
+	local data = (self :: any).Data
+	return self:IsMessageComponent() and type(data) == "table" and data.component_type == 3
+end
+
+function Interaction:IsModalSubmit(): boolean
+	return (self :: any).Type == 5
 end
 
 function Interaction:GetOption(name: string): any
@@ -201,5 +294,20 @@ function Interaction:GetTextInputValue(customId: string): string?
 
 	return nil
 end
+
+Interaction.reply = Interaction.Reply
+Interaction.replyEphemeral = Interaction.ReplyEphemeral
+Interaction.deferReply = Interaction.DeferReply
+Interaction.deferUpdate = Interaction.DeferUpdate
+Interaction.editReply = Interaction.EditReply
+Interaction.deleteReply = Interaction.DeleteReply
+Interaction.followUp = Interaction.FollowUp
+Interaction.showModal = Interaction.ShowModal
+Interaction.update = Interaction.Update
+Interaction.isChatInputCommand = Interaction.IsChatInputCommand
+Interaction.isMessageComponent = Interaction.IsMessageComponent
+Interaction.isButton = Interaction.IsButton
+Interaction.isStringSelectMenu = Interaction.IsStringSelectMenu
+Interaction.isModalSubmit = Interaction.IsModalSubmit
 
 return Interaction
