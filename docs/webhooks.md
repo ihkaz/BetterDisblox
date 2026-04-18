@@ -37,3 +37,24 @@ webhook:DeleteMessage("MESSAGE_ID", {
 ```
 
 Webhook requests use HTTP, not WebSocket.
+
+## Components v2
+
+Webhook messages can use Components v2 payloads.
+
+```lua
+local container = BetterDisblox.ContainerBuilder.new()
+	:SetBlurple()
+	:AddComponents(
+		BetterDisblox.TextDisplayBuilder.new()
+			:SetContent("## BetterDisblox"),
+		BetterDisblox.TextDisplayBuilder.new()
+			:SetContent("Webhook message using Components v2.")
+	)
+	:Build()
+
+webhook:Send({
+	flags = BetterDisblox.MessageFlags.IsComponentsV2,
+	components = { container },
+})
+```

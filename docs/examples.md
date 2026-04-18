@@ -17,6 +17,7 @@ local BetterDisblox = loadstring(game:HttpGet("https://raw.githubusercontent.com
 - `examples/modals.lua`
 - `examples/components-v2.lua`
 - `examples/webhook.lua`
+- `examples/webhook-components-v2.lua`
 - `examples/rest.lua`
 - `examples/command-registry.lua`
 

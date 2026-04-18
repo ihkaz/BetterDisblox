@@ -429,6 +429,25 @@ if message ~= nil then
 end
 ```
 
+Webhook messages can also use Components v2:
+
+```lua
+local container = BetterDisblox.ContainerBuilder.new()
+	:SetBlurple()
+	:AddComponents(
+		BetterDisblox.TextDisplayBuilder.new()
+			:SetContent("## BetterDisblox"),
+		BetterDisblox.TextDisplayBuilder.new()
+			:SetContent("Webhook message using Components v2.")
+	)
+	:Build()
+
+webhook:Send({
+	flags = BetterDisblox.MessageFlags.IsComponentsV2,
+	components = { container },
+})
+```
+
 ## REST Helpers
 
 ```lua
