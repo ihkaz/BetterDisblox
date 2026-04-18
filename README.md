@@ -33,7 +33,13 @@ This project is early. It currently supports:
 
 ## Install
 
-Use the bundled file:
+Most executor users can load the bundled file directly from GitHub:
+
+```lua
+local BetterDisblox = loadstring(game:HttpGet("https://raw.githubusercontent.com/ihkaz/BetterDisblox/main/dist/BetterDisblox.lua"))()
+```
+
+If you already saved the bundle locally, load it from the executor filesystem:
 
 ```lua
 local BetterDisblox = loadstring(readfile("dist/BetterDisblox.lua"))()
@@ -64,7 +70,7 @@ src/
 ## Basic Example
 
 ```lua
-local BetterDisblox = loadstring(readfile("dist/BetterDisblox.lua"))()
+local BetterDisblox = loadstring(game:HttpGet("https://raw.githubusercontent.com/ihkaz/BetterDisblox/main/dist/BetterDisblox.lua"))()
 
 local client = BetterDisblox.Client.new({
 	Token = "BOT_TOKEN",
