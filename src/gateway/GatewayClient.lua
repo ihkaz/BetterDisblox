@@ -346,10 +346,60 @@ local function handlePayload(self: any, payload: any): ()
 	end
 end
 
+local function getSocketMessage(...: any): string?
+	local arguments = table.pack(...)
+
+	for index = 1, arguments.n do
+		if type(arguments[index]) == "string" then
+			return arguments[index]
+		end
+	end
+
+	for index = 1, arguments.n do
+		local argument = arguments[index]
+		if type(argument) == "table" then
+			if type(argument.Data) == "string" then
+				return argument.Data
+			end
+
+			if type(argument.data) == "string" then
+				return argument.data
+			end
+
+			if type(argument.Message) == "string" then
+				return argument.Message
+			end
+
+			if type(argument.message) == "string" then
+				return argument.message
+			end
+		end
+	end
+
+	return nil
+end
+
+local function describeSocketMessage(...: any): string
+	local arguments = table.pack(...)
+	local types: { string } = {}
+
+	for index = 1, arguments.n do
+		table.insert(types, type(arguments[index]))
+	end
+
+	return table.concat(types, ", ")
+end
+
 local function bindSocket(self: any): ()
-	connectSignal(self.socket, "OnMessage", function(message: string)
+	connectSignal(self.socket, "OnMessage", function(...: any)
+		local message = getSocketMessage(...)
+		if message == nil then
+			self.emitter:Emit("ERROR", "Gateway WebSocket message did not include a string payload. Argument types: " .. describeSocketMessage(...))
+			return
+		end
+
 		emitDebug(self, "Gateway message received", {
-			size = if type(message) == "string" then #message else 0,
+			size = #message,
 		})
 
 		local success, decoded = pcall(function()
@@ -357,7 +407,7 @@ local function bindSocket(self: any): ()
 		end)
 
 		if not success then
-			self.emitter:Emit("ERROR", decoded)
+			self.emitter:Emit("ERROR", tostring(decoded) .. " payload=" .. string.sub(message, 1, 200))
 			return
 		end
 
