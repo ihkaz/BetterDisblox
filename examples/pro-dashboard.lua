@@ -6,6 +6,8 @@ local client = BetterDisblox.Client.new({
 	SessionPersistence = true,
 })
 
+client:EnableConsoleDebug()
+
 local registry = BetterDisblox.CommandRegistry.new()
 local applicationId = "APPLICATION_ID"
 local guildId = "GUILD_ID"

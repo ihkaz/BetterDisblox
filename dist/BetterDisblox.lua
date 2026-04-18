@@ -26,6 +26,7 @@ type EventEmitter__DARKLUA_TYPE_d={
 On:(self:EventEmitter__DARKLUA_TYPE_d,eventName:string,callback:(...any)->())->Disconnectable__DARKLUA_TYPE_c,
 Once:(self:EventEmitter__DARKLUA_TYPE_d,eventName:string,callback:(...any)->())->Disconnectable__DARKLUA_TYPE_c,
 Emit:(self:EventEmitter__DARKLUA_TYPE_d,eventName:string,...any)->(),
+EmitSync:(self:EventEmitter__DARKLUA_TYPE_d,eventName:string,...any)->(),
 RemoveAllListeners:(self:EventEmitter__DARKLUA_TYPE_d,eventName:string)->(),
 }
 
@@ -210,6 +211,7 @@ type Client__DARKLUA_TYPE_u={
 Rest:any,
 On:(self:Client__DARKLUA_TYPE_u,eventName:string,callback:(...any)->())->any,
 Once:(self:Client__DARKLUA_TYPE_u,eventName:string,callback:(...any)->())->any,
+EnableConsoleDebug:(self:Client__DARKLUA_TYPE_u)->(),
 Login:(self:Client__DARKLUA_TYPE_u)->(),
 Destroy:(self:Client__DARKLUA_TYPE_u)->(),
 SetPresence:(self:Client__DARKLUA_TYPE_u,presence:any)->(),
@@ -725,6 +727,7 @@ Link=5,
 
 
 
+
 local EventEmitter={}
 EventEmitter.__index=EventEmitter
 
@@ -852,8 +855,45 @@ local nextListeners:{Listener__DARKLUA_TYPE_e}={}
 
 for _,listener in ipairs(eventListeners)do
 task.spawn(function()
+local success,result=pcall(function()
 listener.callback(table.unpack(arguments,1,arguments.n))
 end)
+
+if not success and eventName~="ERROR"then
+self:Emit("ERROR",result)
+end
+end)
+
+if not listener.once then
+table.insert(nextListeners,listener)
+end
+end
+
+state.listeners[eventName]=nextListeners
+end
+
+function EventEmitter:EmitSync(eventName:string,...:any):()
+if type(eventName)~="string"or eventName==""then
+error("eventName must be a non-empty string",2)
+end
+
+local state=self::any
+local eventListeners=state.listeners[eventName]
+if eventListeners==nil then
+return
+end
+
+local arguments=table.pack(...)
+local nextListeners:{Listener__DARKLUA_TYPE_e}={}
+
+for _,listener in ipairs(eventListeners)do
+local success,result=pcall(function()
+listener.callback(table.unpack(arguments,1,arguments.n))
+end)
+
+if not success and eventName~="ERROR"then
+self:EmitSync("ERROR",result)
+end
 
 if not listener.once then
 table.insert(nextListeners,listener)
@@ -1095,7 +1135,16 @@ end
 return websocketTable.connect
 end
 
-local function connectSignal(signal:any,callback:(...any)->()):()
+local function emitDebug(self:any,message:string,fields:any):()
+self.emitter:Emit("DEBUG",{
+message=message,
+fields=fields,
+})
+end
+
+local function connectSignal(socket:any,signalName:string,callback:(...any)->()):()
+local signal=socket[signalName]
+
 if type(signal)=="table"or type(signal)=="userdata"then
 if type(signal.Connect)=="function"then
 signal:Connect(callback)
@@ -1108,7 +1157,7 @@ signal(callback)
 return
 end
 
-error("Unsupported WebSocket signal shape",3)
+socket[signalName]=callback
 end
 
 function GatewayClient.new(options:GatewayClientOptions__DARKLUA_TYPE_j):GatewayClient__DARKLUA_TYPE_k
@@ -1245,6 +1294,9 @@ end
 local function startHeartbeat(self:any,intervalMilliseconds:number):()
 self.heartbeatInterval=intervalMilliseconds/1000
 self.lastHeartbeatAck=true
+emitDebug(self,"Gateway heartbeat started",{
+interval=self.heartbeatInterval,
+})
 
 self.heartbeatThread=task.spawn(function()
 while not self.closed and self.socket~=nil do
@@ -1266,6 +1318,10 @@ end)
 end
 
 local function identify(self:any):()
+emitDebug(self,"Gateway identify sent",{
+intents=self.intents,
+})
+
 self:Send({
 op=GatewayOpcode.IDENTIFY,
 d={
@@ -1286,6 +1342,11 @@ end
 
 local function resume(self:any):()
 self.resumeRequested=true
+emitDebug(self,"Gateway resume sent",{
+sessionId=self.sessionId,
+sequence=self.sequence,
+})
+
 self:Send({
 op=GatewayOpcode.RESUME,
 d={
@@ -1298,6 +1359,15 @@ end
 
 local function handleDispatch(self:any,eventName:string,data:any,sequence:number?):()
 self.sequence=sequence
+self.emitter:Emit("RAW",{
+t=eventName,
+s=sequence,
+d=data,
+})
+emitDebug(self,"Gateway dispatch received",{
+event=eventName,
+sequence=sequence,
+})
 
 if eventName=="READY"and type(data)=="table"then
 self.sessionId=data.session_id
@@ -1317,11 +1387,17 @@ self.emitter:Emit(eventName,data)
 end
 
 local function handlePayload(self:any,payload:any):()
+if type(payload)~="table"then
+self.emitter:Emit("ERROR","Gateway payload must be a table")
+return
+end
+
 if type(payload.s)=="number"then
 self.sequence=payload.s
 end
 
 if payload.op==GatewayOpcode.HELLO then
+emitDebug(self,"Gateway hello received",payload.d)
 startHeartbeat(self,payload.d.heartbeat_interval)
 if canResume(self)then
 resume(self)
@@ -1337,17 +1413,24 @@ return
 end
 
 if payload.op==GatewayOpcode.HEARTBEAT_ACK then
+emitDebug(self,"Gateway heartbeat ACK received",{
+sequence=self.sequence,
+})
 self.lastHeartbeatAck=true
 return
 end
 
 if payload.op==GatewayOpcode.RECONNECT then
+emitDebug(self,"Gateway reconnect requested",payload.d)
 self.emitter:Emit("RECONNECT",payload.d)
 self.socket:Close()
 return
 end
 
 if payload.op==GatewayOpcode.INVALID_SESSION then
+emitDebug(self,"Gateway invalid session received",{
+resumable=payload.d,
+})
 clearSession(self)
 self.resumeRequested=false
 self.emitter:Emit("INVALID_SESSION",payload.d)
@@ -1357,14 +1440,30 @@ end
 end
 
 local function bindSocket(self:any):()
-connectSignal(self.socket.OnMessage,function(message:string)
-local decoded=Json.Decode(message)
+connectSignal(self.socket,"OnMessage",function(message:string)
+emitDebug(self,"Gateway message received",{
+size=if type(message)=="string"then#message else 0,
+})
+
+local success,decoded=pcall(function()
+return Json.Decode(message)
+end)
+
+if not success then
+self.emitter:Emit("ERROR",decoded)
+return
+end
+
 handlePayload(self,decoded)
 end)
 
-connectSignal(self.socket.OnClose,function()
+connectSignal(self.socket,"OnClose",function(...)
+local closeArguments=table.pack(...)
 self.socket=nil
-self.emitter:Emit("CLOSE")
+self.emitter:Emit("CLOSE",table.unpack(closeArguments,1,closeArguments.n))
+emitDebug(self,"Gateway socket closed",{
+arguments=closeArguments,
+})
 
 if self.closed or not self.autoReconnect then
 return
@@ -1403,8 +1502,14 @@ if canResume(state)and type(state.resumeGatewayUrl)=="string"and state.resumeGat
 gatewayUrl=state.resumeGatewayUrl.."?v=10&encoding=json"
 end
 
+emitDebug(state,"Gateway connecting",{
+url=gatewayUrl,
+resume=canResume(state),
+})
+
 state.socket=getWebSocketConnect()(gatewayUrl)
 bindSocket(state)
+emitDebug(state,"Gateway socket bound",nil)
 end
 
 return GatewayClient end function __DARKLUA_BUNDLE_MODULES.h():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.h if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.h=v end return v.c end end do local function __modImpl()
@@ -2491,6 +2596,7 @@ local RestClient=__DARKLUA_BUNDLE_MODULES.n()
 
 
 
+
 local Client={}
 Client.__index=Client
 
@@ -2564,6 +2670,40 @@ end)
 end
 
 return state.gateway:Once(eventName,callback)
+end
+
+function Client:EnableConsoleDebug():()
+self:On("DEBUG",function(data:any)
+if type(data)=="table"then
+print("[BetterDisblox DEBUG]",data.message)
+return
+end
+
+print("[BetterDisblox DEBUG]",tostring(data))
+end)
+
+self:On("ERROR",function(errorMessage:any)
+warn("[BetterDisblox ERROR]",tostring(errorMessage))
+end)
+
+self:On("CLOSE",function(...)
+print("[BetterDisblox CLOSE]",...)
+end)
+
+self:On("READY",function(data:any)
+local user=if type(data)=="table"then data.user else nil
+local username=if type(user)=="table"then user.username else nil
+print("[BetterDisblox READY]",tostring(username or"unknown"))
+end)
+
+self:On("RAW",function(data:any)
+if type(data)=="table"then
+print("[BetterDisblox RAW]",tostring(data.t),tostring(data.s))
+return
+end
+
+print("[BetterDisblox RAW]",tostring(data))
+end)
 end
 
 function Client:Login():()

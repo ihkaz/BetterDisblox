@@ -45,6 +45,17 @@ client:Login()
 client:Destroy()
 ```
 
+## Debug Logs
+
+Enable console diagnostics before `client:Login()`:
+
+```lua
+client:EnableConsoleDebug()
+client:Login()
+```
+
+This prints Gateway lifecycle events, close events, listener errors, and `READY` status. Use it when slash commands register successfully but command handlers do not run.
+
 ## Wrapped Events
 
 `MESSAGE_CREATE` callbacks receive a `Message` wrapper.

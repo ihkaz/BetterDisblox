@@ -81,6 +81,8 @@ local client = BetterDisblox.Client.new({
 	SessionPersistence = true,
 })
 
+client:EnableConsoleDebug()
+
 client:On("READY", function(data)
 	print("Ready as " .. data.user.username)
 	client:SetPresence({

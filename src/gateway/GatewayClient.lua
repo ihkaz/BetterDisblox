@@ -42,7 +42,16 @@ local function getWebSocketConnect(): (string) -> any
 	return websocketTable.connect
 end
 
-local function connectSignal(signal: any, callback: (...any) -> ()): ()
+local function emitDebug(self: any, message: string, fields: any): ()
+	self.emitter:Emit("DEBUG", {
+		message = message,
+		fields = fields,
+	})
+end
+
+local function connectSignal(socket: any, signalName: string, callback: (...any) -> ()): ()
+	local signal = socket[signalName]
+
 	if type(signal) == "table" or type(signal) == "userdata" then
 		if type(signal.Connect) == "function" then
 			signal:Connect(callback)
@@ -55,7 +64,7 @@ local function connectSignal(signal: any, callback: (...any) -> ()): ()
 		return
 	end
 
-	error("Unsupported WebSocket signal shape", 3)
+	socket[signalName] = callback
 end
 
 function GatewayClient.new(options: GatewayClientOptions): GatewayClient
@@ -192,6 +201,9 @@ end
 local function startHeartbeat(self: any, intervalMilliseconds: number): ()
 	self.heartbeatInterval = intervalMilliseconds / 1000
 	self.lastHeartbeatAck = true
+	emitDebug(self, "Gateway heartbeat started", {
+		interval = self.heartbeatInterval,
+	})
 
 	self.heartbeatThread = task.spawn(function()
 		while not self.closed and self.socket ~= nil do
@@ -213,6 +225,10 @@ local function startHeartbeat(self: any, intervalMilliseconds: number): ()
 end
 
 local function identify(self: any): ()
+	emitDebug(self, "Gateway identify sent", {
+		intents = self.intents,
+	})
+
 	self:Send({
 		op = GatewayOpcode.IDENTIFY,
 		d = {
@@ -233,6 +249,11 @@ end
 
 local function resume(self: any): ()
 	self.resumeRequested = true
+	emitDebug(self, "Gateway resume sent", {
+		sessionId = self.sessionId,
+		sequence = self.sequence,
+	})
+
 	self:Send({
 		op = GatewayOpcode.RESUME,
 		d = {
@@ -245,6 +266,15 @@ end
 
 local function handleDispatch(self: any, eventName: string, data: any, sequence: number?): ()
 	self.sequence = sequence
+	self.emitter:Emit("RAW", {
+		t = eventName,
+		s = sequence,
+		d = data,
+	})
+	emitDebug(self, "Gateway dispatch received", {
+		event = eventName,
+		sequence = sequence,
+	})
 
 	if eventName == "READY" and type(data) == "table" then
 		self.sessionId = data.session_id
@@ -264,11 +294,17 @@ local function handleDispatch(self: any, eventName: string, data: any, sequence:
 end
 
 local function handlePayload(self: any, payload: any): ()
+	if type(payload) ~= "table" then
+		self.emitter:Emit("ERROR", "Gateway payload must be a table")
+		return
+	end
+
 	if type(payload.s) == "number" then
 		self.sequence = payload.s
 	end
 
 	if payload.op == GatewayOpcode.HELLO then
+		emitDebug(self, "Gateway hello received", payload.d)
 		startHeartbeat(self, payload.d.heartbeat_interval)
 		if canResume(self) then
 			resume(self)
@@ -284,17 +320,24 @@ local function handlePayload(self: any, payload: any): ()
 	end
 
 	if payload.op == GatewayOpcode.HEARTBEAT_ACK then
+		emitDebug(self, "Gateway heartbeat ACK received", {
+			sequence = self.sequence,
+		})
 		self.lastHeartbeatAck = true
 		return
 	end
 
 	if payload.op == GatewayOpcode.RECONNECT then
+		emitDebug(self, "Gateway reconnect requested", payload.d)
 		self.emitter:Emit("RECONNECT", payload.d)
 		self.socket:Close()
 		return
 	end
 
 	if payload.op == GatewayOpcode.INVALID_SESSION then
+		emitDebug(self, "Gateway invalid session received", {
+			resumable = payload.d,
+		})
 		clearSession(self)
 		self.resumeRequested = false
 		self.emitter:Emit("INVALID_SESSION", payload.d)
@@ -304,14 +347,30 @@ local function handlePayload(self: any, payload: any): ()
 end
 
 local function bindSocket(self: any): ()
-	connectSignal(self.socket.OnMessage, function(message: string)
-		local decoded = Json.Decode(message)
+	connectSignal(self.socket, "OnMessage", function(message: string)
+		emitDebug(self, "Gateway message received", {
+			size = if type(message) == "string" then #message else 0,
+		})
+
+		local success, decoded = pcall(function()
+			return Json.Decode(message)
+		end)
+
+		if not success then
+			self.emitter:Emit("ERROR", decoded)
+			return
+		end
+
 		handlePayload(self, decoded)
 	end)
 
-	connectSignal(self.socket.OnClose, function()
+	connectSignal(self.socket, "OnClose", function(...)
+		local closeArguments = table.pack(...)
 		self.socket = nil
-		self.emitter:Emit("CLOSE")
+		self.emitter:Emit("CLOSE", table.unpack(closeArguments, 1, closeArguments.n))
+		emitDebug(self, "Gateway socket closed", {
+			arguments = closeArguments,
+		})
 
 		if self.closed or not self.autoReconnect then
 			return
@@ -350,8 +409,14 @@ function GatewayClient:Connect(): ()
 		gatewayUrl = state.resumeGatewayUrl .. "?v=10&encoding=json"
 	end
 
+	emitDebug(state, "Gateway connecting", {
+		url = gatewayUrl,
+		resume = canResume(state),
+	})
+
 	state.socket = getWebSocketConnect()(gatewayUrl)
 	bindSocket(state)
+	emitDebug(state, "Gateway socket bound", nil)
 end
 
 return GatewayClient

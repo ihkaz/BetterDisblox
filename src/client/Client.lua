@@ -22,6 +22,7 @@ export type Client = {
 	Rest: any,
 	On: (self: Client, eventName: string, callback: (...any) -> ()) -> any,
 	Once: (self: Client, eventName: string, callback: (...any) -> ()) -> any,
+	EnableConsoleDebug: (self: Client) -> (),
 	Login: (self: Client) -> (),
 	Destroy: (self: Client) -> (),
 	SetPresence: (self: Client, presence: any) -> (),
@@ -100,6 +101,40 @@ function Client:Once(eventName: string, callback: (...any) -> ()): any
 	end
 
 	return state.gateway:Once(eventName, callback)
+end
+
+function Client:EnableConsoleDebug(): ()
+	self:On("DEBUG", function(data: any)
+		if type(data) == "table" then
+			print("[BetterDisblox DEBUG]", data.message)
+			return
+		end
+
+		print("[BetterDisblox DEBUG]", tostring(data))
+	end)
+
+	self:On("ERROR", function(errorMessage: any)
+		warn("[BetterDisblox ERROR]", tostring(errorMessage))
+	end)
+
+	self:On("CLOSE", function(...)
+		print("[BetterDisblox CLOSE]", ...)
+	end)
+
+	self:On("READY", function(data: any)
+		local user = if type(data) == "table" then data.user else nil
+		local username = if type(user) == "table" then user.username else nil
+		print("[BetterDisblox READY]", tostring(username or "unknown"))
+	end)
+
+	self:On("RAW", function(data: any)
+		if type(data) == "table" then
+			print("[BetterDisblox RAW]", tostring(data.t), tostring(data.s))
+			return
+		end
+
+		print("[BetterDisblox RAW]", tostring(data))
+	end)
 end
 
 function Client:Login(): ()

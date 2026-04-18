@@ -22,4 +22,5 @@
 - Added `Collection` utility for command registries and future caches.
 - Added `CommandRegistry` for discord.js-style slash command routing.
 - Improved Discord API compatibility for Components v2 payload validation, webhook components, REST command builders, nil response bodies, modal value lookup, and action row validation.
+- Added Gateway debug diagnostics with `client:EnableConsoleDebug()`.
 - Added Darklua bundle output at `dist/BetterDisblox.lua`.

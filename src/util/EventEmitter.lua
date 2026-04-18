@@ -8,6 +8,7 @@ export type EventEmitter = {
 	On: (self: EventEmitter, eventName: string, callback: (...any) -> ()) -> Disconnectable,
 	Once: (self: EventEmitter, eventName: string, callback: (...any) -> ()) -> Disconnectable,
 	Emit: (self: EventEmitter, eventName: string, ...any) -> (),
+	EmitSync: (self: EventEmitter, eventName: string, ...any) -> (),
 	RemoveAllListeners: (self: EventEmitter, eventName: string) -> (),
 }
 
@@ -147,8 +148,45 @@ function EventEmitter:Emit(eventName: string, ...: any): ()
 
 	for _, listener in ipairs(eventListeners) do
 		task.spawn(function()
+			local success, result = pcall(function()
+				listener.callback(table.unpack(arguments, 1, arguments.n))
+			end)
+
+			if not success and eventName ~= "ERROR" then
+				self:Emit("ERROR", result)
+			end
+		end)
+
+		if not listener.once then
+			table.insert(nextListeners, listener)
+		end
+	end
+
+	state.listeners[eventName] = nextListeners
+end
+
+function EventEmitter:EmitSync(eventName: string, ...: any): ()
+	if type(eventName) ~= "string" or eventName == "" then
+		error("eventName must be a non-empty string", 2)
+	end
+
+	local state = self :: any
+	local eventListeners = state.listeners[eventName]
+	if eventListeners == nil then
+		return
+	end
+
+	local arguments = table.pack(...)
+	local nextListeners: { Listener } = {}
+
+	for _, listener in ipairs(eventListeners) do
+		local success, result = pcall(function()
 			listener.callback(table.unpack(arguments, 1, arguments.n))
 		end)
+
+		if not success and eventName ~= "ERROR" then
+			self:EmitSync("ERROR", result)
+		end
 
 		if not listener.once then
 			table.insert(nextListeners, listener)

@@ -35,6 +35,7 @@ local client = BetterDisblox.Client.new(options)
 | --- | --- |
 | `On(eventName, callback)` | Register an event listener. |
 | `Once(eventName, callback)` | Register a one-time event listener. |
+| `EnableConsoleDebug()` | Print Gateway debug, close, error, and ready logs. |
 | `Login()` | Connect to Discord Gateway. |
 | `Destroy()` | Disconnect from Discord Gateway. |
 | `SetPresence(presence)` | Send a presence update. |
