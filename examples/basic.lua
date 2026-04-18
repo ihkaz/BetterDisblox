@@ -1,4 +1,4 @@
-local BetterDisblox = loadstring(readfile("dist/BetterDisblox.lua"))()
+local BetterDisblox = loadstring(game:HttpGet("https://raw.githubusercontent.com/ihkaz/BetterDisblox/main/dist/BetterDisblox.lua"))()
 
 local client = BetterDisblox.Client.new({
 	Token = "BOT_TOKEN",

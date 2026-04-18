@@ -1,4 +1,4 @@
-local BetterDisblox = loadstring(readfile("dist/BetterDisblox.lua"))()
+local BetterDisblox = loadstring(game:HttpGet("https://raw.githubusercontent.com/ihkaz/BetterDisblox/main/dist/BetterDisblox.lua"))()
 
 local webhook = BetterDisblox.WebhookClient.new("WEBHOOK_URL", {
 	Wait = true,
