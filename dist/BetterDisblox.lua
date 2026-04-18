@@ -142,9 +142,20 @@ BaseUrl:string?,
 
 type RestClient__DARKLUA_TYPE_s={
 Request:(self:RestClient__DARKLUA_TYPE_s,method:string,route:string,body:any)->any,
+GetCurrentUser:(self:RestClient__DARKLUA_TYPE_s)->any,
+GetUser:(self:RestClient__DARKLUA_TYPE_s,userId:string)->any,
+GetChannel:(self:RestClient__DARKLUA_TYPE_s,channelId:string)->any,
+ModifyChannel:(self:RestClient__DARKLUA_TYPE_s,channelId:string,payload:any)->any,
+GetChannelMessages:(self:RestClient__DARKLUA_TYPE_s,channelId:string,options:{[string]:any}?)->any,
+GetMessage:(self:RestClient__DARKLUA_TYPE_s,channelId:string,messageId:string)->any,
 CreateMessage:(self:RestClient__DARKLUA_TYPE_s,channelId:string,payload:any)->any,
 EditMessage:(self:RestClient__DARKLUA_TYPE_s,channelId:string,messageId:string,payload:any)->any,
 DeleteMessage:(self:RestClient__DARKLUA_TYPE_s,channelId:string,messageId:string)->any,
+TriggerTyping:(self:RestClient__DARKLUA_TYPE_s,channelId:string)->any,
+GetGuild:(self:RestClient__DARKLUA_TYPE_s,guildId:string)->any,
+GetGuildChannels:(self:RestClient__DARKLUA_TYPE_s,guildId:string)->any,
+GetGuildMember:(self:RestClient__DARKLUA_TYPE_s,guildId:string,userId:string)->any,
+GetGuildRoles:(self:RestClient__DARKLUA_TYPE_s,guildId:string)->any,
 CreateGlobalApplicationCommand:(self:RestClient__DARKLUA_TYPE_s,applicationId:string,payload:any)->any,
 BulkOverwriteGlobalApplicationCommands:(self:RestClient__DARKLUA_TYPE_s,applicationId:string,payload:{any})->any,
 CreateGuildApplicationCommand:(self:RestClient__DARKLUA_TYPE_s,applicationId:string,guildId:string,payload:any)->any,
@@ -212,92 +223,114 @@ ClearFields:(self:EmbedBuilder__DARKLUA_TYPE_x)->EmbedBuilder__DARKLUA_TYPE_x,
 Build:(self:EmbedBuilder__DARKLUA_TYPE_x)->{[string]:any},
 }
 
-type ModalBuilder__DARKLUA_TYPE_y={
-SetCustomId:(self:ModalBuilder__DARKLUA_TYPE_y,customId:string)->ModalBuilder__DARKLUA_TYPE_y,
-SetTitle:(self:ModalBuilder__DARKLUA_TYPE_y,title:string)->ModalBuilder__DARKLUA_TYPE_y,
-AddComponents:(self:ModalBuilder__DARKLUA_TYPE_y,...any)->ModalBuilder__DARKLUA_TYPE_y,
-SetComponents:(self:ModalBuilder__DARKLUA_TYPE_y,components:{any})->ModalBuilder__DARKLUA_TYPE_y,
-Build:(self:ModalBuilder__DARKLUA_TYPE_y)->{[string]:any},
+type FileBuilder__DARKLUA_TYPE_y={
+SetUrl:(self:FileBuilder__DARKLUA_TYPE_y,url:string)->FileBuilder__DARKLUA_TYPE_y,
+SetSpoiler:(self:FileBuilder__DARKLUA_TYPE_y,spoiler:boolean)->FileBuilder__DARKLUA_TYPE_y,
+Build:(self:FileBuilder__DARKLUA_TYPE_y)->{[string]:any},
 }
 
-type SelectMenuOptionBuilder__DARKLUA_TYPE_z={
-SetLabel:(self:SelectMenuOptionBuilder__DARKLUA_TYPE_z,label:string)->SelectMenuOptionBuilder__DARKLUA_TYPE_z,
-SetValue:(self:SelectMenuOptionBuilder__DARKLUA_TYPE_z,value:string)->SelectMenuOptionBuilder__DARKLUA_TYPE_z,
-SetDescription:(self:SelectMenuOptionBuilder__DARKLUA_TYPE_z,description:string)->SelectMenuOptionBuilder__DARKLUA_TYPE_z,
-SetDefault:(self:SelectMenuOptionBuilder__DARKLUA_TYPE_z,defaultValue:boolean)->SelectMenuOptionBuilder__DARKLUA_TYPE_z,
-Build:(self:SelectMenuOptionBuilder__DARKLUA_TYPE_z)->{[string]:any},
+type MediaGalleryBuilder__DARKLUA_TYPE_z={
+AddItems:(self:MediaGalleryBuilder__DARKLUA_TYPE_z,...any)->MediaGalleryBuilder__DARKLUA_TYPE_z,
+SetItems:(self:MediaGalleryBuilder__DARKLUA_TYPE_z,items:{any})->MediaGalleryBuilder__DARKLUA_TYPE_z,
+Build:(self:MediaGalleryBuilder__DARKLUA_TYPE_z)->{[string]:any},
 }
 
-type SectionBuilder__DARKLUA_TYPE_A={
-AddComponents:(self:SectionBuilder__DARKLUA_TYPE_A,...any)->SectionBuilder__DARKLUA_TYPE_A,
-SetComponents:(self:SectionBuilder__DARKLUA_TYPE_A,components:{any})->SectionBuilder__DARKLUA_TYPE_A,
-SetAccessory:(self:SectionBuilder__DARKLUA_TYPE_A,accessory:any)->SectionBuilder__DARKLUA_TYPE_A,
-Build:(self:SectionBuilder__DARKLUA_TYPE_A)->{[string]:any},
+type ModalBuilder__DARKLUA_TYPE_A={
+SetCustomId:(self:ModalBuilder__DARKLUA_TYPE_A,customId:string)->ModalBuilder__DARKLUA_TYPE_A,
+SetTitle:(self:ModalBuilder__DARKLUA_TYPE_A,title:string)->ModalBuilder__DARKLUA_TYPE_A,
+AddComponents:(self:ModalBuilder__DARKLUA_TYPE_A,...any)->ModalBuilder__DARKLUA_TYPE_A,
+SetComponents:(self:ModalBuilder__DARKLUA_TYPE_A,components:{any})->ModalBuilder__DARKLUA_TYPE_A,
+Build:(self:ModalBuilder__DARKLUA_TYPE_A)->{[string]:any},
 }
 
-type SeparatorBuilder__DARKLUA_TYPE_B={
-SetDivider:(self:SeparatorBuilder__DARKLUA_TYPE_B,divider:boolean)->SeparatorBuilder__DARKLUA_TYPE_B,
-SetSpacing:(self:SeparatorBuilder__DARKLUA_TYPE_B,spacing:number)->SeparatorBuilder__DARKLUA_TYPE_B,
-Build:(self:SeparatorBuilder__DARKLUA_TYPE_B)->{[string]:any},
+type SelectMenuOptionBuilder__DARKLUA_TYPE_B={
+SetLabel:(self:SelectMenuOptionBuilder__DARKLUA_TYPE_B,label:string)->SelectMenuOptionBuilder__DARKLUA_TYPE_B,
+SetValue:(self:SelectMenuOptionBuilder__DARKLUA_TYPE_B,value:string)->SelectMenuOptionBuilder__DARKLUA_TYPE_B,
+SetDescription:(self:SelectMenuOptionBuilder__DARKLUA_TYPE_B,description:string)->SelectMenuOptionBuilder__DARKLUA_TYPE_B,
+SetDefault:(self:SelectMenuOptionBuilder__DARKLUA_TYPE_B,defaultValue:boolean)->SelectMenuOptionBuilder__DARKLUA_TYPE_B,
+Build:(self:SelectMenuOptionBuilder__DARKLUA_TYPE_B)->{[string]:any},
 }
 
-type SlashCommandOption__DARKLUA_TYPE_C={
+type SectionBuilder__DARKLUA_TYPE_C={
+AddComponents:(self:SectionBuilder__DARKLUA_TYPE_C,...any)->SectionBuilder__DARKLUA_TYPE_C,
+SetComponents:(self:SectionBuilder__DARKLUA_TYPE_C,components:{any})->SectionBuilder__DARKLUA_TYPE_C,
+SetAccessory:(self:SectionBuilder__DARKLUA_TYPE_C,accessory:any)->SectionBuilder__DARKLUA_TYPE_C,
+Build:(self:SectionBuilder__DARKLUA_TYPE_C)->{[string]:any},
+}
+
+type SeparatorBuilder__DARKLUA_TYPE_D={
+SetDivider:(self:SeparatorBuilder__DARKLUA_TYPE_D,divider:boolean)->SeparatorBuilder__DARKLUA_TYPE_D,
+SetSpacing:(self:SeparatorBuilder__DARKLUA_TYPE_D,spacing:number)->SeparatorBuilder__DARKLUA_TYPE_D,
+Build:(self:SeparatorBuilder__DARKLUA_TYPE_D)->{[string]:any},
+}
+
+type SlashCommandOption__DARKLUA_TYPE_E={
 type:number,
 name:string,
 description:string,
 required:boolean?,
 choices:{any}?,
-options:{SlashCommandOption__DARKLUA_TYPE_C}?,
+options:{SlashCommandOption__DARKLUA_TYPE_E}?,
 }
 
-type SlashCommandBuilder__DARKLUA_TYPE_D={
-SetName:(self:SlashCommandBuilder__DARKLUA_TYPE_D,name:string)->SlashCommandBuilder__DARKLUA_TYPE_D,
-SetDescription:(self:SlashCommandBuilder__DARKLUA_TYPE_D,description:string)->SlashCommandBuilder__DARKLUA_TYPE_D,
-AddStringOption:(self:SlashCommandBuilder__DARKLUA_TYPE_D,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_D,
-AddIntegerOption:(self:SlashCommandBuilder__DARKLUA_TYPE_D,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_D,
-AddBooleanOption:(self:SlashCommandBuilder__DARKLUA_TYPE_D,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_D,
-AddUserOption:(self:SlashCommandBuilder__DARKLUA_TYPE_D,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_D,
-AddChannelOption:(self:SlashCommandBuilder__DARKLUA_TYPE_D,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_D,
-AddRoleOption:(self:SlashCommandBuilder__DARKLUA_TYPE_D,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_D,
-Build:(self:SlashCommandBuilder__DARKLUA_TYPE_D)->{[string]:any},
+type SlashCommandBuilder__DARKLUA_TYPE_F={
+SetName:(self:SlashCommandBuilder__DARKLUA_TYPE_F,name:string)->SlashCommandBuilder__DARKLUA_TYPE_F,
+SetDescription:(self:SlashCommandBuilder__DARKLUA_TYPE_F,description:string)->SlashCommandBuilder__DARKLUA_TYPE_F,
+AddStringOption:(self:SlashCommandBuilder__DARKLUA_TYPE_F,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_F,
+AddIntegerOption:(self:SlashCommandBuilder__DARKLUA_TYPE_F,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_F,
+AddBooleanOption:(self:SlashCommandBuilder__DARKLUA_TYPE_F,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_F,
+AddUserOption:(self:SlashCommandBuilder__DARKLUA_TYPE_F,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_F,
+AddChannelOption:(self:SlashCommandBuilder__DARKLUA_TYPE_F,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_F,
+AddRoleOption:(self:SlashCommandBuilder__DARKLUA_TYPE_F,name:string,description:string,required:boolean)->SlashCommandBuilder__DARKLUA_TYPE_F,
+Build:(self:SlashCommandBuilder__DARKLUA_TYPE_F)->{[string]:any},
 }
 
-type StringSelectMenuBuilder__DARKLUA_TYPE_E={
-SetCustomId:(self:StringSelectMenuBuilder__DARKLUA_TYPE_E,customId:string)->StringSelectMenuBuilder__DARKLUA_TYPE_E,
-SetPlaceholder:(self:StringSelectMenuBuilder__DARKLUA_TYPE_E,placeholder:string)->StringSelectMenuBuilder__DARKLUA_TYPE_E,
-SetMinValues:(self:StringSelectMenuBuilder__DARKLUA_TYPE_E,minValues:number)->StringSelectMenuBuilder__DARKLUA_TYPE_E,
-SetMaxValues:(self:StringSelectMenuBuilder__DARKLUA_TYPE_E,maxValues:number)->StringSelectMenuBuilder__DARKLUA_TYPE_E,
-SetDisabled:(self:StringSelectMenuBuilder__DARKLUA_TYPE_E,disabled:boolean)->StringSelectMenuBuilder__DARKLUA_TYPE_E,
-AddOptions:(self:StringSelectMenuBuilder__DARKLUA_TYPE_E,...any)->StringSelectMenuBuilder__DARKLUA_TYPE_E,
-SetOptions:(self:StringSelectMenuBuilder__DARKLUA_TYPE_E,options:{any})->StringSelectMenuBuilder__DARKLUA_TYPE_E,
-Build:(self:StringSelectMenuBuilder__DARKLUA_TYPE_E)->{[string]:any},
+type StringSelectMenuBuilder__DARKLUA_TYPE_G={
+SetCustomId:(self:StringSelectMenuBuilder__DARKLUA_TYPE_G,customId:string)->StringSelectMenuBuilder__DARKLUA_TYPE_G,
+SetPlaceholder:(self:StringSelectMenuBuilder__DARKLUA_TYPE_G,placeholder:string)->StringSelectMenuBuilder__DARKLUA_TYPE_G,
+SetMinValues:(self:StringSelectMenuBuilder__DARKLUA_TYPE_G,minValues:number)->StringSelectMenuBuilder__DARKLUA_TYPE_G,
+SetMaxValues:(self:StringSelectMenuBuilder__DARKLUA_TYPE_G,maxValues:number)->StringSelectMenuBuilder__DARKLUA_TYPE_G,
+SetDisabled:(self:StringSelectMenuBuilder__DARKLUA_TYPE_G,disabled:boolean)->StringSelectMenuBuilder__DARKLUA_TYPE_G,
+AddOptions:(self:StringSelectMenuBuilder__DARKLUA_TYPE_G,...any)->StringSelectMenuBuilder__DARKLUA_TYPE_G,
+SetOptions:(self:StringSelectMenuBuilder__DARKLUA_TYPE_G,options:{any})->StringSelectMenuBuilder__DARKLUA_TYPE_G,
+Build:(self:StringSelectMenuBuilder__DARKLUA_TYPE_G)->{[string]:any},
 }
 
-type TextInputBuilder__DARKLUA_TYPE_F={
-SetCustomId:(self:TextInputBuilder__DARKLUA_TYPE_F,customId:string)->TextInputBuilder__DARKLUA_TYPE_F,
-SetLabel:(self:TextInputBuilder__DARKLUA_TYPE_F,label:string)->TextInputBuilder__DARKLUA_TYPE_F,
-SetStyle:(self:TextInputBuilder__DARKLUA_TYPE_F,style:number)->TextInputBuilder__DARKLUA_TYPE_F,
-SetMinLength:(self:TextInputBuilder__DARKLUA_TYPE_F,minLength:number)->TextInputBuilder__DARKLUA_TYPE_F,
-SetMaxLength:(self:TextInputBuilder__DARKLUA_TYPE_F,maxLength:number)->TextInputBuilder__DARKLUA_TYPE_F,
-SetRequired:(self:TextInputBuilder__DARKLUA_TYPE_F,required:boolean)->TextInputBuilder__DARKLUA_TYPE_F,
-SetValue:(self:TextInputBuilder__DARKLUA_TYPE_F,value:string)->TextInputBuilder__DARKLUA_TYPE_F,
-SetPlaceholder:(self:TextInputBuilder__DARKLUA_TYPE_F,placeholder:string)->TextInputBuilder__DARKLUA_TYPE_F,
-Build:(self:TextInputBuilder__DARKLUA_TYPE_F)->{[string]:any},
+type TextInputBuilder__DARKLUA_TYPE_H={
+SetCustomId:(self:TextInputBuilder__DARKLUA_TYPE_H,customId:string)->TextInputBuilder__DARKLUA_TYPE_H,
+SetLabel:(self:TextInputBuilder__DARKLUA_TYPE_H,label:string)->TextInputBuilder__DARKLUA_TYPE_H,
+SetStyle:(self:TextInputBuilder__DARKLUA_TYPE_H,style:number)->TextInputBuilder__DARKLUA_TYPE_H,
+SetMinLength:(self:TextInputBuilder__DARKLUA_TYPE_H,minLength:number)->TextInputBuilder__DARKLUA_TYPE_H,
+SetMaxLength:(self:TextInputBuilder__DARKLUA_TYPE_H,maxLength:number)->TextInputBuilder__DARKLUA_TYPE_H,
+SetRequired:(self:TextInputBuilder__DARKLUA_TYPE_H,required:boolean)->TextInputBuilder__DARKLUA_TYPE_H,
+SetValue:(self:TextInputBuilder__DARKLUA_TYPE_H,value:string)->TextInputBuilder__DARKLUA_TYPE_H,
+SetPlaceholder:(self:TextInputBuilder__DARKLUA_TYPE_H,placeholder:string)->TextInputBuilder__DARKLUA_TYPE_H,
+Build:(self:TextInputBuilder__DARKLUA_TYPE_H)->{[string]:any},
 }
 
-type TextDisplayBuilder__DARKLUA_TYPE_G={
-SetContent:(self:TextDisplayBuilder__DARKLUA_TYPE_G,content:string)->TextDisplayBuilder__DARKLUA_TYPE_G,
-Build:(self:TextDisplayBuilder__DARKLUA_TYPE_G)->{[string]:any},
+type TextDisplayBuilder__DARKLUA_TYPE_I={
+SetContent:(self:TextDisplayBuilder__DARKLUA_TYPE_I,content:string)->TextDisplayBuilder__DARKLUA_TYPE_I,
+Build:(self:TextDisplayBuilder__DARKLUA_TYPE_I)->{[string]:any},
 }
 
-type WebhookClientOptions__DARKLUA_TYPE_H={
+type ThumbnailBuilder__DARKLUA_TYPE_J={
+SetUrl:(self:ThumbnailBuilder__DARKLUA_TYPE_J,url:string)->ThumbnailBuilder__DARKLUA_TYPE_J,
+SetDescription:(self:ThumbnailBuilder__DARKLUA_TYPE_J,description:string)->ThumbnailBuilder__DARKLUA_TYPE_J,
+SetSpoiler:(self:ThumbnailBuilder__DARKLUA_TYPE_J,spoiler:boolean)->ThumbnailBuilder__DARKLUA_TYPE_J,
+Build:(self:ThumbnailBuilder__DARKLUA_TYPE_J)->{[string]:any},
+}
+
+type WebhookClientOptions__DARKLUA_TYPE_K={
 Wait:boolean?,
+Username:string?,
+AvatarUrl:string?,
+ThreadId:string?,
 }
 
-type WebhookClient__DARKLUA_TYPE_I={
-Send:(self:WebhookClient__DARKLUA_TYPE_I,payload:any)->any,
-EditMessage:(self:WebhookClient__DARKLUA_TYPE_I,messageId:string,payload:any)->any,
-DeleteMessage:(self:WebhookClient__DARKLUA_TYPE_I,messageId:string)->any,
+type WebhookClient__DARKLUA_TYPE_L={
+Send:(self:WebhookClient__DARKLUA_TYPE_L,payload:any,options:WebhookClientOptions__DARKLUA_TYPE_K?)->any,
+EditMessage:(self:WebhookClient__DARKLUA_TYPE_L,messageId:string,payload:any,options:WebhookClientOptions__DARKLUA_TYPE_K?)->any,
+DeleteMessage:(self:WebhookClient__DARKLUA_TYPE_L,messageId:string,options:WebhookClientOptions__DARKLUA_TYPE_K?)->any,
 }local __DARKLUA_BUNDLE_MODULES={cache={}::any}do do local function __modImpl()
 
 
@@ -1751,6 +1784,17 @@ local RateLimiter=__DARKLUA_BUNDLE_MODULES.m()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 local RestClient={}
 RestClient.__index=RestClient
 
@@ -1824,6 +1868,59 @@ end
 return decoded
 end
 
+local function assertNonEmptyString(name:string,value:string):()
+if type(value)~="string"or value==""then
+error(name.." must be a non-empty string",3)
+end
+end
+
+local function appendQuery(route:string,options:{[string]:any}?):string
+if options==nil then
+return route
+end
+
+local params:{string}={}
+for key,value in pairs(options)do
+table.insert(params,tostring(key).."="..game:GetService("HttpService"):UrlEncode(tostring(value)))
+end
+
+if#params==0 then
+return route
+end
+
+return route.."?"..table.concat(params,"&")
+end
+
+function RestClient:GetCurrentUser():any
+return self:Request("GET","/users/@me",nil)
+end
+
+function RestClient:GetUser(userId:string):any
+assertNonEmptyString("userId",userId)
+return self:Request("GET","/users/"..userId,nil)
+end
+
+function RestClient:GetChannel(channelId:string):any
+assertNonEmptyString("channelId",channelId)
+return self:Request("GET","/channels/"..channelId,nil)
+end
+
+function RestClient:ModifyChannel(channelId:string,payload:any):any
+assertNonEmptyString("channelId",channelId)
+return self:Request("PATCH","/channels/"..channelId,payload)
+end
+
+function RestClient:GetChannelMessages(channelId:string,options:{[string]:any}?):any
+assertNonEmptyString("channelId",channelId)
+return self:Request("GET",appendQuery("/channels/"..channelId.."/messages",options),nil)
+end
+
+function RestClient:GetMessage(channelId:string,messageId:string):any
+assertNonEmptyString("channelId",channelId)
+assertNonEmptyString("messageId",messageId)
+return self:Request("GET","/channels/"..channelId.."/messages/"..messageId,nil)
+end
+
 function RestClient:CreateMessage(channelId:string,payload:any):any
 if type(channelId)~="string"or channelId==""then
 error("channelId must be a non-empty string",2)
@@ -1854,6 +1951,32 @@ error("messageId must be a non-empty string",2)
 end
 
 return self:Request("DELETE","/channels/"..channelId.."/messages/"..messageId,nil)
+end
+
+function RestClient:TriggerTyping(channelId:string):any
+assertNonEmptyString("channelId",channelId)
+return self:Request("POST","/channels/"..channelId.."/typing",nil)
+end
+
+function RestClient:GetGuild(guildId:string):any
+assertNonEmptyString("guildId",guildId)
+return self:Request("GET","/guilds/"..guildId,nil)
+end
+
+function RestClient:GetGuildChannels(guildId:string):any
+assertNonEmptyString("guildId",guildId)
+return self:Request("GET","/guilds/"..guildId.."/channels",nil)
+end
+
+function RestClient:GetGuildMember(guildId:string,userId:string):any
+assertNonEmptyString("guildId",guildId)
+assertNonEmptyString("userId",userId)
+return self:Request("GET","/guilds/"..guildId.."/members/"..userId,nil)
+end
+
+function RestClient:GetGuildRoles(guildId:string):any
+assertNonEmptyString("guildId",guildId)
+return self:Request("GET","/guilds/"..guildId.."/roles",nil)
 end
 
 function RestClient:CreateGlobalApplicationCommand(applicationId:string,payload:any):any
@@ -2519,6 +2642,74 @@ return EmbedBuilder end function __DARKLUA_BUNDLE_MODULES.r():typeof(__modImpl()
 
 
 
+
+
+
+
+
+
+local FileBuilder={}
+FileBuilder.__index=FileBuilder
+
+local COMPONENT_TYPE_FILE=13
+
+local function assertUrl(url:string):()
+if type(url)~="string"or url==""then
+error("url must be a non-empty string",3)
+end
+
+if#url>512 then
+error("url must be 512 characters or fewer",3)
+end
+end
+
+function FileBuilder.new():FileBuilder__DARKLUA_TYPE_y
+local self={
+component={
+type=COMPONENT_TYPE_FILE,
+}::{[string]:any},
+}
+
+return(setmetatable(self,FileBuilder)::any)::FileBuilder__DARKLUA_TYPE_y
+end
+
+function FileBuilder:SetUrl(url:string):FileBuilder__DARKLUA_TYPE_y
+assertUrl(url)
+local component=(self::any).component
+component.file={
+url=url,
+}
+return self
+end
+
+function FileBuilder:SetSpoiler(spoiler:boolean):FileBuilder__DARKLUA_TYPE_y
+if type(spoiler)~="boolean"then
+error("spoiler must be a boolean",2)
+end
+
+local component=(self::any).component
+component.spoiler=spoiler
+return self
+end
+
+function FileBuilder:Build():{[string]:any}
+local component=(self::any).component
+if type(component.file)~="table"or type(component.file.url)~="string"then
+error("files require a url",2)
+end
+
+local output:{[string]:any}={}
+for key,value in pairs(component)do
+output[key]=value
+end
+
+return output
+end
+
+return FileBuilder end function __DARKLUA_BUNDLE_MODULES.s():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.s if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.s=v end return v.c end end do local function __modImpl()
+
+
+
 return{
 Guilds=1,
 GuildMembers=2,
@@ -2539,7 +2730,7 @@ MessageContent=32768,
 GuildScheduledEvents=65536,
 AutoModerationConfiguration=1048576,
 AutoModerationExecution=2097152,
-}end function __DARKLUA_BUNDLE_MODULES.s():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.s if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.s=v end return v.c end end do local function __modImpl()
+}end function __DARKLUA_BUNDLE_MODULES.t():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.t if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.t=v end return v.c end end do local function __modImpl()
 
 
 
@@ -2551,7 +2742,7 @@ DeferredUpdateMessage=6,
 UpdateMessage=7,
 ApplicationCommandAutocompleteResult=8,
 Modal=9,
-}end function __DARKLUA_BUNDLE_MODULES.t():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.t if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.t=v end return v.c end end do local function __modImpl()
+}end function __DARKLUA_BUNDLE_MODULES.u():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.u if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.u=v end return v.c end end do local function __modImpl()
 
 
 
@@ -2569,7 +2760,116 @@ SuppressNotifications=4096,
 IsVoiceMessage=8192,
 HasSnapshot=16384,
 IsComponentsV2=32768,
-}end function __DARKLUA_BUNDLE_MODULES.u():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.u if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.u=v end return v.c end end do local function __modImpl()
+}end function __DARKLUA_BUNDLE_MODULES.v():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.v if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.v=v end return v.c end end do local function __modImpl()
+
+
+
+
+
+
+
+
+
+local MediaGalleryBuilder={}
+MediaGalleryBuilder.__index=MediaGalleryBuilder
+
+local COMPONENT_TYPE_MEDIA_GALLERY=12
+local MAX_ITEMS=10
+
+local function normalizeItem(item:any):any
+if type(item)~="table"then
+error("media gallery item must be a table",3)
+end
+
+if type(item.Build)=="function"then
+return item:Build()
+end
+
+if type(item.url)=="string"then
+local normalized={
+media={
+url=item.url,
+},
+}
+
+if item.description~=nil then
+normalized.description=item.description
+end
+
+if item.spoiler~=nil then
+normalized.spoiler=item.spoiler
+end
+
+return normalized
+end
+
+if type(item.media)~="table"or type(item.media.url)~="string"then
+error("media gallery items require media.url or url",3)
+end
+
+return item
+end
+
+function MediaGalleryBuilder.new():MediaGalleryBuilder__DARKLUA_TYPE_z
+local self={
+component={
+type=COMPONENT_TYPE_MEDIA_GALLERY,
+items={}::{any},
+}::{[string]:any},
+}
+
+return(setmetatable(self,MediaGalleryBuilder)::any)::MediaGalleryBuilder__DARKLUA_TYPE_z
+end
+
+function MediaGalleryBuilder:AddItems(...:any):MediaGalleryBuilder__DARKLUA_TYPE_z
+local component=(self::any).component
+local items=table.pack(...)
+
+for index=1,items.n do
+if#component.items>=MAX_ITEMS then
+error("media galleries can contain at most 10 items",2)
+end
+
+table.insert(component.items,normalizeItem(items[index]))
+end
+
+return self
+end
+
+function MediaGalleryBuilder:SetItems(items:{any}):MediaGalleryBuilder__DARKLUA_TYPE_z
+if type(items)~="table"then
+error("items must be a table",2)
+end
+
+if#items>MAX_ITEMS then
+error("media galleries can contain at most 10 items",2)
+end
+
+local normalizedItems:{any}={}
+for _,item in ipairs(items)do
+table.insert(normalizedItems,normalizeItem(item))
+end
+
+local component=(self::any).component
+component.items=normalizedItems
+return self
+end
+
+function MediaGalleryBuilder:Build():{[string]:any}
+local component=(self::any).component
+if#component.items<1 then
+error("media galleries require at least one item",2)
+end
+
+local output:{[string]:any}={}
+for key,value in pairs(component)do
+output[key]=value
+end
+
+return output
+end
+
+return MediaGalleryBuilder end function __DARKLUA_BUNDLE_MODULES.w():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.w if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.w=v end return v.c end end do local function __modImpl()
 
 
 
@@ -2608,31 +2908,31 @@ end
 return component
 end
 
-function ModalBuilder.new():ModalBuilder__DARKLUA_TYPE_y
+function ModalBuilder.new():ModalBuilder__DARKLUA_TYPE_A
 local self={
 modal={
 components={}::{any},
 }::{[string]:any},
 }
 
-return(setmetatable(self,ModalBuilder)::any)::ModalBuilder__DARKLUA_TYPE_y
+return(setmetatable(self,ModalBuilder)::any)::ModalBuilder__DARKLUA_TYPE_A
 end
 
-function ModalBuilder:SetCustomId(customId:string):ModalBuilder__DARKLUA_TYPE_y
+function ModalBuilder:SetCustomId(customId:string):ModalBuilder__DARKLUA_TYPE_A
 assertString("customId",customId,100)
 local modal=(self::any).modal
 modal.custom_id=customId
 return self
 end
 
-function ModalBuilder:SetTitle(title:string):ModalBuilder__DARKLUA_TYPE_y
+function ModalBuilder:SetTitle(title:string):ModalBuilder__DARKLUA_TYPE_A
 assertString("title",title,45)
 local modal=(self::any).modal
 modal.title=title
 return self
 end
 
-function ModalBuilder:AddComponents(...:any):ModalBuilder__DARKLUA_TYPE_y
+function ModalBuilder:AddComponents(...:any):ModalBuilder__DARKLUA_TYPE_A
 local modal=(self::any).modal
 local components=table.pack(...)
 
@@ -2647,7 +2947,7 @@ end
 return self
 end
 
-function ModalBuilder:SetComponents(components:{any}):ModalBuilder__DARKLUA_TYPE_y
+function ModalBuilder:SetComponents(components:{any}):ModalBuilder__DARKLUA_TYPE_A
 if type(components)~="table"then
 error("components must be a table",2)
 end
@@ -2689,7 +2989,7 @@ end
 return output
 end
 
-return ModalBuilder end function __DARKLUA_BUNDLE_MODULES.v():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.v if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.v=v end return v.c end end do local function __modImpl()
+return ModalBuilder end function __DARKLUA_BUNDLE_MODULES.x():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.x if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.x=v end return v.c end end do local function __modImpl()
 
 
 
@@ -2714,36 +3014,36 @@ error(name.." must be "..tostring(maxLength).." characters or fewer",3)
 end
 end
 
-function SelectMenuOptionBuilder.new():SelectMenuOptionBuilder__DARKLUA_TYPE_z
+function SelectMenuOptionBuilder.new():SelectMenuOptionBuilder__DARKLUA_TYPE_B
 local self={
 option={}::{[string]:any},
 }
 
-return(setmetatable(self,SelectMenuOptionBuilder)::any)::SelectMenuOptionBuilder__DARKLUA_TYPE_z
+return(setmetatable(self,SelectMenuOptionBuilder)::any)::SelectMenuOptionBuilder__DARKLUA_TYPE_B
 end
 
-function SelectMenuOptionBuilder:SetLabel(label:string):SelectMenuOptionBuilder__DARKLUA_TYPE_z
+function SelectMenuOptionBuilder:SetLabel(label:string):SelectMenuOptionBuilder__DARKLUA_TYPE_B
 assertString("label",label,100)
 local state=self::any
 state.option.label=label
 return self
 end
 
-function SelectMenuOptionBuilder:SetValue(value:string):SelectMenuOptionBuilder__DARKLUA_TYPE_z
+function SelectMenuOptionBuilder:SetValue(value:string):SelectMenuOptionBuilder__DARKLUA_TYPE_B
 assertString("value",value,100)
 local state=self::any
 state.option.value=value
 return self
 end
 
-function SelectMenuOptionBuilder:SetDescription(description:string):SelectMenuOptionBuilder__DARKLUA_TYPE_z
+function SelectMenuOptionBuilder:SetDescription(description:string):SelectMenuOptionBuilder__DARKLUA_TYPE_B
 assertString("description",description,100)
 local state=self::any
 state.option.description=description
 return self
 end
 
-function SelectMenuOptionBuilder:SetDefault(defaultValue:boolean):SelectMenuOptionBuilder__DARKLUA_TYPE_z
+function SelectMenuOptionBuilder:SetDefault(defaultValue:boolean):SelectMenuOptionBuilder__DARKLUA_TYPE_B
 if type(defaultValue)~="boolean"then
 error("defaultValue must be a boolean",2)
 end
@@ -2772,7 +3072,7 @@ end
 return output
 end
 
-return SelectMenuOptionBuilder end function __DARKLUA_BUNDLE_MODULES.w():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.w if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.w=v end return v.c end end do local function __modImpl()
+return SelectMenuOptionBuilder end function __DARKLUA_BUNDLE_MODULES.y():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.y if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.y=v end return v.c end end do local function __modImpl()
 
 
 
@@ -2801,7 +3101,7 @@ end
 return component
 end
 
-function SectionBuilder.new():SectionBuilder__DARKLUA_TYPE_A
+function SectionBuilder.new():SectionBuilder__DARKLUA_TYPE_C
 local self={
 component={
 type=COMPONENT_TYPE_SECTION,
@@ -2809,10 +3109,10 @@ components={}::{any},
 }::{[string]:any},
 }
 
-return(setmetatable(self,SectionBuilder)::any)::SectionBuilder__DARKLUA_TYPE_A
+return(setmetatable(self,SectionBuilder)::any)::SectionBuilder__DARKLUA_TYPE_C
 end
 
-function SectionBuilder:AddComponents(...:any):SectionBuilder__DARKLUA_TYPE_A
+function SectionBuilder:AddComponents(...:any):SectionBuilder__DARKLUA_TYPE_C
 local component=(self::any).component
 local components=table.pack(...)
 
@@ -2827,7 +3127,7 @@ end
 return self
 end
 
-function SectionBuilder:SetComponents(components:{any}):SectionBuilder__DARKLUA_TYPE_A
+function SectionBuilder:SetComponents(components:{any}):SectionBuilder__DARKLUA_TYPE_C
 if type(components)~="table"then
 error("components must be a table",2)
 end
@@ -2846,7 +3146,7 @@ component.components=normalizedComponents
 return self
 end
 
-function SectionBuilder:SetAccessory(accessory:any):SectionBuilder__DARKLUA_TYPE_A
+function SectionBuilder:SetAccessory(accessory:any):SectionBuilder__DARKLUA_TYPE_C
 local component=(self::any).component
 component.accessory=normalizeComponent(accessory)
 return self
@@ -2871,7 +3171,7 @@ end
 return output
 end
 
-return SectionBuilder end function __DARKLUA_BUNDLE_MODULES.x():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.x if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.x=v end return v.c end end do local function __modImpl()
+return SectionBuilder end function __DARKLUA_BUNDLE_MODULES.z():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.z if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.z=v end return v.c end end do local function __modImpl()
 
 
 
@@ -2886,17 +3186,17 @@ SeparatorBuilder.__index=SeparatorBuilder
 
 local COMPONENT_TYPE_SEPARATOR=14
 
-function SeparatorBuilder.new():SeparatorBuilder__DARKLUA_TYPE_B
+function SeparatorBuilder.new():SeparatorBuilder__DARKLUA_TYPE_D
 local self={
 component={
 type=COMPONENT_TYPE_SEPARATOR,
 }::{[string]:any},
 }
 
-return(setmetatable(self,SeparatorBuilder)::any)::SeparatorBuilder__DARKLUA_TYPE_B
+return(setmetatable(self,SeparatorBuilder)::any)::SeparatorBuilder__DARKLUA_TYPE_D
 end
 
-function SeparatorBuilder:SetDivider(divider:boolean):SeparatorBuilder__DARKLUA_TYPE_B
+function SeparatorBuilder:SetDivider(divider:boolean):SeparatorBuilder__DARKLUA_TYPE_D
 if type(divider)~="boolean"then
 error("divider must be a boolean",2)
 end
@@ -2906,7 +3206,7 @@ component.divider=divider
 return self
 end
 
-function SeparatorBuilder:SetSpacing(spacing:number):SeparatorBuilder__DARKLUA_TYPE_B
+function SeparatorBuilder:SetSpacing(spacing:number):SeparatorBuilder__DARKLUA_TYPE_D
 if type(spacing)~="number"or(spacing~=1 and spacing~=2)then
 error("spacing must be SeparatorSpacing.Small or SeparatorSpacing.Large",2)
 end
@@ -2927,14 +3227,14 @@ end
 return output
 end
 
-return SeparatorBuilder end function __DARKLUA_BUNDLE_MODULES.y():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.y if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.y=v end return v.c end end do local function __modImpl()
+return SeparatorBuilder end function __DARKLUA_BUNDLE_MODULES.A():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.A if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.A=v end return v.c end end do local function __modImpl()
 
 
 
 return{
 Small=1,
 Large=2,
-}end function __DARKLUA_BUNDLE_MODULES.z():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.z if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.z=v end return v.c end end do local function __modImpl()
+}end function __DARKLUA_BUNDLE_MODULES.B():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.B if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.B=v end return v.c end end do local function __modImpl()
 
 
 
@@ -2992,7 +3292,7 @@ error("slash command descriptions must be 1 to 100 characters",3)
 end
 end
 
-local function addOption(self:SlashCommandBuilder__DARKLUA_TYPE_D,optionType:number,name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_D
+local function addOption(self:SlashCommandBuilder__DARKLUA_TYPE_F,optionType:number,name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_F
 assertCommandName(name)
 assertDescription(description)
 
@@ -3011,54 +3311,54 @@ required=required,
 return self
 end
 
-function SlashCommandBuilder.new():SlashCommandBuilder__DARKLUA_TYPE_D
+function SlashCommandBuilder.new():SlashCommandBuilder__DARKLUA_TYPE_F
 local self={
 command={
 type=1,
 name=nil::string?,
 description=nil::string?,
-options={}::{SlashCommandOption__DARKLUA_TYPE_C},
+options={}::{SlashCommandOption__DARKLUA_TYPE_E},
 },
 }
 
-return(setmetatable(self,SlashCommandBuilder)::any)::SlashCommandBuilder__DARKLUA_TYPE_D
+return(setmetatable(self,SlashCommandBuilder)::any)::SlashCommandBuilder__DARKLUA_TYPE_F
 end
 
-function SlashCommandBuilder:SetName(name:string):SlashCommandBuilder__DARKLUA_TYPE_D
+function SlashCommandBuilder:SetName(name:string):SlashCommandBuilder__DARKLUA_TYPE_F
 assertCommandName(name)
 local state=self::any
 state.command.name=name
 return self
 end
 
-function SlashCommandBuilder:SetDescription(description:string):SlashCommandBuilder__DARKLUA_TYPE_D
+function SlashCommandBuilder:SetDescription(description:string):SlashCommandBuilder__DARKLUA_TYPE_F
 assertDescription(description)
 local state=self::any
 state.command.description=description
 return self
 end
 
-function SlashCommandBuilder:AddStringOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_D
+function SlashCommandBuilder:AddStringOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_F
 return addOption(self,OptionType.String,name,description,required)
 end
 
-function SlashCommandBuilder:AddIntegerOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_D
+function SlashCommandBuilder:AddIntegerOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_F
 return addOption(self,OptionType.Integer,name,description,required)
 end
 
-function SlashCommandBuilder:AddBooleanOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_D
+function SlashCommandBuilder:AddBooleanOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_F
 return addOption(self,OptionType.Boolean,name,description,required)
 end
 
-function SlashCommandBuilder:AddUserOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_D
+function SlashCommandBuilder:AddUserOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_F
 return addOption(self,OptionType.User,name,description,required)
 end
 
-function SlashCommandBuilder:AddChannelOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_D
+function SlashCommandBuilder:AddChannelOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_F
 return addOption(self,OptionType.Channel,name,description,required)
 end
 
-function SlashCommandBuilder:AddRoleOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_D
+function SlashCommandBuilder:AddRoleOption(name:string,description:string,required:boolean):SlashCommandBuilder__DARKLUA_TYPE_F
 return addOption(self,OptionType.Role,name,description,required)
 end
 
@@ -3085,7 +3385,7 @@ end
 return output
 end
 
-return SlashCommandBuilder end function __DARKLUA_BUNDLE_MODULES.A():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.A if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.A=v end return v.c end end do local function __modImpl()
+return SlashCommandBuilder end function __DARKLUA_BUNDLE_MODULES.C():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.C if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.C=v end return v.c end end do local function __modImpl()
 
 
 
@@ -3128,7 +3428,7 @@ end
 return option
 end
 
-function StringSelectMenuBuilder.new():StringSelectMenuBuilder__DARKLUA_TYPE_E
+function StringSelectMenuBuilder.new():StringSelectMenuBuilder__DARKLUA_TYPE_G
 local self={
 component={
 type=COMPONENT_TYPE_STRING_SELECT,
@@ -3136,24 +3436,24 @@ options={}::{any},
 }::{[string]:any},
 }
 
-return(setmetatable(self,StringSelectMenuBuilder)::any)::StringSelectMenuBuilder__DARKLUA_TYPE_E
+return(setmetatable(self,StringSelectMenuBuilder)::any)::StringSelectMenuBuilder__DARKLUA_TYPE_G
 end
 
-function StringSelectMenuBuilder:SetCustomId(customId:string):StringSelectMenuBuilder__DARKLUA_TYPE_E
+function StringSelectMenuBuilder:SetCustomId(customId:string):StringSelectMenuBuilder__DARKLUA_TYPE_G
 assertString("customId",customId,100)
 local component=(self::any).component
 component.custom_id=customId
 return self
 end
 
-function StringSelectMenuBuilder:SetPlaceholder(placeholder:string):StringSelectMenuBuilder__DARKLUA_TYPE_E
+function StringSelectMenuBuilder:SetPlaceholder(placeholder:string):StringSelectMenuBuilder__DARKLUA_TYPE_G
 assertString("placeholder",placeholder,150)
 local component=(self::any).component
 component.placeholder=placeholder
 return self
 end
 
-function StringSelectMenuBuilder:SetMinValues(minValues:number):StringSelectMenuBuilder__DARKLUA_TYPE_E
+function StringSelectMenuBuilder:SetMinValues(minValues:number):StringSelectMenuBuilder__DARKLUA_TYPE_G
 if type(minValues)~="number"or minValues<0 or minValues>25 then
 error("minValues must be a number from 0 to 25",2)
 end
@@ -3163,7 +3463,7 @@ component.min_values=minValues
 return self
 end
 
-function StringSelectMenuBuilder:SetMaxValues(maxValues:number):StringSelectMenuBuilder__DARKLUA_TYPE_E
+function StringSelectMenuBuilder:SetMaxValues(maxValues:number):StringSelectMenuBuilder__DARKLUA_TYPE_G
 if type(maxValues)~="number"or maxValues<1 or maxValues>25 then
 error("maxValues must be a number from 1 to 25",2)
 end
@@ -3173,7 +3473,7 @@ component.max_values=maxValues
 return self
 end
 
-function StringSelectMenuBuilder:SetDisabled(disabled:boolean):StringSelectMenuBuilder__DARKLUA_TYPE_E
+function StringSelectMenuBuilder:SetDisabled(disabled:boolean):StringSelectMenuBuilder__DARKLUA_TYPE_G
 if type(disabled)~="boolean"then
 error("disabled must be a boolean",2)
 end
@@ -3183,7 +3483,7 @@ component.disabled=disabled
 return self
 end
 
-function StringSelectMenuBuilder:AddOptions(...:any):StringSelectMenuBuilder__DARKLUA_TYPE_E
+function StringSelectMenuBuilder:AddOptions(...:any):StringSelectMenuBuilder__DARKLUA_TYPE_G
 local component=(self::any).component
 local options=table.pack(...)
 
@@ -3198,7 +3498,7 @@ end
 return self
 end
 
-function StringSelectMenuBuilder:SetOptions(options:{any}):StringSelectMenuBuilder__DARKLUA_TYPE_E
+function StringSelectMenuBuilder:SetOptions(options:{any}):StringSelectMenuBuilder__DARKLUA_TYPE_G
 if type(options)~="table"then
 error("options must be a table",2)
 end
@@ -3236,7 +3536,7 @@ end
 return output
 end
 
-return StringSelectMenuBuilder end function __DARKLUA_BUNDLE_MODULES.B():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.B if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.B=v end return v.c end end do local function __modImpl()
+return StringSelectMenuBuilder end function __DARKLUA_BUNDLE_MODULES.D():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.D if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.D=v end return v.c end end do local function __modImpl()
 
 
 
@@ -3267,31 +3567,31 @@ error(name.." must be "..tostring(maxLength).." characters or fewer",3)
 end
 end
 
-function TextInputBuilder.new():TextInputBuilder__DARKLUA_TYPE_F
+function TextInputBuilder.new():TextInputBuilder__DARKLUA_TYPE_H
 local self={
 component={
 type=COMPONENT_TYPE_TEXT_INPUT,
 }::{[string]:any},
 }
 
-return(setmetatable(self,TextInputBuilder)::any)::TextInputBuilder__DARKLUA_TYPE_F
+return(setmetatable(self,TextInputBuilder)::any)::TextInputBuilder__DARKLUA_TYPE_H
 end
 
-function TextInputBuilder:SetCustomId(customId:string):TextInputBuilder__DARKLUA_TYPE_F
+function TextInputBuilder:SetCustomId(customId:string):TextInputBuilder__DARKLUA_TYPE_H
 assertString("customId",customId,100)
 local component=(self::any).component
 component.custom_id=customId
 return self
 end
 
-function TextInputBuilder:SetLabel(label:string):TextInputBuilder__DARKLUA_TYPE_F
+function TextInputBuilder:SetLabel(label:string):TextInputBuilder__DARKLUA_TYPE_H
 assertString("label",label,45)
 local component=(self::any).component
 component.label=label
 return self
 end
 
-function TextInputBuilder:SetStyle(style:number):TextInputBuilder__DARKLUA_TYPE_F
+function TextInputBuilder:SetStyle(style:number):TextInputBuilder__DARKLUA_TYPE_H
 if type(style)~="number"or(style~=1 and style~=2)then
 error("text input style must be 1 or 2",2)
 end
@@ -3301,7 +3601,7 @@ component.style=style
 return self
 end
 
-function TextInputBuilder:SetMinLength(minLength:number):TextInputBuilder__DARKLUA_TYPE_F
+function TextInputBuilder:SetMinLength(minLength:number):TextInputBuilder__DARKLUA_TYPE_H
 if type(minLength)~="number"or minLength<0 or minLength>4000 then
 error("minLength must be a number from 0 to 4000",2)
 end
@@ -3311,7 +3611,7 @@ component.min_length=minLength
 return self
 end
 
-function TextInputBuilder:SetMaxLength(maxLength:number):TextInputBuilder__DARKLUA_TYPE_F
+function TextInputBuilder:SetMaxLength(maxLength:number):TextInputBuilder__DARKLUA_TYPE_H
 if type(maxLength)~="number"or maxLength<1 or maxLength>4000 then
 error("maxLength must be a number from 1 to 4000",2)
 end
@@ -3321,7 +3621,7 @@ component.max_length=maxLength
 return self
 end
 
-function TextInputBuilder:SetRequired(required:boolean):TextInputBuilder__DARKLUA_TYPE_F
+function TextInputBuilder:SetRequired(required:boolean):TextInputBuilder__DARKLUA_TYPE_H
 if type(required)~="boolean"then
 error("required must be a boolean",2)
 end
@@ -3331,14 +3631,14 @@ component.required=required
 return self
 end
 
-function TextInputBuilder:SetValue(value:string):TextInputBuilder__DARKLUA_TYPE_F
+function TextInputBuilder:SetValue(value:string):TextInputBuilder__DARKLUA_TYPE_H
 assertString("value",value,4000)
 local component=(self::any).component
 component.value=value
 return self
 end
 
-function TextInputBuilder:SetPlaceholder(placeholder:string):TextInputBuilder__DARKLUA_TYPE_F
+function TextInputBuilder:SetPlaceholder(placeholder:string):TextInputBuilder__DARKLUA_TYPE_H
 assertString("placeholder",placeholder,100)
 local component=(self::any).component
 component.placeholder=placeholder
@@ -3368,14 +3668,14 @@ end
 return output
 end
 
-return TextInputBuilder end function __DARKLUA_BUNDLE_MODULES.C():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.C if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.C=v end return v.c end end do local function __modImpl()
+return TextInputBuilder end function __DARKLUA_BUNDLE_MODULES.E():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.E if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.E=v end return v.c end end do local function __modImpl()
 
 
 
 return{
 Short=1,
 Paragraph=2,
-}end function __DARKLUA_BUNDLE_MODULES.D():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.D if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.D=v end return v.c end end do local function __modImpl()
+}end function __DARKLUA_BUNDLE_MODULES.F():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.F if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.F=v end return v.c end end do local function __modImpl()
 
 
 
@@ -3389,17 +3689,17 @@ TextDisplayBuilder.__index=TextDisplayBuilder
 
 local COMPONENT_TYPE_TEXT_DISPLAY=10
 
-function TextDisplayBuilder.new():TextDisplayBuilder__DARKLUA_TYPE_G
+function TextDisplayBuilder.new():TextDisplayBuilder__DARKLUA_TYPE_I
 local self={
 component={
 type=COMPONENT_TYPE_TEXT_DISPLAY,
 }::{[string]:any},
 }
 
-return(setmetatable(self,TextDisplayBuilder)::any)::TextDisplayBuilder__DARKLUA_TYPE_G
+return(setmetatable(self,TextDisplayBuilder)::any)::TextDisplayBuilder__DARKLUA_TYPE_I
 end
 
-function TextDisplayBuilder:SetContent(content:string):TextDisplayBuilder__DARKLUA_TYPE_G
+function TextDisplayBuilder:SetContent(content:string):TextDisplayBuilder__DARKLUA_TYPE_I
 if type(content)~="string"or content==""then
 error("content must be a non-empty string",2)
 end
@@ -3428,12 +3728,91 @@ end
 return output
 end
 
-return TextDisplayBuilder end function __DARKLUA_BUNDLE_MODULES.E():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.E if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.E=v end return v.c end end do local function __modImpl()
+return TextDisplayBuilder end function __DARKLUA_BUNDLE_MODULES.G():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.G if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.G=v end return v.c end end do local function __modImpl()
+
+
+
+
+
+
+
+
+
+
+local ThumbnailBuilder={}
+ThumbnailBuilder.__index=ThumbnailBuilder
+
+local COMPONENT_TYPE_THUMBNAIL=11
+
+local function assertString(name:string,value:string,maxLength:number):()
+if type(value)~="string"or value==""then
+error(name.." must be a non-empty string",3)
+end
+
+if#value>maxLength then
+error(name.." must be "..tostring(maxLength).." characters or fewer",3)
+end
+end
+
+function ThumbnailBuilder.new():ThumbnailBuilder__DARKLUA_TYPE_J
+local self={
+component={
+type=COMPONENT_TYPE_THUMBNAIL,
+}::{[string]:any},
+}
+
+return(setmetatable(self,ThumbnailBuilder)::any)::ThumbnailBuilder__DARKLUA_TYPE_J
+end
+
+function ThumbnailBuilder:SetUrl(url:string):ThumbnailBuilder__DARKLUA_TYPE_J
+assertString("url",url,512)
+local component=(self::any).component
+component.media={
+url=url,
+}
+return self
+end
+
+function ThumbnailBuilder:SetDescription(description:string):ThumbnailBuilder__DARKLUA_TYPE_J
+assertString("description",description,1024)
+local component=(self::any).component
+component.description=description
+return self
+end
+
+function ThumbnailBuilder:SetSpoiler(spoiler:boolean):ThumbnailBuilder__DARKLUA_TYPE_J
+if type(spoiler)~="boolean"then
+error("spoiler must be a boolean",2)
+end
+
+local component=(self::any).component
+component.spoiler=spoiler
+return self
+end
+
+function ThumbnailBuilder:Build():{[string]:any}
+local component=(self::any).component
+if type(component.media)~="table"or type(component.media.url)~="string"then
+error("thumbnails require a url",2)
+end
+
+local output:{[string]:any}={}
+for key,value in pairs(component)do
+output[key]=value
+end
+
+return output
+end
+
+return ThumbnailBuilder end function __DARKLUA_BUNDLE_MODULES.H():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.H if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.H=v end return v.c end end do local function __modImpl()
 
 
 
 local Http=__DARKLUA_BUNDLE_MODULES.l()
 local Payload=__DARKLUA_BUNDLE_MODULES.i()
+
+
+
 
 
 
@@ -3466,7 +3845,7 @@ local baseUrl="https://discord.com/api/webhooks/"..webhookId.."/"..webhookToken
 return baseUrl,webhookId,webhookToken
 end
 
-function WebhookClient.new(url:string,options:WebhookClientOptions__DARKLUA_TYPE_H?):WebhookClient__DARKLUA_TYPE_I
+function WebhookClient.new(url:string,options:WebhookClientOptions__DARKLUA_TYPE_K?):WebhookClient__DARKLUA_TYPE_L
 local baseUrl,webhookId,webhookToken=parseWebhookUrl(url)
 local waitForResponse=false
 
@@ -3479,9 +3858,65 @@ baseUrl=baseUrl,
 webhookId=webhookId,
 webhookToken=webhookToken,
 waitForResponse=waitForResponse,
+username=options and options.Username or nil,
+avatarUrl=options and options.AvatarUrl or nil,
+threadId=options and options.ThreadId or nil,
 }
 
-return(setmetatable(self,WebhookClient)::any)::WebhookClient__DARKLUA_TYPE_I
+return(setmetatable(self,WebhookClient)::any)::WebhookClient__DARKLUA_TYPE_L
+end
+
+local function appendQuery(url:string,key:string,value:string):string
+local separator="?"
+if string.find(url,"?",1,true)~=nil then
+separator="&"
+end
+
+return url..separator..key.."="..game:GetService("HttpService"):UrlEncode(value)
+end
+
+local function applyWebhookPayloadDefaults(payload:any,state:any,options:WebhookClientOptions__DARKLUA_TYPE_K?):any
+local resolvedPayload=Payload.Message(payload)
+local messagePayload={}
+for key,value in pairs(resolvedPayload)do
+messagePayload[key]=value
+end
+
+local username=state.username
+local avatarUrl=state.avatarUrl
+
+if options~=nil then
+if options.Username~=nil then
+username=options.Username
+end
+
+if options.AvatarUrl~=nil then
+avatarUrl=options.AvatarUrl
+end
+end
+
+if username~=nil then
+messagePayload.username=username
+end
+
+if avatarUrl~=nil then
+messagePayload.avatar_url=avatarUrl
+end
+
+return messagePayload
+end
+
+local function applyWebhookQuery(url:string,state:any,options:WebhookClientOptions__DARKLUA_TYPE_K?):string
+local threadId=state.threadId
+if options~=nil and options.ThreadId~=nil then
+threadId=options.ThreadId
+end
+
+if threadId~=nil then
+url=appendQuery(url,"thread_id",threadId)
+end
+
+return url
 end
 
 local function requestJson(method:string,url:string,payload:any):any
@@ -3502,36 +3937,39 @@ end
 return game:GetService("HttpService"):JSONDecode(response.Body)
 end
 
-function WebhookClient:Send(payload:any):any
+function WebhookClient:Send(payload:any,options:WebhookClientOptions__DARKLUA_TYPE_K?):any
 local state=self::any
 local url=state.baseUrl
 
-if state.waitForResponse then
-url..="?wait=true"
+if state.waitForResponse or(options~=nil and options.Wait==true)then
+url=appendQuery(url,"wait","true")
 end
 
-return requestJson("POST",url,Payload.Message(payload))
+url=applyWebhookQuery(url,state,options)
+return requestJson("POST",url,applyWebhookPayloadDefaults(payload,state,options))
 end
 
-function WebhookClient:EditMessage(messageId:string,payload:any):any
+function WebhookClient:EditMessage(messageId:string,payload:any,options:WebhookClientOptions__DARKLUA_TYPE_K?):any
 if type(messageId)~="string"or messageId==""then
 error("messageId must be a non-empty string",2)
 end
 
 local state=self::any
-return requestJson("PATCH",state.baseUrl.."/messages/"..messageId,Payload.Message(payload))
+local url=applyWebhookQuery(state.baseUrl.."/messages/"..messageId,state,options)
+return requestJson("PATCH",url,applyWebhookPayloadDefaults(payload,state,options))
 end
 
-function WebhookClient:DeleteMessage(messageId:string):any
+function WebhookClient:DeleteMessage(messageId:string,options:WebhookClientOptions__DARKLUA_TYPE_K?):any
 if type(messageId)~="string"or messageId==""then
 error("messageId must be a non-empty string",2)
 end
 
 local state=self::any
-return requestJson("DELETE",state.baseUrl.."/messages/"..messageId,nil)
+local url=applyWebhookQuery(state.baseUrl.."/messages/"..messageId,state,options)
+return requestJson("DELETE",url,nil)
 end
 
-return WebhookClient end function __DARKLUA_BUNDLE_MODULES.F():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.F if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.F=v end return v.c end end end
+return WebhookClient end function __DARKLUA_BUNDLE_MODULES.I():typeof(__modImpl())local v=__DARKLUA_BUNDLE_MODULES.cache.I if not v then v={c=__modImpl()}__DARKLUA_BUNDLE_MODULES.cache.I=v end return v.c end end end
 
 
 
@@ -3542,25 +3980,28 @@ local Client=__DARKLUA_BUNDLE_MODULES.o()
 local Color=__DARKLUA_BUNDLE_MODULES.p()
 local ContainerBuilder=__DARKLUA_BUNDLE_MODULES.q()
 local EmbedBuilder=__DARKLUA_BUNDLE_MODULES.r()
+local FileBuilder=__DARKLUA_BUNDLE_MODULES.s()
 local GatewayOpcode=__DARKLUA_BUNDLE_MODULES.e()
-local Intents=__DARKLUA_BUNDLE_MODULES.s()
-local InteractionResponseType=__DARKLUA_BUNDLE_MODULES.t()
+local Intents=__DARKLUA_BUNDLE_MODULES.t()
+local InteractionResponseType=__DARKLUA_BUNDLE_MODULES.u()
 local Interaction=__DARKLUA_BUNDLE_MODULES.j()
 local Message=__DARKLUA_BUNDLE_MODULES.k()
-local MessageFlags=__DARKLUA_BUNDLE_MODULES.u()
-local ModalBuilder=__DARKLUA_BUNDLE_MODULES.v()
+local MessageFlags=__DARKLUA_BUNDLE_MODULES.v()
+local MediaGalleryBuilder=__DARKLUA_BUNDLE_MODULES.w()
+local ModalBuilder=__DARKLUA_BUNDLE_MODULES.x()
 local RestClient=__DARKLUA_BUNDLE_MODULES.n()
 local SessionStore=__DARKLUA_BUNDLE_MODULES.g()
-local SelectMenuOptionBuilder=__DARKLUA_BUNDLE_MODULES.w()
-local SectionBuilder=__DARKLUA_BUNDLE_MODULES.x()
-local SeparatorBuilder=__DARKLUA_BUNDLE_MODULES.y()
-local SeparatorSpacing=__DARKLUA_BUNDLE_MODULES.z()
-local SlashCommandBuilder=__DARKLUA_BUNDLE_MODULES.A()
-local StringSelectMenuBuilder=__DARKLUA_BUNDLE_MODULES.B()
-local TextInputBuilder=__DARKLUA_BUNDLE_MODULES.C()
-local TextInputStyle=__DARKLUA_BUNDLE_MODULES.D()
-local TextDisplayBuilder=__DARKLUA_BUNDLE_MODULES.E()
-local WebhookClient=__DARKLUA_BUNDLE_MODULES.F()
+local SelectMenuOptionBuilder=__DARKLUA_BUNDLE_MODULES.y()
+local SectionBuilder=__DARKLUA_BUNDLE_MODULES.z()
+local SeparatorBuilder=__DARKLUA_BUNDLE_MODULES.A()
+local SeparatorSpacing=__DARKLUA_BUNDLE_MODULES.B()
+local SlashCommandBuilder=__DARKLUA_BUNDLE_MODULES.C()
+local StringSelectMenuBuilder=__DARKLUA_BUNDLE_MODULES.D()
+local TextInputBuilder=__DARKLUA_BUNDLE_MODULES.E()
+local TextInputStyle=__DARKLUA_BUNDLE_MODULES.F()
+local TextDisplayBuilder=__DARKLUA_BUNDLE_MODULES.G()
+local ThumbnailBuilder=__DARKLUA_BUNDLE_MODULES.H()
+local WebhookClient=__DARKLUA_BUNDLE_MODULES.I()
 
 return{
 ActionRowBuilder=ActionRowBuilder,
@@ -3571,12 +4012,14 @@ Color=Color,
 Colors=Color.Colors,
 ContainerBuilder=ContainerBuilder,
 EmbedBuilder=EmbedBuilder,
+FileBuilder=FileBuilder,
 GatewayOpcode=GatewayOpcode,
 Interaction=Interaction,
 Intents=Intents,
 InteractionResponseType=InteractionResponseType,
 Message=Message,
 MessageFlags=MessageFlags,
+MediaGalleryBuilder=MediaGalleryBuilder,
 ModalBuilder=ModalBuilder,
 RestClient=RestClient,
 SelectMenuOptionBuilder=SelectMenuOptionBuilder,
@@ -3589,5 +4032,6 @@ StringSelectMenuBuilder=StringSelectMenuBuilder,
 TextDisplayBuilder=TextDisplayBuilder,
 TextInputBuilder=TextInputBuilder,
 TextInputStyle=TextInputStyle,
+ThumbnailBuilder=ThumbnailBuilder,
 WebhookClient=WebhookClient,
 }

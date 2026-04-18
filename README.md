@@ -18,7 +18,7 @@ This project is early. It currently supports:
 - `ActionRowBuilder` and `ButtonBuilder`.
 - `StringSelectMenuBuilder` and `SelectMenuOptionBuilder`.
 - `ModalBuilder`, `TextInputBuilder`, and `TextInputStyle`.
-- Components v2 foundation: `MessageFlags`, `TextDisplayBuilder`, `ContainerBuilder`, `SectionBuilder`, and `SeparatorBuilder`.
+- Components v2 foundation: `MessageFlags`, `TextDisplayBuilder`, `ContainerBuilder`, `SectionBuilder`, `SeparatorBuilder`, `ThumbnailBuilder`, `MediaGalleryBuilder`, and `FileBuilder`.
 - `WebhookClient` for Discord webhooks without Gateway/WebSocket.
 - Color resolving for `0xRRGGBB`, `"#RRGGBB"`, and `"RRGGBB"`.
 - discord.js-style `Message` and `Interaction` wrapper objects.
@@ -303,11 +303,19 @@ local container = BetterDisblox.ContainerBuilder.new()
 					:SetContent("Components v2 from a Roblox executor.")
 			)
 			:SetAccessory(
-				BetterDisblox.ButtonBuilder.new()
-					:SetCustomId("v2_ok")
-					:SetLabel("OK")
-					:SetSuccess()
+				BetterDisblox.ThumbnailBuilder.new()
+					:SetUrl("https://example.com/avatar.png")
+					:SetDescription("Avatar")
 			),
+
+		BetterDisblox.MediaGalleryBuilder.new()
+			:AddItems({
+				url = "https://example.com/banner.png",
+				description = "Banner",
+			}),
+
+		BetterDisblox.FileBuilder.new()
+			:SetUrl("attachment://guide.txt"),
 
 		BetterDisblox.TextDisplayBuilder.new()
 			:SetContent("Built with BetterDisblox.")
@@ -325,6 +333,8 @@ interaction:Reply({
 ```lua
 local webhook = BetterDisblox.WebhookClient.new("WEBHOOK_URL", {
 	Wait = true,
+	Username = "BetterDisblox",
+	AvatarUrl = "https://example.com/avatar.png",
 })
 
 local message = webhook:Send({
@@ -343,8 +353,26 @@ local message = webhook:Send({
 })
 
 if message ~= nil then
-	webhook:EditMessage(message.id, "Edited webhook message")
+	webhook:EditMessage(message.id, "Edited webhook message", {
+		ThreadId = "THREAD_ID",
+	})
 end
+```
+
+## REST Helpers
+
+```lua
+local me = client.Rest:GetCurrentUser()
+local channel = client.Rest:GetChannel("CHANNEL_ID")
+local messages = client.Rest:GetChannelMessages("CHANNEL_ID", {
+	limit = 10,
+})
+
+client.Rest:TriggerTyping("CHANNEL_ID")
+
+local guild = client.Rest:GetGuild("GUILD_ID")
+local channels = client.Rest:GetGuildChannels("GUILD_ID")
+local roles = client.Rest:GetGuildRoles("GUILD_ID")
 ```
 
 ## Session Persistence

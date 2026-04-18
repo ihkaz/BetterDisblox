@@ -33,13 +33,18 @@ client:On("INTERACTION_CREATE", function(interaction)
 				:AddComponents(
 					BetterDisblox.TextDisplayBuilder.new()
 						:SetContent("Components v2 from a Roblox executor.")
-				)
-				:SetAccessory(
-					BetterDisblox.ButtonBuilder.new()
-						:SetCustomId("v2_ok")
-						:SetLabel("OK")
-						:SetSuccess()
-				),
+			)
+			:SetAccessory(
+				BetterDisblox.ThumbnailBuilder.new()
+					:SetUrl("https://example.com/avatar.png")
+					:SetDescription("Avatar")
+			),
+
+			BetterDisblox.MediaGalleryBuilder.new()
+				:AddItems({
+					url = "https://example.com/banner.png",
+					description = "Banner",
+				}),
 
 			BetterDisblox.TextDisplayBuilder.new()
 				:SetContent("Built with BetterDisblox.")
@@ -50,12 +55,6 @@ client:On("INTERACTION_CREATE", function(interaction)
 		flags = BetterDisblox.MessageFlags.IsComponentsV2,
 		components = { container },
 	})
-end)
-
-client:On("INTERACTION_CREATE", function(interaction)
-	if interaction.Type == 3 and interaction.CustomId == "v2_ok" then
-		interaction:ReplyEphemeral("OK")
-	end
 end)
 
 client:Login()

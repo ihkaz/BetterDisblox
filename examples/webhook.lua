@@ -2,6 +2,8 @@ local BetterDisblox = loadstring(readfile("dist/BetterDisblox.lua"))()
 
 local webhook = BetterDisblox.WebhookClient.new("WEBHOOK_URL", {
 	Wait = true,
+	Username = "BetterDisblox",
+	AvatarUrl = "https://example.com/avatar.png",
 })
 
 local message = webhook:Send({
@@ -20,5 +22,7 @@ local message = webhook:Send({
 })
 
 if message ~= nil then
-	webhook:EditMessage(message.id, "Edited webhook message")
+	webhook:EditMessage(message.id, "Edited webhook message", {
+		ThreadId = "THREAD_ID",
+	})
 end

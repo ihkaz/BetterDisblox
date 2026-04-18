@@ -7,12 +7,14 @@ local Client = require("./client/Client")
 local Color = require("./util/Color")
 local ContainerBuilder = require("./builders/components_v2/ContainerBuilder")
 local EmbedBuilder = require("./builders/EmbedBuilder")
+local FileBuilder = require("./builders/components_v2/FileBuilder")
 local GatewayOpcode = require("./gateway/GatewayOpcode")
 local Intents = require("./gateway/Intents")
 local InteractionResponseType = require("./InteractionResponseType")
 local Interaction = require("./structures/Interaction")
 local Message = require("./structures/Message")
 local MessageFlags = require("./builders/components_v2/MessageFlags")
+local MediaGalleryBuilder = require("./builders/components_v2/MediaGalleryBuilder")
 local ModalBuilder = require("./builders/components/ModalBuilder")
 local RestClient = require("./rest/RestClient")
 local SessionStore = require("./storage/SessionStore")
@@ -25,6 +27,7 @@ local StringSelectMenuBuilder = require("./builders/components/StringSelectMenuB
 local TextInputBuilder = require("./builders/components/TextInputBuilder")
 local TextInputStyle = require("./builders/components/TextInputStyle")
 local TextDisplayBuilder = require("./builders/components_v2/TextDisplayBuilder")
+local ThumbnailBuilder = require("./builders/components_v2/ThumbnailBuilder")
 local WebhookClient = require("./webhook/WebhookClient")
 
 return {
@@ -36,12 +39,14 @@ return {
 	Colors = Color.Colors,
 	ContainerBuilder = ContainerBuilder,
 	EmbedBuilder = EmbedBuilder,
+	FileBuilder = FileBuilder,
 	GatewayOpcode = GatewayOpcode,
 	Interaction = Interaction,
 	Intents = Intents,
 	InteractionResponseType = InteractionResponseType,
 	Message = Message,
 	MessageFlags = MessageFlags,
+	MediaGalleryBuilder = MediaGalleryBuilder,
 	ModalBuilder = ModalBuilder,
 	RestClient = RestClient,
 	SelectMenuOptionBuilder = SelectMenuOptionBuilder,
@@ -54,5 +59,6 @@ return {
 	TextDisplayBuilder = TextDisplayBuilder,
 	TextInputBuilder = TextInputBuilder,
 	TextInputStyle = TextInputStyle,
+	ThumbnailBuilder = ThumbnailBuilder,
 	WebhookClient = WebhookClient,
 }

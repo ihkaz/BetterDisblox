@@ -11,6 +11,9 @@
 - Added `ModalBuilder`, `TextInputBuilder`, `TextInputStyle`, `interaction:ShowModal`, and `interaction:GetTextInputValue`.
 - Added Components v2 foundation with `MessageFlags`, `TextDisplayBuilder`, `ContainerBuilder`, `SectionBuilder`, and `SeparatorBuilder`.
 - Added `WebhookClient` for Discord webhook send/edit/delete.
+- Added Components v2 thumbnail, media gallery, and file builders.
+- Added webhook username, avatar, and thread options.
+- Added user, channel, message, typing, and guild REST helper routes.
 - Added `Color.Resolve` and `Colors` with hex string support for embed and Components v2 colors.
 - Added expanded embed style methods, button style shortcuts, and container color shortcuts.
 - Added discord.js-style `Message` and `Interaction` wrapper objects.

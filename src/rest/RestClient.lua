@@ -11,9 +11,20 @@ export type RestClientOptions = {
 
 export type RestClient = {
 	Request: (self: RestClient, method: string, route: string, body: any) -> any,
+	GetCurrentUser: (self: RestClient) -> any,
+	GetUser: (self: RestClient, userId: string) -> any,
+	GetChannel: (self: RestClient, channelId: string) -> any,
+	ModifyChannel: (self: RestClient, channelId: string, payload: any) -> any,
+	GetChannelMessages: (self: RestClient, channelId: string, options: { [string]: any }?) -> any,
+	GetMessage: (self: RestClient, channelId: string, messageId: string) -> any,
 	CreateMessage: (self: RestClient, channelId: string, payload: any) -> any,
 	EditMessage: (self: RestClient, channelId: string, messageId: string, payload: any) -> any,
 	DeleteMessage: (self: RestClient, channelId: string, messageId: string) -> any,
+	TriggerTyping: (self: RestClient, channelId: string) -> any,
+	GetGuild: (self: RestClient, guildId: string) -> any,
+	GetGuildChannels: (self: RestClient, guildId: string) -> any,
+	GetGuildMember: (self: RestClient, guildId: string, userId: string) -> any,
+	GetGuildRoles: (self: RestClient, guildId: string) -> any,
 	CreateGlobalApplicationCommand: (self: RestClient, applicationId: string, payload: any) -> any,
 	BulkOverwriteGlobalApplicationCommands: (self: RestClient, applicationId: string, payload: { any }) -> any,
 	CreateGuildApplicationCommand: (self: RestClient, applicationId: string, guildId: string, payload: any) -> any,
@@ -97,6 +108,59 @@ function RestClient:Request(method: string, route: string, body: any): any
 	return decoded
 end
 
+local function assertNonEmptyString(name: string, value: string): ()
+	if type(value) ~= "string" or value == "" then
+		error(name .. " must be a non-empty string", 3)
+	end
+end
+
+local function appendQuery(route: string, options: { [string]: any }?): string
+	if options == nil then
+		return route
+	end
+
+	local params: { string } = {}
+	for key, value in pairs(options) do
+		table.insert(params, tostring(key) .. "=" .. game:GetService("HttpService"):UrlEncode(tostring(value)))
+	end
+
+	if #params == 0 then
+		return route
+	end
+
+	return route .. "?" .. table.concat(params, "&")
+end
+
+function RestClient:GetCurrentUser(): any
+	return self:Request("GET", "/users/@me", nil)
+end
+
+function RestClient:GetUser(userId: string): any
+	assertNonEmptyString("userId", userId)
+	return self:Request("GET", "/users/" .. userId, nil)
+end
+
+function RestClient:GetChannel(channelId: string): any
+	assertNonEmptyString("channelId", channelId)
+	return self:Request("GET", "/channels/" .. channelId, nil)
+end
+
+function RestClient:ModifyChannel(channelId: string, payload: any): any
+	assertNonEmptyString("channelId", channelId)
+	return self:Request("PATCH", "/channels/" .. channelId, payload)
+end
+
+function RestClient:GetChannelMessages(channelId: string, options: { [string]: any }?): any
+	assertNonEmptyString("channelId", channelId)
+	return self:Request("GET", appendQuery("/channels/" .. channelId .. "/messages", options), nil)
+end
+
+function RestClient:GetMessage(channelId: string, messageId: string): any
+	assertNonEmptyString("channelId", channelId)
+	assertNonEmptyString("messageId", messageId)
+	return self:Request("GET", "/channels/" .. channelId .. "/messages/" .. messageId, nil)
+end
+
 function RestClient:CreateMessage(channelId: string, payload: any): any
 	if type(channelId) ~= "string" or channelId == "" then
 		error("channelId must be a non-empty string", 2)
@@ -127,6 +191,32 @@ function RestClient:DeleteMessage(channelId: string, messageId: string): any
 	end
 
 	return self:Request("DELETE", "/channels/" .. channelId .. "/messages/" .. messageId, nil)
+end
+
+function RestClient:TriggerTyping(channelId: string): any
+	assertNonEmptyString("channelId", channelId)
+	return self:Request("POST", "/channels/" .. channelId .. "/typing", nil)
+end
+
+function RestClient:GetGuild(guildId: string): any
+	assertNonEmptyString("guildId", guildId)
+	return self:Request("GET", "/guilds/" .. guildId, nil)
+end
+
+function RestClient:GetGuildChannels(guildId: string): any
+	assertNonEmptyString("guildId", guildId)
+	return self:Request("GET", "/guilds/" .. guildId .. "/channels", nil)
+end
+
+function RestClient:GetGuildMember(guildId: string, userId: string): any
+	assertNonEmptyString("guildId", guildId)
+	assertNonEmptyString("userId", userId)
+	return self:Request("GET", "/guilds/" .. guildId .. "/members/" .. userId, nil)
+end
+
+function RestClient:GetGuildRoles(guildId: string): any
+	assertNonEmptyString("guildId", guildId)
+	return self:Request("GET", "/guilds/" .. guildId .. "/roles", nil)
 end
 
 function RestClient:CreateGlobalApplicationCommand(applicationId: string, payload: any): any
